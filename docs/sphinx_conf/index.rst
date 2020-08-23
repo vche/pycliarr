@@ -2,12 +2,17 @@ pycliarr's documentation
 =====================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
+    :caption: Userguide
 
-   readme
+    readme
+    changelog
 
-   source/modules
+.. toctree::
+    :maxdepth: 5
+    :caption: API reference
+
+    source/modules
 
 
 Indices and tables

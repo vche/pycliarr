@@ -35,8 +35,12 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
+    'sphinx.ext.todo',
     'm2r',
 ]
+
+# Allow todo sections
+todo_include_todos = True
 
 # source_suffix = '.rst'
 # source_suffix = ['.rst', '.md']
@@ -57,6 +61,10 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 #
 # html_theme = 'alabaster'
 html_theme = 'sphinx_rtd_theme'
+
+html_theme_options = {
+    'navigation_depth': 5,
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

@@ -1,15 +1,17 @@
 import json
 import logging
 from pprint import pformat
-from typing import Any, Dict, Optional, Tuple, Type, TypeVar
+from typing import Any, Dict, List, Optional, Type, TypeVar, Union
 
 import requests
 
 from pycliarr.api.exceptions import CliArrError, CliDecodeError, CliServerError
 
 log = logging.getLogger(__name__)
-json_data = Dict[str, Any]
-BaseItemClass = TypeVar("BaseItemClass", bound="BaseItem")
+json_dict = Dict[str, Any]
+json_list = List[json_dict]
+json_data = Union[json_dict, json_dict]
+BaseItemClass = TypeVar("BaseItemClass", bound="BaseCliApiItem")
 
 
 class BaseCliApi:
@@ -57,7 +59,7 @@ class BaseCliApi:
         path: str,
         url_params: Optional[Dict[str, Any]] = None,
         json_data: Optional[json_data] = None,
-    ) -> Tuple[int, json_data]:
+    ) -> json_data:
         """Send a request to the host API
 
         Args:
@@ -72,32 +74,34 @@ class BaseCliApi:
         log.debug("Request sent: %s %s params: %s data: %s", method, request_url, url_params, json_data)
         try:
             res = self._session.request(method, request_url, params=url_params, json=json_data)
+            print(f"pipo {res.status_code} {res.content}")
             # log.debug(f"Result {res.status_code}, Body {res.content}")
         except Exception as e:
             raise CliArrError(f"Error sending request {request_url}: {e}")
         if res.status_code >= 400:
             raise CliServerError(
-                f"Error from server {request_url}, status: {res.status_code}, msg: {pformat(res.json())}",
+                f"Error from server {request_url}, status: {res.status_code}, msg: {pformat(res.content.decode())}",
                 status_code=res.status_code,
             )
         try:
-            return res.json()
+            body: Dict[str, Any] = res.json()
+            return body
         except Exception as e:
             raise CliDecodeError(f"Error parsing response {res.content.decode()} from {request_url}: {e}")
 
-    def request_get(self, path: str, url_params: Optional[Dict[str, Any]] = None) -> Tuple[int, json_data]:
+    def request_get(self, path: str, url_params: Optional[Dict[str, Any]] = None) -> json_data:
         """Shortcut for request withe method=get."""
         return self.request("GET", path, url_params=url_params)
 
-    def request_post(self, path: str, json_data: Optional[json_data] = None) -> Tuple[int, json_data]:
+    def request_post(self, path: str, json_data: Optional[json_data] = None) -> json_data:
         """Shortcut for request withe method=post."""
         return self.request("POST", path, json_data=json_data)
 
-    def request_put(self, path: str, json_data: Optional[json_data] = None) -> Tuple[int, json_data]:
+    def request_put(self, path: str, json_data: Optional[json_data] = None) -> json_data:
         """Shortcut for request withe method=put."""
         return self.request("PUT", path, json_data=json_data)
 
-    def request_delete(self, path: str, json_data: Optional[json_data] = None) -> Tuple[int, json_data]:
+    def request_delete(self, path: str, json_data: Optional[json_data] = None) -> json_data:
         """Shortcut for request withe method=delete."""
         return self.request("DELETE", path, json_data=json_data)
 
@@ -116,24 +120,24 @@ class BaseCliApiItem:
     by BaseCliApi subclasses
     """
 
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, **kwargs: Any) -> None:
         """Build an item and populate it with the keys specified."""
         self._data = self._model()
         self._update_existing(kwargs)
 
     @classmethod
-    def from_dict(cls: Type[BaseItemClass], dict_data) -> BaseItemClass:
+    def from_dict(cls: Type[BaseItemClass], dict_data: Dict[Any, Any]) -> BaseItemClass:
         """Build an item and populate it based on the given dictionnary."""
-        new_obj = cls()
+        new_obj: BaseItemClass = cls()
         new_obj._update_existing(dict_data)
         return new_obj
 
     @classmethod
-    def from_json(cls, json_data: str) -> BaseItemClass:
+    def from_json(cls: Type[BaseItemClass], json_data: str) -> BaseItemClass:
         """Build an item and populate it based on json data."""
         return cls.from_dict(json.loads(json_data))
 
-    def _update_existing(self, dict_data):
+    def _update_existing(self, dict_data: Dict[Any, Any]) -> None:
         """Update a dict only if the keys already exist."""
         for key in dict_data:
             if key in self._data:
@@ -152,10 +156,10 @@ class BaseCliApiItem:
     def to_dict(self) -> Dict[Any, Any]:
         return self._data
 
-    def add_attribute(self, name: str, value: Any):
+    def add_attribute(self, name: str, value: Any) -> None:
         self._data[name] = value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(pformat(self.to_dict(), indent=2))
 
     def __getattr__(self, name: str) -> Any:
@@ -168,4 +172,4 @@ class BaseCliApiItem:
         if "_data" in self.__dict__ and name in self._data:
             self.__dict__["_data"][name] = value
         else:
-            super().__setattr__(name, value)
+            super().__setattr__(name, value)  # pragma: no cover
