@@ -35,6 +35,85 @@ serie = sonarr_cli.get_serie(12)
 print(serie.title)
 ```
 
+## CLI help
+
+Clients:
+```sh
+pyvenv/bin/pycliarr --help
+PyCliarr version 0.0.1
+usage: pycliarr [-h] --host HOST --api-key API_KEY [--user USER] [--password PASSWORD] [--debug] {sonarr,radarr} ...
+
+Radarr/Sonarr client
+
+positional arguments:
+  {sonarr,radarr}
+    sonarr              use sonarr client
+    radarr              use radarr client
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --host HOST, -t HOST  Host url, e.g 'http://192.168.0.1'
+  --api-key API_KEY, -k API_KEY
+                        API key, e.g '5f5e32xf3ff8463d9f1d2u88ef0fd3e8'
+  --user USER, -u USER  Username if using basic authentication
+  --password PASSWORD, -p PASSWORD
+                        Password if using basic authentication
+  --debug, -d           Enable debug logging
+```
+
+Radarr CLI:
+```sh
+pyvenv/bin/pycliarr radarr --help
+PyCliarr version 0.0.1
+usage: pycliarr radarr [-h] {get,delete,add,refresh,rescan,profiles,system-status,disk-space,queue,calendar,delqueue,wanted} ...
+
+positional arguments:
+  {get,delete,add,refresh,rescan,profiles,system-status,disk-space,queue,calendar,delqueue,wanted}
+    get                 Get info on a of movie
+    delete              Delete a movie
+    add                 Add a movie from the imdb/tmdb id, or look for keywords
+    refresh             Refresh movies
+    rescan              Rescan movies
+    profiles            Get list of quality profiles
+    system-status       Get system status
+    disk-space          Get disk space
+    queue               Get current downloading queue
+    calendar            Get events from calendar
+    delqueue            Get list of quality profiles
+    wanted              List wanted/missing
+
+optional arguments:
+  -h, --help            show this help message and exit
+```
+
+Sonarr CLI:
+```sh
+pyvenv/bin/pycliarr sonarr --help
+PyCliarr version 0.0.1
+usage: pycliarr sonarr [-h] {get,delete,add,refresh,rescan,get-episode,get-episode-file,delete-episode-file,profiles,system-status,disk-space,queue,calendar,delqueue,wanted} ...
+
+positional arguments:
+  {get,delete,add,refresh,rescan,get-episode,get-episode-file,delete-episode-file,profiles,system-status,disk-space,queue,calendar,delqueue,wanted}
+    get                 Get info on a of serie
+    delete              Delete a serie
+    add                 Add a serie from the tvdb id, or look for keywords
+    refresh             Refresh series
+    rescan              Rescan series
+    get-episode         Get info on an episode
+    get-episode-file    Get info on an episode file
+    delete-episode-file
+                        Get info on a of serie
+    profiles            Get list of quality profiles
+    system-status       Get system status
+    disk-space          Get disk space
+    queue               Get current downloading queue
+    calendar            Get events from calendar
+    delqueue            Get list of quality profiles
+    wanted              List wanted/missing
+
+optional arguments:
+  -h, --help            show this help message and exit
+```
 ## Installation
 From pip:
 ```sh
