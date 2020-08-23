@@ -39,6 +39,8 @@ extensions = [
     'm2r',
 ]
 
+master_doc = 'index'
+
 # Allow todo sections
 todo_include_todos = True
 
