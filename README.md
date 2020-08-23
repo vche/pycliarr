@@ -78,5 +78,5 @@ pip install sphinx sphinx_rtd_theme m2r
 In case new classes/modules are added, update the autodoc list:
 ```sh
 rm  docs/sphinx_conf/source/*
-sphinx-apidoc -f -o docs/sphinx_conf/source/ src/pycliarr
+sphinx-apidoc -f -o docs/sphinx_conf/source/ src/pycliarr --separate
 ```
