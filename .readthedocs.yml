@@ -26,5 +26,4 @@ python:
         extra_requirements:
             - sphinx_rtd_theme
             - m2r
-      - method: setuptools
    system_packages: true
