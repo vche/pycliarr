@@ -4,10 +4,18 @@ pycliarr.api package
 Submodules
 ----------
 
-pycliarr.api.base module
-------------------------
+pycliarr.api.base\_api module
+-----------------------------
 
-.. automodule:: pycliarr.api.base
+.. automodule:: pycliarr.api.base_api
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pycliarr.api.base\_media module
+-------------------------------
+
+.. automodule:: pycliarr.api.base_media
    :members:
    :undoc-members:
    :show-inheritance:

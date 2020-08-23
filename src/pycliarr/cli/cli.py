@@ -1,5 +1,6 @@
 import logging
 import sys
+import traceback
 from argparse import ArgumentParser, Namespace
 from typing import Dict, List
 
@@ -22,7 +23,6 @@ def _parse_args(cli_mapping: Dict[str, CliApiCommand]) -> Namespace:
     parser.add_argument("--api-key", "-k", help="API key, e.g '5f5e32xf3ff8463d9f1d2u88ef0fd3e8'", required=True)
     parser.add_argument("--user", "-u", help="Username if using basic authentication", default=None)
     parser.add_argument("--password", "-p", help="Password if using basic authentication", default=None)
-    parser.add_argument("--retry", "-r", default=0, help="Retry attempts of failing requests")
     parser.add_argument("--debug", "-d", default=False, action="store_true", help="Enable debug logging")
     client_subparser = parser.add_subparsers(dest="client")
     client_subparser.required = True
@@ -43,7 +43,6 @@ def _parse_args(cli_mapping: Dict[str, CliApiCommand]) -> Namespace:
 
 def _run_command(cli_mapping: Dict[str, CliApiCommand], cli_name: str, cmd_name: str, args: Namespace) -> None:
     """Execute a command from the client name and the command name."""
-    print(f"running client {cli_name}, command {cmd_name}")
     cli_mapping[cli_name].run_command(cmd_name, args)
 
 
@@ -65,7 +64,11 @@ def main() -> None:
         sys.exit(0)
     except exceptions.CliArrError as e:
         print(f"API error: {e}")
+        if args.debug:
+            traceback.print_exc()
         sys.exit(1)
     except Exception as e:
         print(f"Unexpected error: {e}")
+        if args.debug:
+            traceback.print_exc()
         sys.exit(2)

@@ -1,4 +1,5 @@
-from pycliarr.api.base import BaseCliApi, BaseCliMediaApi
+from pycliarr.api.base_api import BaseCliApi
+from pycliarr.api.base_media import BaseCliMediaApi
 from pycliarr.api.exceptions import CliArrError
 from unittest.mock import Mock, patch
 import pytest
@@ -23,7 +24,7 @@ def mock_response(code, data_dict):
 def test_get_with_auth(patch_session):
     cli = BaseCliApi(TEST_HOST, TEST_APIKEY, username=TEST_USER, password=TEST_PASS)
     patch_session().request.return_value = mock_response(200, [TEST_JSON])
-    code, rep = cli.get(TEST_PATH, {'param': 'value'})
+    code, rep = cli.request_get(TEST_PATH, {'param': 'value'})
     cli.close()
 
     assert patch_session().headers == {"X-Api-Key": TEST_APIKEY}
@@ -41,7 +42,7 @@ def test_request_error(patch_session):
     patch_session().request.side_effect = Exception
 
     with pytest.raises(CliArrError):
-        code, rep = cli.get(TEST_PATH)
+        code, rep = cli.request_get(TEST_PATH)
 
     assert patch_session().headers == {"X-Api-Key": TEST_APIKEY}
     patch_session().request.assert_called_with("GET", f"{TEST_HOST}{TEST_PATH}", params=None, json=None)
@@ -53,7 +54,7 @@ def test_response_error(patch_session):
     patch_session().request.return_value = mock_response(200, Exception)
 
     with pytest.raises(CliArrError):
-        code, rep = cli.get(TEST_PATH)
+        code, rep = cli.request_get(TEST_PATH)
 
     assert patch_session().headers == {"X-Api-Key": TEST_APIKEY}
     patch_session().request.assert_called_with("GET", f"{TEST_HOST}{TEST_PATH}", params=None, json=None)
@@ -63,7 +64,7 @@ def test_response_error(patch_session):
 def test_put(patch_session):
     cli = BaseCliApi(TEST_HOST, TEST_APIKEY, username=TEST_USER, password=TEST_PASS)
     patch_session().request.return_value = mock_response(200, [TEST_JSON])
-    code, rep = cli.put(TEST_PATH, {'param': 'value'})
+    code, rep = cli.request_put(TEST_PATH, {'param': 'value'})
 
     assert patch_session().headers == {"X-Api-Key": TEST_APIKEY}
     patch_session().request.assert_called_with(
@@ -77,7 +78,7 @@ def test_put(patch_session):
 def test_post(patch_session):
     cli = BaseCliApi(TEST_HOST, TEST_APIKEY, username=TEST_USER, password=TEST_PASS)
     patch_session().request.return_value = mock_response(200, [TEST_JSON])
-    code, rep = cli.post(TEST_PATH, {'param': 'value'})
+    code, rep = cli.request_post(TEST_PATH, {'param': 'value'})
 
     assert patch_session().headers == {"X-Api-Key": TEST_APIKEY}
     patch_session().request.assert_called_with(
@@ -91,7 +92,7 @@ def test_post(patch_session):
 def test_delete(patch_session):
     cli = BaseCliApi(TEST_HOST, TEST_APIKEY, username=TEST_USER, password=TEST_PASS)
     patch_session().request.return_value = mock_response(200, [TEST_JSON])
-    code, rep = cli.delete(TEST_PATH, {'param': 'value'})
+    code, rep = cli.request_delete(TEST_PATH, {'param': 'value'})
 
     assert patch_session().headers == {"X-Api-Key": TEST_APIKEY}
     patch_session().request.assert_called_with(

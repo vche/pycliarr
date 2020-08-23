@@ -82,7 +82,7 @@ def test_cli_sonarr_get(monkeypatch, mock_exit):
     monkeypatch.setattr(sys, "argv", test_args)
     mock_sonarr = Mock()
     mock_sonarr.return_value = 200, TEST_JSON
-    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get", mock_sonarr)
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_movie", mock_sonarr)
     cli.main()
-    mock_sonarr.assert_called_with('/api/movie/lookup', url_param={'term': "12%2034"})
+    mock_sonarr.assert_called_with("12 34")
     mock_exit.assert_called_with(0)
