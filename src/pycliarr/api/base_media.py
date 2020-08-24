@@ -93,7 +93,7 @@ class BaseCliMediaApi(BaseCliApi):
         res = cast(json_list, self.request_get(self.api_url_rootfolder))
         return res[0]
 
-    def get_item(self, item_id: Optional[int]) -> json_data:
+    def get_item(self, item_id: Optional[int] = None) -> json_data:
         """Get specified item, or all if no id provided from server collection.
 
         Args:

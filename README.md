@@ -1,7 +1,11 @@
+![Read the Docs](https://img.shields.io/readthedocs/pycliarr) ![GitHub](https://img.shields.io/github/license/vche/pycliarr) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/vche/pycliarr) ![Codecov](https://img.shields.io/codecov/c/github/vche/pycliarr)
+
 ## What's pycliarr
 
 Python client for radarr and sonarr apis.
 The package provides python client and CLI to use in command line.
+
+[Documentation homepage](https://pycliarr.readthedocs.io/en/latest/)
 
 ## Usage
 

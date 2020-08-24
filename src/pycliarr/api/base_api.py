@@ -74,7 +74,6 @@ class BaseCliApi:
         log.debug("Request sent: %s %s params: %s data: %s", method, request_url, url_params, json_data)
         try:
             res = self._session.request(method, request_url, params=url_params, json=json_data)
-            print(f"pipo {res.status_code} {res.content}")
             # log.debug(f"Result {res.status_code}, Body {res.content}")
         except Exception as e:
             raise CliArrError(f"Error sending request {request_url}: {e}")
