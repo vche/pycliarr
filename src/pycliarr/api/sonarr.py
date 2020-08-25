@@ -111,13 +111,12 @@ class SonarrCli(BaseCliMediaApi):
         Returns:
             json response
         """
-        term = str(term)
         if tvdb_id:
             term = "tvdb:" + str(tvdb_id)
         elif not term:
             SonarrCliError("Error invalid parameters")
 
-        res = self.lookup_item(term)
+        res = self.lookup_item(str(term))
         return [SonarrSerieItem.from_dict(serie) for serie in res]
 
     def add_serie(

@@ -60,7 +60,7 @@ class RadarrCli(BaseCliMediaApi):
     api_url_item = "/api/movie"
     api_url_itemlookup = "/api/movie/lookup"
 
-    def get_movie(self, movie_id: Optional[int]) -> Union[RadarrMovieItem, List[RadarrMovieItem]]:
+    def get_movie(self, movie_id: Optional[int] = None) -> Union[RadarrMovieItem, List[RadarrMovieItem]]:
         """Get specified movie, or all if no id provided from server collection.
 
         Args:
@@ -89,7 +89,6 @@ class RadarrCli(BaseCliMediaApi):
         Returns:
             json response
         """
-        term = str(term)
         if tmdb_id:
             url_path = f"{self.api_url_itemlookup}/tmdb"
             url_params: Dict[str, Any] = {"tmdbId": tmdb_id}
@@ -99,7 +98,7 @@ class RadarrCli(BaseCliMediaApi):
             url_params = {"imdbId": imdb_id}
             res = cast(json_list, self.request_get(url_path, url_params=url_params))
         elif term:
-            res = self.lookup_item(term)
+            res = self.lookup_item(str(term))
         else:
             raise RadarrCliError("Error, invalid parameters")
 
@@ -162,7 +161,7 @@ class RadarrCli(BaseCliMediaApi):
         options = {"addExclusion": add_exclusion} if add_exclusion else {}
         return self.delete_item(movie_id, delete_files, options)
 
-    def refresh_movie(self, movie_id: Optional[int]) -> json_data:
+    def refresh_movie(self, movie_id: Optional[int] = None) -> json_data:
         """Refresh movie information  and rescan disk.
 
         Args:
@@ -175,7 +174,7 @@ class RadarrCli(BaseCliMediaApi):
             data["movieId"] = movie_id
         return self._sendCommand(data)
 
-    def rescan_movie(self, movie_id: Optional[int]) -> json_data:
+    def rescan_movie(self, movie_id: Optional[int] = None) -> json_data:
         """Scan disk for any downloaded movie for all or specified movie.
 
         Args:
