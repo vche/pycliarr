@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pycliarr.api.base_media &mdash; pycliarr 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> pycliarr
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Userguide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">What’s pycliarr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#cli-help">CLI help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/modules.html">pycliarr</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pycliarr</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pycliarr.api.base_media</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pycliarr.api.base_media</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">from</span> <span class="nn">pycliarr.api.base_api</span> <span class="kn">import</span> <span class="n">BaseCliApi</span><span class="p">,</span> <span class="n">json_data</span><span class="p">,</span> <span class="n">json_dict</span><span class="p">,</span> <span class="n">json_list</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BaseCliMediaApi"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi">[docs]</a><span class="k">class</span> <span class="nc">BaseCliMediaApi</span><span class="p">(</span><span class="n">BaseCliApi</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for media based API.</span>
+
+<span class="sd">    Implement behavior common to media based apis (e.g. sonarr, radarr)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Default urls for commands. Some might need to be overriden by the childs.</span>
+    <span class="n">api_url_calendar</span> <span class="o">=</span> <span class="s2">&quot;/api/calendar&quot;</span>
+    <span class="n">api_url_command</span> <span class="o">=</span> <span class="s2">&quot;/api/command&quot;</span>
+    <span class="n">api_url_diskspace</span> <span class="o">=</span> <span class="s2">&quot;/api/diskspace&quot;</span>
+    <span class="n">api_url_item</span> <span class="o">=</span> <span class="s2">&quot;/api/item&quot;</span>
+    <span class="n">api_url_itemlookup</span> <span class="o">=</span> <span class="s2">&quot;/api/item/lookup&quot;</span>
+    <span class="n">api_url_systemstatus</span> <span class="o">=</span> <span class="s2">&quot;/api/system/status&quot;</span>
+    <span class="n">api_url_queue</span> <span class="o">=</span> <span class="s2">&quot;/api/queue&quot;</span>
+    <span class="n">api_url_history</span> <span class="o">=</span> <span class="s2">&quot;/api/history/&quot;</span>
+    <span class="n">api_url_profile</span> <span class="o">=</span> <span class="s2">&quot;/api/profile&quot;</span>
+    <span class="n">api_url_rootfolder</span> <span class="o">=</span> <span class="s2">&quot;/api/rootfolder&quot;</span>
+    <span class="n">api_url_log</span> <span class="o">=</span> <span class="s2">&quot;/api/log&quot;</span>
+    <span class="n">api_url_systembackup</span> <span class="o">=</span> <span class="s2">&quot;/api/system/backup&quot;</span>
+    <span class="n">api_url_wanted_missing</span> <span class="o">=</span> <span class="s2">&quot;/api/wanted/missing&quot;</span>
+
+<div class="viewcode-block" id="BaseCliMediaApi.get_calendar"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.get_calendar">[docs]</a>    <span class="k">def</span> <span class="nf">get_calendar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve info about when items were/will be downloaded.</span>
+
+<span class="sd">        If start and end are not provided, retrieves movies airing today and tomorrow.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            start_date (Optional[datetime]):  Start date of events to retrieve</span>
+<span class="sd">            end_date (Optional[datetime]):    End date of events to retrieve</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url_params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">start_date</span> <span class="ow">and</span> <span class="n">end_date</span><span class="p">:</span>
+            <span class="n">url_params</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">url_params</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_calendar</span><span class="p">,</span> <span class="n">url_params</span><span class="o">=</span><span class="n">url_params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.get_command"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.get_command">[docs]</a>    <span class="k">def</span> <span class="nf">get_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cid</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Query the status of a previously started command, or all currently running.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cid (Optional[int]) Unique ID of command</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_command</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">cid</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">cid</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_url_command</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="n">url_path</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_sendCommand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">json_data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_command</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BaseCliMediaApi.sync_rss"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.sync_rss">[docs]</a>    <span class="k">def</span> <span class="nf">sync_rss</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Perform an RSS sync with all enabled indexers.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sendCommand</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;RssSync&quot;</span><span class="p">})</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.rename_files"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.rename_files">[docs]</a>    <span class="k">def</span> <span class="nf">rename_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Rename the list of files provided.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_ids (List[int]): List of ids of files to rename</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sendCommand</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;RenameFiles&quot;</span><span class="p">,</span> <span class="s2">&quot;files&quot;</span><span class="p">:</span> <span class="n">file_ids</span><span class="p">})</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.get_disk_space"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.get_disk_space">[docs]</a>    <span class="k">def</span> <span class="nf">get_disk_space</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve info about the disk space on the server.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_diskspace</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.get_root_folder"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.get_root_folder">[docs]</a>    <span class="k">def</span> <span class="nf">get_root_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve the server root folder.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">json_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_rootfolder</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.get_item"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.get_item">[docs]</a>    <span class="k">def</span> <span class="nf">get_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get specified item, or all if no id provided from server collection.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            item_id (Optional[int]) ID of item to get, all items by default</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_item</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">item_id</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_url_item</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="n">url_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.lookup_item"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.lookup_item">[docs]</a>    <span class="k">def</span> <span class="nf">lookup_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Search for items</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            term (str): Lookup terms</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;term&quot;</span><span class="p">:</span> <span class="n">term</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">json_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_itemlookup</span><span class="p">,</span> <span class="n">url_params</span><span class="o">=</span><span class="n">url_params</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.add_item"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.add_item">[docs]</a>    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_data</span><span class="p">:</span> <span class="n">json_data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;addMovie adds a new movie to collection</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            json_data: Dict representation of the item to add</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_item</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="n">json_data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.delete_item"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.delete_item">[docs]</a>    <span class="k">def</span> <span class="nf">delete_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">delete_files</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Delete the item with the given ID</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            item_id (int):  Item to delete</span>
+<span class="sd">            delete_files (bool): Optional. Also delete files. Default is False</span>
+<span class="sd">            options (Dict[str, Any]): Optionally specify additional options</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;deleteFiles&quot;</span><span class="p">:</span> <span class="n">delete_files</span><span class="p">}</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+        <span class="n">url_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_item</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">item_id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_delete</span><span class="p">(</span><span class="n">url_path</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.get_system_status"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.get_system_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_system_status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the System Status as json&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_systemstatus</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.get_quality_profiles"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.get_quality_profiles">[docs]</a>    <span class="k">def</span> <span class="nf">get_quality_profiles</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the quality profiles&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">json_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_profile</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.get_queue"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.get_queue">[docs]</a>    <span class="k">def</span> <span class="nf">get_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get queue info (downloading/completed, ok/warning) as json&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_queue</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.delete_queue"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.delete_queue">[docs]</a>    <span class="k">def</span> <span class="nf">delete_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">blacklist</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Delete an item from the queue and download client. Optionally blacklist item after deletion.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            item_id (int):  Item to delete</span>
+<span class="sd">            blacklist (Optional[bool]): Optionally blacklist the item</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">item_id</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">blacklist</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;blacklist&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">blacklist</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_queue</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.get_history"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.get_history">[docs]</a>    <span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">page</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">sort_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;date&quot;</span><span class="p">,</span>
+        <span class="n">page_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">sort_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;asc&quot;</span><span class="p">,</span>
+        <span class="n">options</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get history (grabs/failures/completed)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            page (int) - 1-indexed (1 default)</span>
+<span class="sd">            sort_key (string) - title or date</span>
+<span class="sd">            page_size (int) - Default: 10</span>
+<span class="sd">            sort_dir (string) - asc or desc - Default: asc</span>
+<span class="sd">            options (Dict[str, Any]={}): Optional additional options</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="n">page</span><span class="p">,</span>
+            <span class="s2">&quot;pageSize&quot;</span><span class="p">:</span> <span class="n">page_size</span><span class="p">,</span>
+            <span class="s2">&quot;sortKey&quot;</span><span class="p">:</span> <span class="n">sort_key</span><span class="p">,</span>
+            <span class="s2">&quot;sortDir&quot;</span><span class="p">:</span> <span class="n">sort_dir</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_history</span><span class="p">,</span> <span class="n">url_params</span><span class="o">=</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.get_logs"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.get_logs">[docs]</a>    <span class="k">def</span> <span class="nf">get_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sort_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">page_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">sort_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;asc&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get logs</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            page (int) - 1-indexed (1 default)</span>
+<span class="sd">            sort_key (string) - title or time</span>
+<span class="sd">            page_size (int) - Default: 10</span>
+<span class="sd">            sort_dir (string) - asc or desc - Default: asc</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="n">page</span><span class="p">,</span>
+            <span class="s2">&quot;pageSize&quot;</span><span class="p">:</span> <span class="n">page_size</span><span class="p">,</span>
+            <span class="s2">&quot;sortKey&quot;</span><span class="p">:</span> <span class="n">sort_key</span><span class="p">,</span>
+            <span class="s2">&quot;sortDir&quot;</span><span class="p">:</span> <span class="n">sort_dir</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_log</span><span class="p">,</span> <span class="n">url_params</span><span class="o">=</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.get_backup"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.get_backup">[docs]</a>    <span class="k">def</span> <span class="nf">get_backup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Return the backups as json&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_systembackup</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseCliMediaApi.get_wanted"><a class="viewcode-back" href="../../../source/pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi.get_wanted">[docs]</a>    <span class="k">def</span> <span class="nf">get_wanted</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sort_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;airDateUtc&quot;</span><span class="p">,</span> <span class="n">page_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">sort_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;asc&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get Wanted / Missing episodes</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sort_key (str): series.title or airDateUtc (default)</span>
+<span class="sd">            page (int): 1-indexed Default: 1</span>
+<span class="sd">            page_size (int): Default: 10</span>
+<span class="sd">            sort_dir (str): asc or desc - Default: asc</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="n">page</span><span class="p">,</span>
+            <span class="s2">&quot;pageSize&quot;</span><span class="p">:</span> <span class="n">page_size</span><span class="p">,</span>
+            <span class="s2">&quot;sortKey&quot;</span><span class="p">:</span> <span class="n">sort_key</span><span class="p">,</span>
+            <span class="s2">&quot;sortDir&quot;</span><span class="p">:</span> <span class="n">sort_dir</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;sortKey&quot;</span><span class="p">:</span> <span class="n">sort_key</span><span class="p">})</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_wanted_missing</span><span class="p">,</span> <span class="n">url_params</span><span class="o">=</span><span class="n">data</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Vivien Chene
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

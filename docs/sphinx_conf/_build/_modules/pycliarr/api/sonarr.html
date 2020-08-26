@@ -1,0 +1,465 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pycliarr.api.sonarr &mdash; pycliarr 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> pycliarr
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Userguide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">What’s pycliarr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#cli-help">CLI help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/modules.html">pycliarr</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pycliarr</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pycliarr.api.sonarr</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pycliarr.api.sonarr</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">pycliarr.api.base_api</span> <span class="kn">import</span> <span class="n">BaseCliApiItem</span><span class="p">,</span> <span class="n">json_data</span>
+<span class="kn">from</span> <span class="nn">pycliarr.api.base_media</span> <span class="kn">import</span> <span class="n">BaseCliMediaApi</span>
+<span class="kn">from</span> <span class="nn">pycliarr.api.exceptions</span> <span class="kn">import</span> <span class="n">SonarrCliError</span>
+
+
+<div class="viewcode-block" id="SonarrSerieItem"><a class="viewcode-back" href="../../../source/pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrSerieItem">[docs]</a><span class="k">class</span> <span class="nc">SonarrSerieItem</span><span class="p">(</span><span class="n">BaseCliApiItem</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class for handling serie info.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Define the model of items represented by this class.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;alternateTitles&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;sortTitle&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;seasonCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;totalEpisodeCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;episodeCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;episodeFileCount&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;sizeOnDisk&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;overview&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;previousAiring&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;network&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;airTime&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;images&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;seasons&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;profileId&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;seasonFolder&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;monitored&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;useSceneNumbering&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;runtime&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;tvdbId&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;tvRageId&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;tvMazeId&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;firstAired&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lastInfoSync&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;seriesType&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cleanTitle&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;imdbId&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;titleSlug&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;certification&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;genres&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;added&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ratings&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;qualityProfileId&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="SonarrCli"><a class="viewcode-back" href="../../../source/pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli">[docs]</a><span class="k">class</span> <span class="nc">SonarrCli</span><span class="p">(</span><span class="n">BaseCliMediaApi</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sonarr api client.</span>
+
+<span class="sd">    API reference:</span>
+<span class="sd">        https://github.com/Sonarr/Sonarr/wiki/API</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Not all commands are implemented.</span>
+<span class="sd">        Some commands available are implemented in BaseCliMediaApi:</span>
+<span class="sd">        * get_calendar</span>
+<span class="sd">        * get_command</span>
+<span class="sd">        * get_quality_profiles</span>
+<span class="sd">        * rename_files</span>
+<span class="sd">        * get_disk_space</span>
+<span class="sd">        * get_system_status</span>
+<span class="sd">        * get_queue</span>
+<span class="sd">        * delete_queue</span>
+
+<span class="sd">    Todo:</span>
+<span class="sd">        * get_wanted</span>
+<span class="sd">        * get_logs</span>
+<span class="sd">        * get_backup</span>
+<span class="sd">        * get_episode_files</span>
+<span class="sd">        * delete_episode_files</span>
+<span class="sd">        * search_selected</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Set api specific to radarr (differs from the default ones in BaseCliMediaApi)</span>
+    <span class="n">api_url_item</span> <span class="o">=</span> <span class="s2">&quot;/api/series&quot;</span>
+    <span class="n">api_url_itemlookup</span> <span class="o">=</span> <span class="s2">&quot;/api/series/lookup&quot;</span>
+    <span class="n">api_url_episode</span> <span class="o">=</span> <span class="s2">&quot;/api/episode&quot;</span>
+    <span class="n">api_url_episodefile</span> <span class="o">=</span> <span class="s2">&quot;/api/episodefile&quot;</span>
+
+<div class="viewcode-block" id="SonarrCli.get_serie"><a class="viewcode-back" href="../../../source/pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli.get_serie">[docs]</a>    <span class="k">def</span> <span class="nf">get_serie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serie_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">SonarrSerieItem</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">SonarrSerieItem</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Get specified serie, or all if no id provided from server collection.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            serie_id (Optional[int]) ID of serie to get, all items by default</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            ``SonarrSerieItem`` if a serie id is specified, or a list of ``SonarrSerieItem``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_item</span><span class="p">(</span><span class="n">serie_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">SonarrSerieItem</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">serie</span><span class="p">)</span> <span class="k">for</span> <span class="n">serie</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SonarrSerieItem</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SonarrCli.lookup_serie"><a class="viewcode-back" href="../../../source/pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli.lookup_serie">[docs]</a>    <span class="k">def</span> <span class="nf">lookup_serie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">term</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tvdb_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SonarrSerieItem</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Search for a serie based on keyword, or tvdb id.</span>
+
+<span class="sd">        If tvdb id is provided, it will be used. If not, the keywords will be used.</span>
+<span class="sd">        One of ``term``, or ``tvdb_id`` must be specified.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            term (Optional[str]): Keywords to seach for</span>
+<span class="sd">            tvdb_id (Optional[str]): TVDB serie id</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">term</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tvdb_id</span><span class="p">:</span>
+            <span class="n">term</span> <span class="o">=</span> <span class="s2">&quot;tvdb:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tvdb_id</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">term</span><span class="p">:</span>
+            <span class="n">SonarrCliError</span><span class="p">(</span><span class="s2">&quot;Error invalid parameters&quot;</span><span class="p">)</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_item</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">SonarrSerieItem</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">serie</span><span class="p">)</span> <span class="k">for</span> <span class="n">serie</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SonarrCli.add_serie"><a class="viewcode-back" href="../../../source/pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli.add_serie">[docs]</a>    <span class="k">def</span> <span class="nf">add_serie</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">quality</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">tvdb_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">serie_info</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SonarrSerieItem</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">monitored</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">search</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;addMovie adds a new serie to collection.</span>
+
+<span class="sd">        The serie description serie_info must be specified. If the IMDB or TMDB id is provided instead,</span>
+<span class="sd">        it will be used to fetch the required serie description from TMDB.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            quality: Quality profile to use, as retrieved by get_quality_profiles()</span>
+<span class="sd">            tvdb_id (Optional[int]): TVDB id of the serie to add</span>
+<span class="sd">            serie_info (Optional[RadarrserieItem]): Description of the serie to add</span>
+<span class="sd">            monitored (bool): Whether to monitor the serie. Default is True</span>
+<span class="sd">            search (bool): Whether to search for the serie once added. Default is True</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get info from imdb/tmdb if needed:</span>
+        <span class="k">if</span> <span class="n">tvdb_id</span><span class="p">:</span>
+            <span class="n">serie_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_serie</span><span class="p">(</span><span class="n">tvdb_id</span><span class="o">=</span><span class="n">tvdb_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">serie_list</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SonarrCliError</span><span class="p">(</span><span class="s2">&quot;Error, invalid parameter, {len(serie_list)} results in tvdb.&quot;</span><span class="p">)</span>
+            <span class="n">serie_info</span> <span class="o">=</span> <span class="n">serie_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">serie_info</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SonarrCliError</span><span class="p">(</span><span class="s2">&quot;Error, invalid parameters&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Prepare serie info for adding</span>
+        <span class="n">root_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_root_folder</span><span class="p">()</span>
+        <span class="n">serie_info</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">root_path</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">serie_info</span><span class="o">.</span><span class="n">title</span>
+        <span class="n">serie_info</span><span class="o">.</span><span class="n">profileId</span> <span class="o">=</span> <span class="n">quality</span>
+        <span class="n">serie_info</span><span class="o">.</span><span class="n">qualityProfileId</span> <span class="o">=</span> <span class="n">quality</span>
+        <span class="n">serie_info</span><span class="o">.</span><span class="n">monitored</span> <span class="o">=</span> <span class="n">monitored</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;searchForMovie&quot;</span><span class="p">:</span> <span class="n">search</span><span class="p">,</span>
+            <span class="s2">&quot;ignoreEpisodesWithFiles&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;ignoreEpisodesWithoutFiles&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">serie_info</span><span class="o">.</span><span class="n">add_attribute</span><span class="p">(</span><span class="s2">&quot;addOptions&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">json_data</span><span class="o">=</span><span class="n">serie_info</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="SonarrCli.delete_serie"><a class="viewcode-back" href="../../../source/pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli.delete_serie">[docs]</a>    <span class="k">def</span> <span class="nf">delete_serie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serie_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">delete_files</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">add_exclusion</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Delete the serie with the given ID</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            serie_id (int):  Serie to delete</span>
+<span class="sd">            delete_files (bool): Optional. Also delete files. Default is True</span>
+<span class="sd">            add_exclusion: Optionally exclude the serie from further tvdb auto add</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;addExclusion&quot;</span><span class="p">:</span> <span class="n">add_exclusion</span><span class="p">}</span> <span class="k">if</span> <span class="n">add_exclusion</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">delete_item</span><span class="p">(</span><span class="n">serie_id</span><span class="p">,</span> <span class="n">delete_files</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SonarrCli.refresh_serie"><a class="viewcode-back" href="../../../source/pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli.refresh_serie">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_serie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serie_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Refresh serie information  and rescan disk.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            serie_id (Optional[int]): serie to refresh, if not set all series will be refreshed and scanned</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;RefreshSeries&quot;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">serie_id</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;seriesId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">serie_id</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sendCommand</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SonarrCli.rescan_serie"><a class="viewcode-back" href="../../../source/pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli.rescan_serie">[docs]</a>    <span class="k">def</span> <span class="nf">rescan_serie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serie_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Scan disk for any downloaded serie for all or specified serie.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            serie_id (Optional[int]): serie to refresh, if not set all series will be refreshed and scanned</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;RescanSeries&quot;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">serie_id</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;seriesId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">serie_id</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sendCommand</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SonarrCli.get_episode"><a class="viewcode-back" href="../../../source/pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli.get_episode">[docs]</a>    <span class="k">def</span> <span class="nf">get_episode</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">serie_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">episode_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">json_data</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">json_data</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns specified episode or all for the given serie</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            serie_id (int): ID of the serie to get all episodes from</span>
+<span class="sd">            episode_id (int): ID of a specific episode to get</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">serie_id</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_episode</span><span class="p">,</span> <span class="n">url_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;seriesId&quot;</span><span class="p">:</span> <span class="n">serie_id</span><span class="p">})</span>
+        <span class="k">elif</span> <span class="n">episode_id</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_episode</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">episode_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SonarrCliError</span><span class="p">(</span><span class="s2">&quot;serie_id or episode_id must be provided&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="SonarrCli.get_episode_file"><a class="viewcode-back" href="../../../source/pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli.get_episode_file">[docs]</a>    <span class="k">def</span> <span class="nf">get_episode_file</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">serie_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">episode_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">json_data</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">json_data</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns specified episode file or all for the given serie</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            serie_id (int): ID of the serie to get all episodes files from</span>
+<span class="sd">            episode_id (int): ID of a specific episode file to get</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">serie_id</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_episodefile</span><span class="p">,</span> <span class="n">url_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;seriesId&quot;</span><span class="p">:</span> <span class="n">serie_id</span><span class="p">})</span>
+        <span class="k">elif</span> <span class="n">episode_id</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_episodefile</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">episode_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SonarrCliError</span><span class="p">(</span><span class="s2">&quot;serie_id or episode_id must be provided&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="SonarrCli.delete_episode_file"><a class="viewcode-back" href="../../../source/pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli.delete_episode_file">[docs]</a>    <span class="k">def</span> <span class="nf">delete_episode_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">episode_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">json_data</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Delete the given episode file</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            episode_id (int): ID of the episode to delete</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            json response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_delete</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">api_url_episodefile</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">episode_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Vivien Chene
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

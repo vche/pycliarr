@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pycliarr.api.sonarr module &mdash; pycliarr 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pycliarr.cli package" href="pycliarr.cli.html" />
+    <link rel="prev" title="pycliarr.api.radarr module" href="pycliarr.api.radarr.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> pycliarr
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Userguide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">What’s pycliarr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#cli-help">CLI help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pycliarr</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pycliarr.html">pycliarr package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pycliarr.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="pycliarr.api.html">pycliarr.api package</a><ul class="current">
+<li class="toctree-l5 current"><a class="reference internal" href="pycliarr.api.html#submodules">Submodules</a></li>
+<li class="toctree-l5"><a class="reference internal" href="pycliarr.api.html#module-pycliarr.api">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pycliarr.cli.html">pycliarr.cli package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pycliarr.html#module-pycliarr">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pycliarr</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">pycliarr</a> &raquo;</li>
+        
+          <li><a href="pycliarr.html">pycliarr package</a> &raquo;</li>
+        
+          <li><a href="pycliarr.api.html">pycliarr.api package</a> &raquo;</li>
+        
+      <li>pycliarr.api.sonarr module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/pycliarr.api.sonarr.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pycliarr.api.sonarr">
+<span id="pycliarr-api-sonarr-module"></span><h1>pycliarr.api.sonarr module<a class="headerlink" href="#module-pycliarr.api.sonarr" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="pycliarr.api.sonarr.SonarrCli">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.api.sonarr.</code><code class="sig-name descname">SonarrCli</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">host_url</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">api_key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">password</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycliarr/api/sonarr.html#SonarrCli"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi" title="pycliarr.api.base_media.BaseCliMediaApi"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.api.base_media.BaseCliMediaApi</span></code></a></p>
+<p>Sonarr api client.</p>
+<dl class="simple">
+<dt>API reference:</dt><dd><p><a class="reference external" href="https://github.com/Sonarr/Sonarr/wiki/API">https://github.com/Sonarr/Sonarr/wiki/API</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not all commands are implemented.
+Some commands available are implemented in BaseCliMediaApi:
+* get_calendar
+* get_command
+* get_quality_profiles
+* rename_files
+* get_disk_space
+* get_system_status
+* get_queue
+* delete_queue</p>
+</div>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>get_wanted</p></li>
+<li><p>get_logs</p></li>
+<li><p>get_backup</p></li>
+<li><p>get_episode_files</p></li>
+<li><p>delete_episode_files</p></li>
+<li><p>search_selected</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt id="pycliarr.api.sonarr.SonarrCli.add_serie">
+<code class="sig-name descname">add_serie</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">quality</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">tvdb_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">serie_info</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference internal" href="#pycliarr.api.sonarr.SonarrSerieItem" title="pycliarr.api.sonarr.SonarrSerieItem">pycliarr.api.sonarr.SonarrSerieItem</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">monitored</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">search</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/sonarr.html#SonarrCli.add_serie"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli.add_serie" title="Permalink to this definition">¶</a></dt>
+<dd><p>addMovie adds a new serie to collection.</p>
+<p>The serie description serie_info must be specified. If the IMDB or TMDB id is provided instead,
+it will be used to fetch the required serie description from TMDB.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>quality</strong> – Quality profile to use, as retrieved by get_quality_profiles()</p></li>
+<li><p><strong>tvdb_id</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – TVDB id of the serie to add</p></li>
+<li><p><strong>serie_info</strong> (<em>Optional</em><em>[</em><em>RadarrserieItem</em><em>]</em>) – Description of the serie to add</p></li>
+<li><p><strong>monitored</strong> (<em>bool</em>) – Whether to monitor the serie. Default is True</p></li>
+<li><p><strong>search</strong> (<em>bool</em>) – Whether to search for the serie once added. Default is True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.sonarr.SonarrCli.api_url_episode">
+<code class="sig-name descname">api_url_episode</code><em class="property"> = '/api/episode'</em><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli.api_url_episode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.sonarr.SonarrCli.api_url_episodefile">
+<code class="sig-name descname">api_url_episodefile</code><em class="property"> = '/api/episodefile'</em><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli.api_url_episodefile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.sonarr.SonarrCli.api_url_item">
+<code class="sig-name descname">api_url_item</code><em class="property"> = '/api/series'</em><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli.api_url_item" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.sonarr.SonarrCli.api_url_itemlookup">
+<code class="sig-name descname">api_url_itemlookup</code><em class="property"> = '/api/series/lookup'</em><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli.api_url_itemlookup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.sonarr.SonarrCli.delete_episode_file">
+<code class="sig-name descname">delete_episode_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">episode_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/sonarr.html#SonarrCli.delete_episode_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli.delete_episode_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the given episode file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>episode_id</strong> (<em>int</em>) – ID of the episode to delete</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.sonarr.SonarrCli.delete_serie">
+<code class="sig-name descname">delete_serie</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serie_id</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">delete_files</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">add_exclusion</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/sonarr.html#SonarrCli.delete_serie"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli.delete_serie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the serie with the given ID</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serie_id</strong> (<em>int</em>) – Serie to delete</p></li>
+<li><p><strong>delete_files</strong> (<em>bool</em>) – Optional. Also delete files. Default is True</p></li>
+<li><p><strong>add_exclusion</strong> – Optionally exclude the serie from further tvdb auto add</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.sonarr.SonarrCli.get_episode">
+<code class="sig-name descname">get_episode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serie_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">episode_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">, </span>List<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/sonarr.html#SonarrCli.get_episode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli.get_episode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns specified episode or all for the given serie</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serie_id</strong> (<em>int</em>) – ID of the serie to get all episodes from</p></li>
+<li><p><strong>episode_id</strong> (<em>int</em>) – ID of a specific episode to get</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.sonarr.SonarrCli.get_episode_file">
+<code class="sig-name descname">get_episode_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serie_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">episode_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">, </span>List<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">]</span><span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/sonarr.html#SonarrCli.get_episode_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli.get_episode_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns specified episode file or all for the given serie</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>serie_id</strong> (<em>int</em>) – ID of the serie to get all episodes files from</p></li>
+<li><p><strong>episode_id</strong> (<em>int</em>) – ID of a specific episode file to get</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.sonarr.SonarrCli.get_serie">
+<code class="sig-name descname">get_serie</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serie_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span><a class="reference internal" href="#pycliarr.api.sonarr.SonarrSerieItem" title="pycliarr.api.sonarr.SonarrSerieItem">pycliarr.api.sonarr.SonarrSerieItem</a><span class="p">, </span>List<span class="p">[</span><a class="reference internal" href="#pycliarr.api.sonarr.SonarrSerieItem" title="pycliarr.api.sonarr.SonarrSerieItem">pycliarr.api.sonarr.SonarrSerieItem</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/sonarr.html#SonarrCli.get_serie"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli.get_serie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get specified serie, or all if no id provided from server collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>serie_id</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">SonarrSerieItem</span></code> if a serie id is specified, or a list of <code class="docutils literal notranslate"><span class="pre">SonarrSerieItem</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.sonarr.SonarrCli.lookup_serie">
+<code class="sig-name descname">lookup_serie</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">term</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tvdb_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#pycliarr.api.sonarr.SonarrSerieItem" title="pycliarr.api.sonarr.SonarrSerieItem">pycliarr.api.sonarr.SonarrSerieItem</a><span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/sonarr.html#SonarrCli.lookup_serie"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli.lookup_serie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for a serie based on keyword, or tvdb id.</p>
+<p>If tvdb id is provided, it will be used. If not, the keywords will be used.
+One of <code class="docutils literal notranslate"><span class="pre">term</span></code>, or <code class="docutils literal notranslate"><span class="pre">tvdb_id</span></code> must be specified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>term</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Keywords to seach for</p></li>
+<li><p><strong>tvdb_id</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – TVDB serie id</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.sonarr.SonarrCli.refresh_serie">
+<code class="sig-name descname">refresh_serie</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serie_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/sonarr.html#SonarrCli.refresh_serie"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli.refresh_serie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refresh serie information  and rescan disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>serie_id</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – serie to refresh, if not set all series will be refreshed and scanned</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.sonarr.SonarrCli.rescan_serie">
+<code class="sig-name descname">rescan_serie</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">serie_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/sonarr.html#SonarrCli.rescan_serie"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.sonarr.SonarrCli.rescan_serie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scan disk for any downloaded serie for all or specified serie.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>serie_id</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – serie to refresh, if not set all series will be refreshed and scanned</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.api.sonarr.SonarrSerieItem">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.api.sonarr.</code><code class="sig-name descname">SonarrSerieItem</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycliarr/api/sonarr.html#SonarrSerieItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.sonarr.SonarrSerieItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pycliarr.api.base_api.html#pycliarr.api.base_api.BaseCliApiItem" title="pycliarr.api.base_api.BaseCliApiItem"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.api.base_api.BaseCliApiItem</span></code></a></p>
+<p>Class for handling serie info.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pycliarr.cli.html" class="btn btn-neutral float-right" title="pycliarr.cli package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pycliarr.api.radarr.html" class="btn btn-neutral float-left" title="pycliarr.api.radarr module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Vivien Chene
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

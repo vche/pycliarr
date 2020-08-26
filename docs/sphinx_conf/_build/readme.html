@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>What’s pycliarr &mdash; pycliarr 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="pycliarr’s documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> pycliarr
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Userguide</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">What’s pycliarr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#cli-help">CLI help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#development">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-sources-projects">Installing sources projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-tests">Run tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-documentation">Generate documentation:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/modules.html">pycliarr</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pycliarr</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>What’s pycliarr</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/readme.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="what-s-pycliarr">
+<h1>What’s pycliarr<a class="headerlink" href="#what-s-pycliarr" title="Permalink to this headline">¶</a></h1>
+<p>Python client for radarr and sonarr apis.
+The package provides python client and CLI to use in command line.</p>
+</div>
+<div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>Sonarr CLI</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pyvenv/bin/pycliarr -t <span class="s2">&quot;http://192.168.0.199:8989&quot;</span> -k <span class="s2">&quot;2ac2d8f667524da3bx1849e81dba5a84&quot;</span> -d sonarr get -i <span class="m">65</span>
+pyvenv/bin/pycliarr -t <span class="s2">&quot;http://192.168.0.199:8989&quot;</span> -k <span class="s2">&quot;2ac2d8f667524da3bax849e81dba5a84&quot;</span> -d sonarr add -t <span class="s2">&quot;the walking dead&quot;</span>
+</pre></div>
+</div>
+<p>Radarr CLI</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pyvenv/bin/pycliarr -t <span class="s2">&quot;http://192.168.0.199:8989&quot;</span> -k <span class="s2">&quot;2ac2d8f667524da3bx1849e81dba5a84&quot;</span> -d radarr get -i <span class="m">65</span>
+pyvenv/bin/pycliarr -t <span class="s2">&quot;http://192.168.0.199:8989&quot;</span> -k <span class="s2">&quot;2ac2d8f667524da3bax849e81dba5a84&quot;</span> -d radarr add -t <span class="s2">&quot;wonder woman&quot;</span>
+</pre></div>
+</div>
+<p>Using radarr client</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pycliarr.api.radarr</span> <span class="kn">import</span> <span class="n">RadarrCli</span>
+<span class="n">sonarr_cli</span> <span class="o">=</span> <span class="n">RadarrCli</span><span class="p">(</span><span class="s1">&#39;192.168.0.199:7878&#39;</span><span class="p">,</span> <span class="s1">&#39;5f5e32qf3ff8463e9f3d2388af0fd3e8&#39;</span><span class="p">)</span>
+<span class="n">sonarr_cli</span><span class="o">.</span><span class="n">add_movie</span><span class="p">(</span><span class="n">imdb_id</span><span class="o">=</span><span class="s2">&quot;tt1234&quot;</span><span class="p">,</span> <span class="n">quality_profile</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">movie</span> <span class="o">=</span> <span class="n">sonarr_cli</span><span class="o">.</span><span class="n">get_movie</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">movie</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using sonarr client</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pycliarr.api.sonarr</span> <span class="kn">import</span> <span class="n">SonarrCli</span>
+<span class="n">sonarr_cli</span> <span class="o">=</span> <span class="n">SonarrCli</span><span class="p">(</span><span class="s1">&#39;192.168.0.199:8989&#39;</span><span class="p">,</span> <span class="s1">&#39;2ac2d8f667524da3bx1849e81dba5a84&#39;</span><span class="p">)</span>
+<span class="n">sonarr_cli</span><span class="o">.</span><span class="n">add_serie</span><span class="p">(</span><span class="n">imdb_id</span><span class="o">=</span><span class="s2">&quot;tt1234&quot;</span><span class="p">,</span> <span class="n">quality_profile</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">serie</span> <span class="o">=</span> <span class="n">sonarr_cli</span><span class="o">.</span><span class="n">get_serie</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">serie</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cli-help">
+<h1>CLI help<a class="headerlink" href="#cli-help" title="Permalink to this headline">¶</a></h1>
+<p>Clients:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pyvenv/bin/pycliarr --help
+PyCliarr version <span class="m">0</span>.0.1
+usage: pycliarr <span class="o">[</span>-h<span class="o">]</span> --host HOST --api-key API_KEY <span class="o">[</span>--user USER<span class="o">]</span> <span class="o">[</span>--password PASSWORD<span class="o">]</span> <span class="o">[</span>--debug<span class="o">]</span> <span class="o">{</span>sonarr,radarr<span class="o">}</span> ...
+
+Radarr/Sonarr client
+
+positional arguments:
+  <span class="o">{</span>sonarr,radarr<span class="o">}</span>
+    sonarr              use sonarr client
+    radarr              use radarr client
+
+optional arguments:
+  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
+  --host HOST, -t HOST  Host url, e.g <span class="s1">&#39;http://192.168.0.1&#39;</span>
+  --api-key API_KEY, -k API_KEY
+                        API key, e.g <span class="s1">&#39;5f5e32xf3ff8463d9f1d2u88ef0fd3e8&#39;</span>
+  --user USER, -u USER  Username <span class="k">if</span> using basic authentication
+  --password PASSWORD, -p PASSWORD
+                        Password <span class="k">if</span> using basic authentication
+  --debug, -d           Enable debug logging
+</pre></div>
+</div>
+<p>Radarr CLI:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pyvenv/bin/pycliarr radarr --help
+PyCliarr version <span class="m">0</span>.0.1
+usage: pycliarr radarr <span class="o">[</span>-h<span class="o">]</span> <span class="o">{</span>get,delete,add,refresh,rescan,profiles,system-status,disk-space,queue,calendar,delqueue,wanted<span class="o">}</span> ...
+
+positional arguments:
+  <span class="o">{</span>get,delete,add,refresh,rescan,profiles,system-status,disk-space,queue,calendar,delqueue,wanted<span class="o">}</span>
+    get                 Get info on a of movie
+    delete              Delete a movie
+    add                 Add a movie from the imdb/tmdb id, or look <span class="k">for</span> keywords
+    refresh             Refresh movies
+    rescan              Rescan movies
+    profiles            Get list of quality profiles
+    system-status       Get system status
+    disk-space          Get disk space
+    queue               Get current downloading queue
+    calendar            Get events from calendar
+    delqueue            Get list of quality profiles
+    wanted              List wanted/missing
+
+optional arguments:
+  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
+</pre></div>
+</div>
+<p>Sonarr CLI:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pyvenv/bin/pycliarr sonarr --help
+PyCliarr version <span class="m">0</span>.0.1
+usage: pycliarr sonarr <span class="o">[</span>-h<span class="o">]</span> <span class="o">{</span>get,delete,add,refresh,rescan,get-episode,get-episode-file,delete-episode-file,profiles,system-status,disk-space,queue,calendar,delqueue,wanted<span class="o">}</span> ...
+
+positional arguments:
+  <span class="o">{</span>get,delete,add,refresh,rescan,get-episode,get-episode-file,delete-episode-file,profiles,system-status,disk-space,queue,calendar,delqueue,wanted<span class="o">}</span>
+    get                 Get info on a of serie
+    delete              Delete a serie
+    add                 Add a serie from the tvdb id, or look <span class="k">for</span> keywords
+    refresh             Refresh series
+    rescan              Rescan series
+    get-episode         Get info on an episode
+    get-episode-file    Get info on an episode file
+    delete-episode-file
+                        Get info on a of serie
+    profiles            Get list of quality profiles
+    system-status       Get system status
+    disk-space          Get disk space
+    queue               Get current downloading queue
+    calendar            Get events from calendar
+    delqueue            Get list of quality profiles
+    wanted              List wanted/missing
+
+optional arguments:
+  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>From pip:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip pycliarr
+</pre></div>
+</div>
+<p>From git:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/vche/pycliarr.git
+pip install -e .
+</pre></div>
+</div>
+</div>
+<div class="section" id="development">
+<h1>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installing-sources-projects">
+<h2>Installing sources projects<a class="headerlink" href="#installing-sources-projects" title="Permalink to this headline">¶</a></h2>
+<p>Get the project and create the virtual env:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/vche/pycliarr.git
+virtualenv pyvenv
+. pyvenv/bin/activate
+pip install -e .
+</pre></div>
+</div>
+<p>Note: Entry points will be installed in pyvenv/bin, libs with pyvenv libs</p>
+</div>
+<div class="section" id="run-tests">
+<h2>Run tests<a class="headerlink" href="#run-tests" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install tox
+tox
+</pre></div>
+</div>
+</div>
+<div class="section" id="generate-documentation">
+<h2>Generate documentation:<a class="headerlink" href="#generate-documentation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install sphinx sphinx_rtd_theme m2r
+./setup.py doc
+</pre></div>
+</div>
+<p>In case new classes/modules are added, update the autodoc list:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>rm  docs/sphinx_conf/source/*
+sphinx-apidoc -f -o docs/sphinx_conf/source/ src/pycliarr --separate
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="pycliarr’s documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Vivien Chene
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

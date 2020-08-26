@@ -1,0 +1,670 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pycliarr.cli.cli_cmd &mdash; pycliarr 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> pycliarr
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Userguide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">What’s pycliarr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#cli-help">CLI help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/modules.html">pycliarr</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pycliarr</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>pycliarr.cli.cli_cmd</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pycliarr.cli.cli_cmd</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">argparse</span> <span class="kn">import</span> <span class="n">ArgumentParser</span><span class="p">,</span> <span class="n">Namespace</span><span class="p">,</span> <span class="n">_SubParsersAction</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pformat</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">pycliarr.api</span> <span class="kn">import</span> <span class="n">base_media</span><span class="p">,</span> <span class="n">radarr</span><span class="p">,</span> <span class="n">sonarr</span>
+
+
+<div class="viewcode-block" id="CliCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliCommand">[docs]</a><span class="k">class</span> <span class="nc">CliCommand</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Base command, all command should extend this class.&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="CliCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmdlist_parser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="n">cmdlist_parser</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">cmd_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="CliApiCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliApiCommand">[docs]</a><span class="k">class</span> <span class="nc">CliApiCommand</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Definition of an API client.</span>
+
+<span class="sd">    Allows instantiating the relevant communication client, and execute a subcommmand from its name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cli_class</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">commands</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">CliCommand</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cli_class</span> <span class="o">=</span> <span class="n">cli_class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmd_list</span> <span class="o">=</span> <span class="p">{</span><span class="n">cmd</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">cmd</span> <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_new_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">password</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="n">cli</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cli_class</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cli</span>
+
+<div class="viewcode-block" id="CliApiCommand.add_commands_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliApiCommand.add_commands_args">[docs]</a>    <span class="k">def</span> <span class="nf">add_commands_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmd_list</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cmd_list</span><span class="p">[</span><span class="n">cmd</span><span class="p">]</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CliApiCommand.run_command"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliApiCommand.run_command">[docs]</a>    <span class="k">def</span> <span class="nf">run_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cli</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new_client</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">api_key</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmd_list</span><span class="p">[</span><span class="n">cmd_name</span><span class="p">]</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span></div></div>
+
+
+<span class="c1">##############################################</span>
+<span class="c1">##########  media specific commands ##########</span>
+<span class="c1">##############################################</span>
+<div class="viewcode-block" id="select_profile"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.select_profile">[docs]</a><span class="k">def</span> <span class="nf">select_profile</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">base_media</span><span class="o">.</span><span class="n">BaseCliMediaApi</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">get_quality_profiles</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">profile</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+        <span class="n">qualities</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">qual</span><span class="p">[</span><span class="s2">&quot;quality&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">qual</span> <span class="ow">in</span> <span class="n">profile</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">qual</span><span class="p">[</span><span class="s2">&quot;allowed&quot;</span><span class="p">]])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">profile</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">]: </span><span class="si">{</span><span class="n">profile</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">qualities</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="n">profile_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Profile id to use (1-</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="si">}</span><span class="s2">):&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">profile_id</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">profile_id</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">profile_id</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid profile selection: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="select_item"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.select_item">[docs]</a><span class="k">def</span> <span class="nf">select_item</span><span class="p">(</span>
+    <span class="n">terms</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">choices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">radarr</span><span class="o">.</span><span class="n">RadarrMovieItem</span><span class="p">,</span> <span class="n">sonarr</span><span class="o">.</span><span class="n">SonarrSerieItem</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">radarr</span><span class="o">.</span><span class="n">RadarrMovieItem</span><span class="p">,</span> <span class="n">sonarr</span><span class="o">.</span><span class="n">SonarrSerieItem</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No match found for terms </span><span class="si">{</span><span class="n">terms</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">choices</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">choices</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">]: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">year</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="n">item_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Select the item to add (1-</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span><span class="si">}</span><span class="s2">):&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">item_id</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">choices</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">choices</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid selection: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CliGetProfilesCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetProfilesCommand">[docs]</a><span class="k">class</span> <span class="nc">CliGetProfilesCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;profiles&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Get list of quality profiles&quot;</span>
+
+<div class="viewcode-block" id="CliGetProfilesCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetProfilesCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">base_media</span><span class="o">.</span><span class="n">BaseCliMediaApi</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">get_quality_profiles</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Available quality profiles:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">profile</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+            <span class="n">qualities</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">qual</span><span class="p">[</span><span class="s2">&quot;quality&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">qual</span> <span class="ow">in</span> <span class="n">profile</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">qual</span><span class="p">[</span><span class="s2">&quot;allowed&quot;</span><span class="p">]])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">profile</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">profile</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">qualities</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliSystemStatusCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliSystemStatusCommand">[docs]</a><span class="k">class</span> <span class="nc">CliSystemStatusCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;system-status&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Get system status&quot;</span>
+
+<div class="viewcode-block" id="CliSystemStatusCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliSystemStatusCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">base_media</span><span class="o">.</span><span class="n">BaseCliMediaApi</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">get_system_status</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;System status: </span><span class="si">{</span><span class="n">pformat</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliGetDiskSpaceCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetDiskSpaceCommand">[docs]</a><span class="k">class</span> <span class="nc">CliGetDiskSpaceCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;disk-space&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Get disk space&quot;</span>
+
+<div class="viewcode-block" id="CliGetDiskSpaceCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetDiskSpaceCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">base_media</span><span class="o">.</span><span class="n">BaseCliMediaApi</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">get_disk_space</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Disk space: </span><span class="si">{</span><span class="n">pformat</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliGetQueueCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetQueueCommand">[docs]</a><span class="k">class</span> <span class="nc">CliGetQueueCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;queue&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Get current downloading queue&quot;</span>
+
+<div class="viewcode-block" id="CliGetQueueCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetQueueCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">base_media</span><span class="o">.</span><span class="n">BaseCliMediaApi</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">get_queue</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Queue: </span><span class="si">{</span><span class="n">pformat</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliGetCalendarCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetCalendarCommand">[docs]</a><span class="k">class</span> <span class="nc">CliGetCalendarCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;calendar&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Get events from calendar&quot;</span>
+
+<div class="viewcode-block" id="CliGetCalendarCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetCalendarCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--start&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Start date, format like 2018-06-29&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--end&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;End date, format like 2018-06-29&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliGetCalendarCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetCalendarCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">base_media</span><span class="o">.</span><span class="n">BaseCliMediaApi</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">start_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">start</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">end</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">get_calendar</span><span class="p">(</span><span class="n">start_date</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="o">=</span><span class="n">end_date</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Calendar events: </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliDeleteQueueCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliDeleteQueueCommand">[docs]</a><span class="k">class</span> <span class="nc">CliDeleteQueueCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;delqueue&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Get list of quality profiles&quot;</span>
+
+<div class="viewcode-block" id="CliDeleteQueueCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliDeleteQueueCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--id&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;item ID&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliDeleteQueueCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliDeleteQueueCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">base_media</span><span class="o">.</span><span class="n">BaseCliMediaApi</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">delete_queue</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result: </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliWantedCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliWantedCommand">[docs]</a><span class="k">class</span> <span class="nc">CliWantedCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;wanted&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;List wanted/missing&quot;</span>
+
+<div class="viewcode-block" id="CliWantedCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliWantedCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--page&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Page to get&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--sort-key&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Sort key&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;airDateUtc&quot;</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--page-size&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Page size&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--sort-dir&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Sort direction&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;asc&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliWantedCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliWantedCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">base_media</span><span class="o">.</span><span class="n">BaseCliMediaApi</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">get_wanted</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">page</span><span class="p">,</span> <span class="n">sort_key</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">sort_key</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">page_size</span><span class="p">,</span> <span class="n">sort_dir</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">sort_dir</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<span class="c1">##############################################</span>
+<span class="c1">########## radarr specific commands ##########</span>
+<span class="c1">##############################################</span>
+<div class="viewcode-block" id="CliGetMovieCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetMovieCommand">[docs]</a><span class="k">class</span> <span class="nc">CliGetMovieCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;get&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Get info on a of movie&quot;</span>
+
+<div class="viewcode-block" id="CliGetMovieCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetMovieCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--mid&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;ID of the movie to get info on&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliGetMovieCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetMovieCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">radarr</span><span class="o">.</span><span class="n">RadarrCli</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">get_movie</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mid</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Movie info:</span><span class="se">\n</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliDeleteMovieCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliDeleteMovieCommand">[docs]</a><span class="k">class</span> <span class="nc">CliDeleteMovieCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;delete&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Delete a movie&quot;</span>
+
+<div class="viewcode-block" id="CliDeleteMovieCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliDeleteMovieCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--mid&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;ID of the movie to delete&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--delfiles&quot;</span><span class="p">,</span> <span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Also delete files on disk&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliDeleteMovieCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliDeleteMovieCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">radarr</span><span class="o">.</span><span class="n">RadarrCli</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">delete_movie</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mid</span><span class="p">,</span> <span class="n">delete_files</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">delfiles</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliGetRefreshMovieCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetRefreshMovieCommand">[docs]</a><span class="k">class</span> <span class="nc">CliGetRefreshMovieCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;refresh&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Refresh movies&quot;</span>
+
+<div class="viewcode-block" id="CliGetRefreshMovieCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetRefreshMovieCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--mid&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Movie ID&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliGetRefreshMovieCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetRefreshMovieCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">radarr</span><span class="o">.</span><span class="n">RadarrCli</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">refresh_movie</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mid</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result: </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliGetRescanMovieCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetRescanMovieCommand">[docs]</a><span class="k">class</span> <span class="nc">CliGetRescanMovieCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;rescan&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Rescan movies&quot;</span>
+
+<div class="viewcode-block" id="CliGetRescanMovieCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetRescanMovieCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--mid&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Movie ID&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliGetRescanMovieCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetRescanMovieCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">radarr</span><span class="o">.</span><span class="n">RadarrCli</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">rescan_movie</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">mid</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result: </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliAddMovieCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliAddMovieCommand">[docs]</a><span class="k">class</span> <span class="nc">CliAddMovieCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;add&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Add a movie from the imdb/tmdb id, or look for keywords&quot;</span>
+
+<div class="viewcode-block" id="CliAddMovieCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliAddMovieCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">search_group</span> <span class="o">=</span> <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">()</span>
+        <span class="n">search_group</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">search_group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--tmdb&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;TheMovieDatabase ID of the movie to add&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">search_group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--imdb&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;IMDB ID of the movie to add&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">search_group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--terms&quot;</span><span class="p">,</span> <span class="s2">&quot;-t&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Keyword to search for the movie to add&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--quality&quot;</span><span class="p">,</span> <span class="s2">&quot;-q&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Quality profile to use&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliAddMovieCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliAddMovieCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">radarr</span><span class="o">.</span><span class="n">RadarrCli</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+
+        <span class="c1"># If keywords were specified, look for results and prompt for choice</span>
+        <span class="n">movie_info</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">terms</span><span class="p">:</span>
+            <span class="n">choices</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">lookup_movie</span><span class="p">(</span><span class="n">term</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">terms</span><span class="p">)</span>
+            <span class="n">movie_info</span> <span class="o">=</span> <span class="n">select_item</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">terms</span><span class="p">,</span> <span class="n">choices</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="c1"># If no quality profile specified, list them qnd prompt for choice</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">quality</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">quality</span> <span class="o">=</span> <span class="n">select_profile</span><span class="p">(</span><span class="n">cli</span><span class="p">)</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">add_movie</span><span class="p">(</span><span class="n">quality</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">quality</span><span class="p">,</span> <span class="n">tmdb_id</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">tmdb</span><span class="p">,</span> <span class="n">imdb_id</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">imdb</span><span class="p">,</span> <span class="n">movie_info</span><span class="o">=</span><span class="n">movie_info</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<span class="c1">##############################################</span>
+<span class="c1">########## sonarr specific commands ##########</span>
+<span class="c1">##############################################</span>
+<div class="viewcode-block" id="CliGetSerieCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetSerieCommand">[docs]</a><span class="k">class</span> <span class="nc">CliGetSerieCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;get&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Get info on a of serie&quot;</span>
+
+<div class="viewcode-block" id="CliGetSerieCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetSerieCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--sid&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;ID of the serie to get info on&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliGetSerieCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetSerieCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">sonarr</span><span class="o">.</span><span class="n">SonarrCli</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">get_serie</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Serie info:</span><span class="se">\n</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliDeleteSerieCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliDeleteSerieCommand">[docs]</a><span class="k">class</span> <span class="nc">CliDeleteSerieCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;delete&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Delete a serie&quot;</span>
+
+<div class="viewcode-block" id="CliDeleteSerieCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliDeleteSerieCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--sid&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;ID of the serie to delete&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--delfiles&quot;</span><span class="p">,</span> <span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Also delete files on disk&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliDeleteSerieCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliDeleteSerieCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">sonarr</span><span class="o">.</span><span class="n">SonarrCli</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">delete_serie</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">sid</span><span class="p">,</span> <span class="n">delete_files</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">delfiles</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliGetRefreshSerieCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetRefreshSerieCommand">[docs]</a><span class="k">class</span> <span class="nc">CliGetRefreshSerieCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;refresh&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Refresh series&quot;</span>
+
+<div class="viewcode-block" id="CliGetRefreshSerieCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetRefreshSerieCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--sid&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;serie ID&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliGetRefreshSerieCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetRefreshSerieCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">sonarr</span><span class="o">.</span><span class="n">SonarrCli</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">refresh_serie</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result: </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliGetRescanSerieCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetRescanSerieCommand">[docs]</a><span class="k">class</span> <span class="nc">CliGetRescanSerieCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;rescan&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Rescan series&quot;</span>
+
+<div class="viewcode-block" id="CliGetRescanSerieCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetRescanSerieCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--sid&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;serie ID&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliGetRescanSerieCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetRescanSerieCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">sonarr</span><span class="o">.</span><span class="n">SonarrCli</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">rescan_serie</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result: </span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliAddSerieCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliAddSerieCommand">[docs]</a><span class="k">class</span> <span class="nc">CliAddSerieCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;add&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Add a serie from the tvdb id, or look for keywords&quot;</span>
+
+<div class="viewcode-block" id="CliAddSerieCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliAddSerieCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">search_group</span> <span class="o">=</span> <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">()</span>
+        <span class="n">search_group</span><span class="o">.</span><span class="n">required</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">search_group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--tvdb&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;TheVideoDatabase ID of the serie to add&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">search_group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--terms&quot;</span><span class="p">,</span> <span class="s2">&quot;-t&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Keyword to search for the serie to add&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--quality&quot;</span><span class="p">,</span> <span class="s2">&quot;-q&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Quality profile to use&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliAddSerieCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliAddSerieCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">sonarr</span><span class="o">.</span><span class="n">SonarrCli</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+
+        <span class="c1"># If keywords were specified, look for results and prompt for choice</span>
+        <span class="n">serie_info</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">terms</span><span class="p">:</span>
+            <span class="n">choices</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">lookup_serie</span><span class="p">(</span><span class="n">term</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">terms</span><span class="p">)</span>
+            <span class="n">serie_info</span> <span class="o">=</span> <span class="n">select_item</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">terms</span><span class="p">,</span> <span class="n">choices</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="c1"># If no quality profile specified, list them qnd prompt for choice</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">quality</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">quality</span> <span class="o">=</span> <span class="n">select_profile</span><span class="p">(</span><span class="n">cli</span><span class="p">)</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">add_serie</span><span class="p">(</span><span class="n">quality</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">quality</span><span class="p">,</span> <span class="n">tvdb_id</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">tvdb</span><span class="p">,</span> <span class="n">serie_info</span><span class="o">=</span><span class="n">serie_info</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result:</span><span class="se">\n</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliEpisodeCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliEpisodeCommand">[docs]</a><span class="k">class</span> <span class="nc">CliEpisodeCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;get-episode&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Get info on an episode&quot;</span>
+
+<div class="viewcode-block" id="CliEpisodeCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliEpisodeCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--sid&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;ID of the serie to get info on&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--epid&quot;</span><span class="p">,</span> <span class="s2">&quot;-e&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;ID of the episode to get info on&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliEpisodeCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliEpisodeCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">sonarr</span><span class="o">.</span><span class="n">SonarrCli</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">get_episode</span><span class="p">(</span><span class="n">serie_id</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">sid</span><span class="p">,</span> <span class="n">episode_id</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">epid</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Episode info:</span><span class="se">\n</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliGetEpisodeFileCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetEpisodeFileCommand">[docs]</a><span class="k">class</span> <span class="nc">CliGetEpisodeFileCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;get-episode-file&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Get info on an episode file&quot;</span>
+
+<div class="viewcode-block" id="CliGetEpisodeFileCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetEpisodeFileCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--sid&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;ID of the serie to get info on&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--epid&quot;</span><span class="p">,</span> <span class="s2">&quot;-e&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;ID of the episode to get info on&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliGetEpisodeFileCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliGetEpisodeFileCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">sonarr</span><span class="o">.</span><span class="n">SonarrCli</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">get_episode_file</span><span class="p">(</span><span class="n">serie_id</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">sid</span><span class="p">,</span> <span class="n">episode_id</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">epid</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Episode file:</span><span class="se">\n</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CliDeleteEpisodeFileCommand"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliDeleteEpisodeFileCommand">[docs]</a><span class="k">class</span> <span class="nc">CliDeleteEpisodeFileCommand</span><span class="p">(</span><span class="n">CliCommand</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;delete-episode-file&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Get info on a of serie&quot;</span>
+
+<div class="viewcode-block" id="CliDeleteEpisodeFileCommand.configure_args"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliDeleteEpisodeFileCommand.configure_args">[docs]</a>    <span class="k">def</span> <span class="nf">configure_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">_SubParsersAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArgumentParser</span><span class="p">:</span>
+        <span class="n">cmd_parser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">configure_args</span><span class="p">(</span><span class="n">cmd_subparser</span><span class="p">)</span>
+        <span class="n">cmd_parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--sid&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;ID of the serie to get info on&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cmd_parser</span></div>
+
+<div class="viewcode-block" id="CliDeleteEpisodeFileCommand.run"><a class="viewcode-back" href="../../../source/pycliarr.cli.cli_cmd.html#pycliarr.cli.cli_cmd.CliDeleteEpisodeFileCommand.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cli</span><span class="p">:</span> <span class="n">sonarr</span><span class="o">.</span><span class="n">SonarrCli</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">Namespace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">delete_episode_file</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Res:</span><span class="se">\n</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+
+
+<span class="c1">#####################################################</span>
+<span class="c1">########## Clients and commands definition ##########</span>
+<span class="c1">#####################################################</span>
+<span class="n">CLI_LIST</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">CliApiCommand</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">CliApiCommand</span><span class="p">(</span>
+        <span class="s2">&quot;sonarr&quot;</span><span class="p">,</span>
+        <span class="n">sonarr</span><span class="o">.</span><span class="n">SonarrCli</span><span class="p">,</span>
+        <span class="p">[</span>
+            <span class="n">CliGetSerieCommand</span><span class="p">(),</span>
+            <span class="n">CliDeleteSerieCommand</span><span class="p">(),</span>
+            <span class="n">CliAddSerieCommand</span><span class="p">(),</span>
+            <span class="n">CliGetRefreshSerieCommand</span><span class="p">(),</span>
+            <span class="n">CliGetRescanSerieCommand</span><span class="p">(),</span>
+            <span class="n">CliEpisodeCommand</span><span class="p">(),</span>
+            <span class="n">CliGetEpisodeFileCommand</span><span class="p">(),</span>
+            <span class="n">CliDeleteEpisodeFileCommand</span><span class="p">(),</span>
+            <span class="n">CliGetProfilesCommand</span><span class="p">(),</span>
+            <span class="n">CliSystemStatusCommand</span><span class="p">(),</span>
+            <span class="n">CliGetDiskSpaceCommand</span><span class="p">(),</span>
+            <span class="n">CliGetQueueCommand</span><span class="p">(),</span>
+            <span class="n">CliGetCalendarCommand</span><span class="p">(),</span>
+            <span class="n">CliDeleteQueueCommand</span><span class="p">(),</span>
+            <span class="n">CliWantedCommand</span><span class="p">(),</span>
+        <span class="p">],</span>
+    <span class="p">),</span>
+    <span class="n">CliApiCommand</span><span class="p">(</span>
+        <span class="s2">&quot;radarr&quot;</span><span class="p">,</span>
+        <span class="n">radarr</span><span class="o">.</span><span class="n">RadarrCli</span><span class="p">,</span>
+        <span class="p">[</span>
+            <span class="n">CliGetMovieCommand</span><span class="p">(),</span>
+            <span class="n">CliDeleteMovieCommand</span><span class="p">(),</span>
+            <span class="n">CliAddMovieCommand</span><span class="p">(),</span>
+            <span class="n">CliGetRefreshMovieCommand</span><span class="p">(),</span>
+            <span class="n">CliGetRescanMovieCommand</span><span class="p">(),</span>
+            <span class="n">CliGetProfilesCommand</span><span class="p">(),</span>
+            <span class="n">CliSystemStatusCommand</span><span class="p">(),</span>
+            <span class="n">CliGetDiskSpaceCommand</span><span class="p">(),</span>
+            <span class="n">CliGetQueueCommand</span><span class="p">(),</span>
+            <span class="n">CliGetCalendarCommand</span><span class="p">(),</span>
+            <span class="n">CliDeleteQueueCommand</span><span class="p">(),</span>
+            <span class="n">CliWantedCommand</span><span class="p">(),</span>
+        <span class="p">],</span>
+    <span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Vivien Chene
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

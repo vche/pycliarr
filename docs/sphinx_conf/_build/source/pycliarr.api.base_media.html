@@ -1,0 +1,556 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pycliarr.api.base_media module &mdash; pycliarr 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pycliarr.api.exceptions module" href="pycliarr.api.exceptions.html" />
+    <link rel="prev" title="pycliarr.api.base_api module" href="pycliarr.api.base_api.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> pycliarr
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Userguide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">What’s pycliarr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#cli-help">CLI help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pycliarr</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pycliarr.html">pycliarr package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pycliarr.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="pycliarr.api.html">pycliarr.api package</a><ul class="current">
+<li class="toctree-l5 current"><a class="reference internal" href="pycliarr.api.html#submodules">Submodules</a></li>
+<li class="toctree-l5"><a class="reference internal" href="pycliarr.api.html#module-pycliarr.api">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="pycliarr.cli.html">pycliarr.cli package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pycliarr.html#module-pycliarr">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pycliarr</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">pycliarr</a> &raquo;</li>
+        
+          <li><a href="pycliarr.html">pycliarr package</a> &raquo;</li>
+        
+          <li><a href="pycliarr.api.html">pycliarr.api package</a> &raquo;</li>
+        
+      <li>pycliarr.api.base_media module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/pycliarr.api.base_media.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pycliarr.api.base_media">
+<span id="pycliarr-api-base-media-module"></span><h1>pycliarr.api.base_media module<a class="headerlink" href="#module-pycliarr.api.base_media" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.api.base_media.</code><code class="sig-name descname">BaseCliMediaApi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">host_url</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">api_key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">password</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pycliarr.api.base_api.html#pycliarr.api.base_api.BaseCliApi" title="pycliarr.api.base_api.BaseCliApi"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.api.base_api.BaseCliApi</span></code></a></p>
+<p>Base class for media based API.</p>
+<p>Implement behavior common to media based apis (e.g. sonarr, radarr)</p>
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.add_item">
+<code class="sig-name descname">add_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json_data</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.add_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.add_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>addMovie adds a new movie to collection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>json_data</strong> – Dict representation of the item to add</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.api_url_calendar">
+<code class="sig-name descname">api_url_calendar</code><em class="property"> = '/api/calendar'</em><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.api_url_calendar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.api_url_command">
+<code class="sig-name descname">api_url_command</code><em class="property"> = '/api/command'</em><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.api_url_command" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.api_url_diskspace">
+<code class="sig-name descname">api_url_diskspace</code><em class="property"> = '/api/diskspace'</em><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.api_url_diskspace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.api_url_history">
+<code class="sig-name descname">api_url_history</code><em class="property"> = '/api/history/'</em><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.api_url_history" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.api_url_item">
+<code class="sig-name descname">api_url_item</code><em class="property"> = '/api/item'</em><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.api_url_item" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.api_url_itemlookup">
+<code class="sig-name descname">api_url_itemlookup</code><em class="property"> = '/api/item/lookup'</em><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.api_url_itemlookup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.api_url_log">
+<code class="sig-name descname">api_url_log</code><em class="property"> = '/api/log'</em><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.api_url_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.api_url_profile">
+<code class="sig-name descname">api_url_profile</code><em class="property"> = '/api/profile'</em><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.api_url_profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.api_url_queue">
+<code class="sig-name descname">api_url_queue</code><em class="property"> = '/api/queue'</em><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.api_url_queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.api_url_rootfolder">
+<code class="sig-name descname">api_url_rootfolder</code><em class="property"> = '/api/rootfolder'</em><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.api_url_rootfolder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.api_url_systembackup">
+<code class="sig-name descname">api_url_systembackup</code><em class="property"> = '/api/system/backup'</em><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.api_url_systembackup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.api_url_systemstatus">
+<code class="sig-name descname">api_url_systemstatus</code><em class="property"> = '/api/system/status'</em><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.api_url_systemstatus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.api_url_wanted_missing">
+<code class="sig-name descname">api_url_wanted_missing</code><em class="property"> = '/api/wanted/missing'</em><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.api_url_wanted_missing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.delete_item">
+<code class="sig-name descname">delete_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">item_id</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">delete_files</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">options</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.delete_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.delete_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the item with the given ID</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item_id</strong> (<em>int</em>) – Item to delete</p></li>
+<li><p><strong>delete_files</strong> (<em>bool</em>) – Optional. Also delete files. Default is False</p></li>
+<li><p><strong>options</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Optionally specify additional options</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.delete_queue">
+<code class="sig-name descname">delete_queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">item_id</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">blacklist</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>bool<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.delete_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.delete_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete an item from the queue and download client. Optionally blacklist item after deletion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item_id</strong> (<em>int</em>) – Item to delete</p></li>
+<li><p><strong>blacklist</strong> (<em>Optional</em><em>[</em><em>bool</em><em>]</em>) – Optionally blacklist the item</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.get_backup">
+<code class="sig-name descname">get_backup</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.get_backup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.get_backup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the backups as json</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.get_calendar">
+<code class="sig-name descname">get_calendar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start_date</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>datetime.datetime<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">end_date</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>datetime.datetime<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.get_calendar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.get_calendar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve info about when items were/will be downloaded.</p>
+<p>If start and end are not provided, retrieves movies airing today and tomorrow.
+:param start_date: Start date of events to retrieve
+:type start_date: Optional[datetime]
+:param end_date: End date of events to retrieve
+:type end_date: Optional[datetime]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.get_command">
+<code class="sig-name descname">get_command</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cid</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.get_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.get_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query the status of a previously started command, or all currently running.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cid</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.get_disk_space">
+<code class="sig-name descname">get_disk_space</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.get_disk_space"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.get_disk_space" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve info about the disk space on the server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.get_history">
+<code class="sig-name descname">get_history</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">sort_key</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'date'</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">sort_dir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'asc'</span></em>, <em class="sig-param"><span class="n">options</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">{}</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.get_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.get_history" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get history (grabs/failures/completed)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>page</strong> (<em>int</em><em>) </em><em>- 1-indexed</em><em> (</em><em>1 default</em>) – </p></li>
+<li><p><strong>sort_key</strong> (<em>string</em>) – </p></li>
+<li><p><strong>page_size</strong> (<em>int</em>) – 10</p></li>
+<li><p><strong>sort_dir</strong> (<em>string</em>) – asc</p></li>
+<li><p><strong>options</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>={}</em>) – Optional additional options</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.get_item">
+<code class="sig-name descname">get_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">item_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.get_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.get_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get specified item, or all if no id provided from server collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item_id</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.get_logs">
+<code class="sig-name descname">get_logs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">sort_key</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'time'</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">sort_dir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'asc'</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.get_logs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.get_logs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get logs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>page</strong> (<em>int</em><em>) </em><em>- 1-indexed</em><em> (</em><em>1 default</em>) – </p></li>
+<li><p><strong>sort_key</strong> (<em>string</em>) – </p></li>
+<li><p><strong>page_size</strong> (<em>int</em>) – 10</p></li>
+<li><p><strong>sort_dir</strong> (<em>string</em>) – asc</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.get_quality_profiles">
+<code class="sig-name descname">get_quality_profiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.get_quality_profiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.get_quality_profiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the quality profiles</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.get_queue">
+<code class="sig-name descname">get_queue</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.get_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.get_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get queue info (downloading/completed, ok/warning) as json</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.get_root_folder">
+<code class="sig-name descname">get_root_folder</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.get_root_folder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.get_root_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the server root folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.get_system_status">
+<code class="sig-name descname">get_system_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.get_system_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.get_system_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the System Status as json</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.get_wanted">
+<code class="sig-name descname">get_wanted</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">sort_key</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'airDateUtc'</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">sort_dir</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'asc'</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.get_wanted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.get_wanted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Wanted / Missing episodes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sort_key</strong> (<em>str</em>) – series.title or airDateUtc (default)</p></li>
+<li><p><strong>page</strong> (<em>int</em>) – 1-indexed Default: 1</p></li>
+<li><p><strong>page_size</strong> (<em>int</em>) – Default: 10</p></li>
+<li><p><strong>sort_dir</strong> (<em>str</em>) – asc or desc - Default: asc</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.lookup_item">
+<code class="sig-name descname">lookup_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">term</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.lookup_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.lookup_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for items</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>term</strong> (<em>str</em>) – Lookup terms</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.rename_files">
+<code class="sig-name descname">rename_files</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_ids</span><span class="p">:</span> <span class="n">List<span class="p">[</span>int<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.rename_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.rename_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename the list of files provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_ids</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – List of ids of files to rename</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.api.base_media.BaseCliMediaApi.sync_rss">
+<code class="sig-name descname">sync_rss</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/api/base_media.html#BaseCliMediaApi.sync_rss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.api.base_media.BaseCliMediaApi.sync_rss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform an RSS sync with all enabled indexers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>json response</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pycliarr.api.exceptions.html" class="btn btn-neutral float-right" title="pycliarr.api.exceptions module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pycliarr.api.base_api.html" class="btn btn-neutral float-left" title="pycliarr.api.base_api module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Vivien Chene
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

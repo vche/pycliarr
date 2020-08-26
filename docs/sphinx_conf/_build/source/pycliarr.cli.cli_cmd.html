@@ -1,0 +1,802 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pycliarr.cli.cli_cmd module &mdash; pycliarr 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pycliarr.cli.utils module" href="pycliarr.cli.utils.html" />
+    <link rel="prev" title="pycliarr.cli.cli module" href="pycliarr.cli.cli.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> pycliarr
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Userguide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">What’s pycliarr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#cli-help">CLI help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pycliarr</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pycliarr.html">pycliarr package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pycliarr.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pycliarr.api.html">pycliarr.api package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="pycliarr.cli.html">pycliarr.cli package</a><ul class="current">
+<li class="toctree-l5 current"><a class="reference internal" href="pycliarr.cli.html#submodules">Submodules</a></li>
+<li class="toctree-l5"><a class="reference internal" href="pycliarr.cli.html#module-pycliarr.cli">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pycliarr.html#module-pycliarr">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pycliarr</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">pycliarr</a> &raquo;</li>
+        
+          <li><a href="pycliarr.html">pycliarr package</a> &raquo;</li>
+        
+          <li><a href="pycliarr.cli.html">pycliarr.cli package</a> &raquo;</li>
+        
+      <li>pycliarr.cli.cli_cmd module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/source/pycliarr.cli.cli_cmd.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pycliarr.cli.cli_cmd">
+<span id="pycliarr-cli-cli-cmd-module"></span><h1>pycliarr.cli.cli_cmd module<a class="headerlink" href="#module-pycliarr.cli.cli_cmd" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliAddMovieCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliAddMovieCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliAddMovieCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliAddMovieCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliAddMovieCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliAddMovieCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliAddMovieCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliAddMovieCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Add a movie from the imdb/tmdb id, or look for keywords'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliAddMovieCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliAddMovieCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'add'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliAddMovieCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliAddMovieCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.radarr.html#pycliarr.api.radarr.RadarrCli" title="pycliarr.api.radarr.RadarrCli">pycliarr.api.radarr.RadarrCli</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliAddMovieCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliAddMovieCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliAddSerieCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliAddSerieCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliAddSerieCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliAddSerieCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliAddSerieCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliAddSerieCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliAddSerieCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliAddSerieCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Add a serie from the tvdb id, or look for keywords'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliAddSerieCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliAddSerieCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'add'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliAddSerieCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliAddSerieCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli" title="pycliarr.api.sonarr.SonarrCli">pycliarr.api.sonarr.SonarrCli</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliAddSerieCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliAddSerieCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliApiCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliApiCommand</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">cli_class</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">commands</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand">pycliarr.cli.cli_cmd.CliCommand</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliApiCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliApiCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Definition of an API client.</p>
+<p>Allows instantiating the relevant communication client, and execute a subcommmand from its name.</p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliApiCommand.add_commands_args">
+<code class="sig-name descname">add_commands_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliApiCommand.add_commands_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliApiCommand.add_commands_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliApiCommand.run_command">
+<code class="sig-name descname">run_command</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliApiCommand.run_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliApiCommand.run_command" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base command, all command should extend this class.</p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmdlist_parser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = ''</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = ''</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n">Any</span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteEpisodeFileCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliDeleteEpisodeFileCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliDeleteEpisodeFileCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteEpisodeFileCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteEpisodeFileCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliDeleteEpisodeFileCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteEpisodeFileCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteEpisodeFileCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Get info on a of serie'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteEpisodeFileCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteEpisodeFileCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'delete-episode-file'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteEpisodeFileCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteEpisodeFileCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli" title="pycliarr.api.sonarr.SonarrCli">pycliarr.api.sonarr.SonarrCli</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliDeleteEpisodeFileCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteEpisodeFileCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteMovieCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliDeleteMovieCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliDeleteMovieCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteMovieCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteMovieCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliDeleteMovieCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteMovieCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteMovieCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Delete a movie'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteMovieCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteMovieCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'delete'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteMovieCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteMovieCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.radarr.html#pycliarr.api.radarr.RadarrCli" title="pycliarr.api.radarr.RadarrCli">pycliarr.api.radarr.RadarrCli</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliDeleteMovieCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteMovieCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteQueueCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliDeleteQueueCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliDeleteQueueCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteQueueCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteQueueCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliDeleteQueueCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteQueueCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteQueueCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Get list of quality profiles'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteQueueCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteQueueCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'delqueue'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteQueueCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteQueueCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi" title="pycliarr.api.base_media.BaseCliMediaApi">pycliarr.api.base_media.BaseCliMediaApi</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliDeleteQueueCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteQueueCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteSerieCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliDeleteSerieCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliDeleteSerieCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteSerieCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteSerieCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliDeleteSerieCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteSerieCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteSerieCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Delete a serie'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteSerieCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteSerieCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'delete'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteSerieCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliDeleteSerieCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli" title="pycliarr.api.sonarr.SonarrCli">pycliarr.api.sonarr.SonarrCli</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliDeleteSerieCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliDeleteSerieCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliEpisodeCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliEpisodeCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliEpisodeCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliEpisodeCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliEpisodeCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliEpisodeCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliEpisodeCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliEpisodeCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Get info on an episode'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliEpisodeCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliEpisodeCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'get-episode'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliEpisodeCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliEpisodeCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli" title="pycliarr.api.sonarr.SonarrCli">pycliarr.api.sonarr.SonarrCli</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliEpisodeCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliEpisodeCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliGetCalendarCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliGetCalendarCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetCalendarCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetCalendarCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetCalendarCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetCalendarCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetCalendarCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetCalendarCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Get events from calendar'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetCalendarCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetCalendarCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'calendar'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetCalendarCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetCalendarCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi" title="pycliarr.api.base_media.BaseCliMediaApi">pycliarr.api.base_media.BaseCliMediaApi</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetCalendarCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetCalendarCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliGetDiskSpaceCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliGetDiskSpaceCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetDiskSpaceCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetDiskSpaceCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetDiskSpaceCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Get disk space'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetDiskSpaceCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetDiskSpaceCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'disk-space'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetDiskSpaceCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetDiskSpaceCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi" title="pycliarr.api.base_media.BaseCliMediaApi">pycliarr.api.base_media.BaseCliMediaApi</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetDiskSpaceCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetDiskSpaceCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliGetEpisodeFileCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliGetEpisodeFileCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetEpisodeFileCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetEpisodeFileCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetEpisodeFileCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetEpisodeFileCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetEpisodeFileCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetEpisodeFileCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Get info on an episode file'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetEpisodeFileCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetEpisodeFileCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'get-episode-file'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetEpisodeFileCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetEpisodeFileCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli" title="pycliarr.api.sonarr.SonarrCli">pycliarr.api.sonarr.SonarrCli</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetEpisodeFileCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetEpisodeFileCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliGetMovieCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliGetMovieCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetMovieCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetMovieCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetMovieCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetMovieCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetMovieCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetMovieCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Get info on a of movie'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetMovieCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetMovieCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'get'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetMovieCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetMovieCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.radarr.html#pycliarr.api.radarr.RadarrCli" title="pycliarr.api.radarr.RadarrCli">pycliarr.api.radarr.RadarrCli</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetMovieCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetMovieCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliGetProfilesCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliGetProfilesCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetProfilesCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetProfilesCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetProfilesCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Get list of quality profiles'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetProfilesCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetProfilesCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'profiles'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetProfilesCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetProfilesCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi" title="pycliarr.api.base_media.BaseCliMediaApi">pycliarr.api.base_media.BaseCliMediaApi</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetProfilesCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetProfilesCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliGetQueueCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliGetQueueCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetQueueCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetQueueCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetQueueCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Get current downloading queue'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetQueueCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetQueueCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'queue'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetQueueCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetQueueCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi" title="pycliarr.api.base_media.BaseCliMediaApi">pycliarr.api.base_media.BaseCliMediaApi</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetQueueCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetQueueCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliGetRefreshMovieCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliGetRefreshMovieCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetRefreshMovieCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRefreshMovieCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetRefreshMovieCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetRefreshMovieCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRefreshMovieCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetRefreshMovieCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Refresh movies'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRefreshMovieCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetRefreshMovieCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'refresh'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRefreshMovieCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetRefreshMovieCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.radarr.html#pycliarr.api.radarr.RadarrCli" title="pycliarr.api.radarr.RadarrCli">pycliarr.api.radarr.RadarrCli</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetRefreshMovieCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRefreshMovieCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliGetRefreshSerieCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliGetRefreshSerieCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetRefreshSerieCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRefreshSerieCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetRefreshSerieCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetRefreshSerieCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRefreshSerieCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetRefreshSerieCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Refresh series'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRefreshSerieCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetRefreshSerieCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'refresh'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRefreshSerieCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetRefreshSerieCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli" title="pycliarr.api.sonarr.SonarrCli">pycliarr.api.sonarr.SonarrCli</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetRefreshSerieCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRefreshSerieCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliGetRescanMovieCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliGetRescanMovieCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetRescanMovieCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRescanMovieCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetRescanMovieCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetRescanMovieCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRescanMovieCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetRescanMovieCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Rescan movies'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRescanMovieCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetRescanMovieCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'rescan'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRescanMovieCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetRescanMovieCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.radarr.html#pycliarr.api.radarr.RadarrCli" title="pycliarr.api.radarr.RadarrCli">pycliarr.api.radarr.RadarrCli</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetRescanMovieCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRescanMovieCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliGetRescanSerieCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliGetRescanSerieCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetRescanSerieCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRescanSerieCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetRescanSerieCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetRescanSerieCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRescanSerieCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetRescanSerieCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Rescan series'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRescanSerieCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetRescanSerieCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'rescan'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRescanSerieCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetRescanSerieCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli" title="pycliarr.api.sonarr.SonarrCli">pycliarr.api.sonarr.SonarrCli</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetRescanSerieCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetRescanSerieCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliGetSerieCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliGetSerieCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetSerieCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetSerieCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetSerieCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetSerieCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetSerieCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetSerieCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Get info on a of serie'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetSerieCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliGetSerieCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'get'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetSerieCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliGetSerieCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrCli" title="pycliarr.api.sonarr.SonarrCli">pycliarr.api.sonarr.SonarrCli</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliGetSerieCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliGetSerieCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliSystemStatusCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliSystemStatusCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliSystemStatusCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliSystemStatusCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliSystemStatusCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'Get system status'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliSystemStatusCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliSystemStatusCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'system-status'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliSystemStatusCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliSystemStatusCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi" title="pycliarr.api.base_media.BaseCliMediaApi">pycliarr.api.base_media.BaseCliMediaApi</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliSystemStatusCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliSystemStatusCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pycliarr.cli.cli_cmd.CliWantedCommand">
+<em class="property">class </em><code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">CliWantedCommand</code><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliWantedCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliWantedCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pycliarr.cli.cli_cmd.CliCommand" title="pycliarr.cli.cli_cmd.CliCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">pycliarr.cli.cli_cmd.CliCommand</span></code></a></p>
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliWantedCommand.configure_args">
+<code class="sig-name descname">configure_args</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cmd_subparser</span><span class="p">:</span> <span class="n">argparse._SubParsersAction</span></em><span class="sig-paren">)</span> &#x2192; argparse.ArgumentParser<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliWantedCommand.configure_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliWantedCommand.configure_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliWantedCommand.description">
+<code class="sig-name descname">description</code><em class="property"> = 'List wanted/missing'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliWantedCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pycliarr.cli.cli_cmd.CliWantedCommand.name">
+<code class="sig-name descname">name</code><em class="property"> = 'wanted'</em><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliWantedCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="pycliarr.cli.cli_cmd.CliWantedCommand.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi" title="pycliarr.api.base_media.BaseCliMediaApi">pycliarr.api.base_media.BaseCliMediaApi</a></span></em>, <em class="sig-param"><span class="n">args</span><span class="p">:</span> <span class="n">argparse.Namespace</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#CliWantedCommand.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.CliWantedCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="pycliarr.cli.cli_cmd.select_item">
+<code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">select_item</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">terms</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">choices</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Union<span class="p">[</span><a class="reference internal" href="pycliarr.api.radarr.html#pycliarr.api.radarr.RadarrMovieItem" title="pycliarr.api.radarr.RadarrMovieItem">pycliarr.api.radarr.RadarrMovieItem</a><span class="p">, </span><a class="reference internal" href="pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrSerieItem" title="pycliarr.api.sonarr.SonarrSerieItem">pycliarr.api.sonarr.SonarrSerieItem</a><span class="p">]</span><span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span><a class="reference internal" href="pycliarr.api.radarr.html#pycliarr.api.radarr.RadarrMovieItem" title="pycliarr.api.radarr.RadarrMovieItem">pycliarr.api.radarr.RadarrMovieItem</a><span class="p">, </span><a class="reference internal" href="pycliarr.api.sonarr.html#pycliarr.api.sonarr.SonarrSerieItem" title="pycliarr.api.sonarr.SonarrSerieItem">pycliarr.api.sonarr.SonarrSerieItem</a><span class="p">]</span><a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#select_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.select_item" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="pycliarr.cli.cli_cmd.select_profile">
+<code class="sig-prename descclassname">pycliarr.cli.cli_cmd.</code><code class="sig-name descname">select_profile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cli</span><span class="p">:</span> <span class="n"><a class="reference internal" href="pycliarr.api.base_media.html#pycliarr.api.base_media.BaseCliMediaApi" title="pycliarr.api.base_media.BaseCliMediaApi">pycliarr.api.base_media.BaseCliMediaApi</a></span></em><span class="sig-paren">)</span> &#x2192; int<a class="reference internal" href="../_modules/pycliarr/cli/cli_cmd.html#select_profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycliarr.cli.cli_cmd.select_profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pycliarr.cli.utils.html" class="btn btn-neutral float-right" title="pycliarr.cli.utils module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pycliarr.cli.cli.html" class="btn btn-neutral float-left" title="pycliarr.cli.cli module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Vivien Chene
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
