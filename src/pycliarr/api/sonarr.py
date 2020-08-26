@@ -85,7 +85,7 @@ class SonarrCli(BaseCliMediaApi):
     api_url_episode = "/api/episode"
     api_url_episodefile = "/api/episodefile"
 
-    def get_serie(self, serie_id: Optional[int]) -> Union[SonarrSerieItem, List[SonarrSerieItem]]:
+    def get_serie(self, serie_id: Optional[int] = None) -> Union[SonarrSerieItem, List[SonarrSerieItem]]:
         """Get specified serie, or all if no id provided from server collection.
 
         Args:
@@ -114,7 +114,7 @@ class SonarrCli(BaseCliMediaApi):
         if tvdb_id:
             term = "tvdb:" + str(tvdb_id)
         elif not term:
-            SonarrCliError("Error invalid parameters")
+            raise SonarrCliError("Error invalid parameters")
 
         res = self.lookup_item(str(term))
         return [SonarrSerieItem.from_dict(serie) for serie in res]
@@ -141,7 +141,7 @@ class SonarrCli(BaseCliMediaApi):
         Returns:
             json response
         """
-        # Get info from imdb/tmdb if needed:
+        # Get info from imdb/tvdb if needed:
         if tvdb_id:
             serie_list = self.lookup_serie(tvdb_id=tvdb_id)
             if len(serie_list) != 1:
@@ -157,7 +157,7 @@ class SonarrCli(BaseCliMediaApi):
         serie_info.qualityProfileId = quality
         serie_info.monitored = monitored
         options = {
-            "searchForMovie": search,
+            "searchForMissingEpisodes": search,
             "ignoreEpisodesWithFiles": True,
             "ignoreEpisodesWithoutFiles": True,
         }
@@ -178,7 +178,7 @@ class SonarrCli(BaseCliMediaApi):
         options = {"addExclusion": add_exclusion} if add_exclusion else {}
         return self.delete_item(serie_id, delete_files, options)
 
-    def refresh_serie(self, serie_id: Optional[int]) -> json_data:
+    def refresh_serie(self, serie_id: Optional[int] = None) -> json_data:
         """Refresh serie information  and rescan disk.
 
         Args:
@@ -191,7 +191,7 @@ class SonarrCli(BaseCliMediaApi):
             data["seriesId"] = serie_id
         return self._sendCommand(data)
 
-    def rescan_serie(self, serie_id: Optional[int]) -> json_data:
+    def rescan_serie(self, serie_id: Optional[int] = None) -> json_data:
         """Scan disk for any downloaded serie for all or specified serie.
 
         Args:
