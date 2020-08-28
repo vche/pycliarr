@@ -1,6 +1,6 @@
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, cast
 
-from pycliarr.api.base_api import BaseCliApiItem, json_data
+from pycliarr.api.base_api import BaseCliApiItem, json_data, json_list
 from pycliarr.api.base_media import BaseCliMediaApi
 from pycliarr.api.exceptions import SonarrCliError
 
@@ -99,7 +99,9 @@ class SonarrCli(BaseCliMediaApi):
         else:
             return SonarrSerieItem.from_dict(res)
 
-    def lookup_serie(self, term: Optional[str] = None, tvdb_id: Optional[int] = None) -> List[SonarrSerieItem]:
+    def lookup_serie(
+        self, term: Optional[str] = None, tvdb_id: Optional[int] = None
+    ) -> Optional[Union[SonarrSerieItem, List[SonarrSerieItem]]]:
         """Search for a serie based on keyword, or tvdb id.
 
         If tvdb id is provided, it will be used. If not, the keywords will be used.
@@ -117,7 +119,12 @@ class SonarrCli(BaseCliMediaApi):
             raise SonarrCliError("Error invalid parameters")
 
         res = self.lookup_item(str(term))
-        return [SonarrSerieItem.from_dict(serie) for serie in res]
+        if not res:
+            return None
+        elif isinstance(res, list):
+            return [SonarrSerieItem.from_dict(serie) for serie in cast(json_list, res)]
+        else:
+            return SonarrSerieItem.from_dict(res)
 
     def add_serie(
         self,
@@ -143,12 +150,10 @@ class SonarrCli(BaseCliMediaApi):
         """
         # Get info from imdb/tvdb if needed:
         if tvdb_id:
-            serie_list = self.lookup_serie(tvdb_id=tvdb_id)
-            if len(serie_list) != 1:
-                raise SonarrCliError("Error, invalid parameter, {len(serie_list)} results in tvdb.")
-            serie_info = serie_list[0]
-        elif not serie_info:
-            raise SonarrCliError("Error, invalid parameters")
+            serie_info = cast(SonarrSerieItem, self.lookup_serie(tvdb_id=tvdb_id))
+        if not serie_info:
+            raise SonarrCliError("Error, invalid parameters or invalid tvdb id")
+        print(f"fuck seris {serie_info}")
 
         # Prepare serie info for adding
         root_path = self.get_root_folder()

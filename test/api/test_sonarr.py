@@ -79,20 +79,20 @@ def test_lookup_serie_with_term(mock_base, cli):
     assert res[0].year == 2020
 
 
-@patch("pycliarr.api.sonarr.BaseCliMediaApi.lookup_item", return_value=[TEST_SERIE])
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.lookup_item", return_value=TEST_SERIE)
 def test_lookup_serie_with_tvdb(mock_base, cli):
     res = cli.lookup_serie(tvdb_id=1234)
     mock_base.assert_called_with("tvdb:1234")
-    assert res[0].title == "some serie"
-    assert res[0].year == 2020
+    assert res.title == "some serie"
+    assert res.year == 2020
 
 
-@patch("pycliarr.api.sonarr.BaseCliMediaApi.lookup_item", return_value=[TEST_SERIE])
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.lookup_item", return_value=TEST_SERIE)
 def test_lookup_serie_with_all(mock_base, cli):
     res = cli.lookup_serie(term="some title", tvdb_id=1234)
     mock_base.assert_called_with("tvdb:1234")
-    assert res[0].title == "some serie"
-    assert res[0].year == 2020
+    assert res.title == "some serie"
+    assert res.year == 2020
 
 
 def test_lookup_serie_with_noparam(cli):
@@ -101,7 +101,7 @@ def test_lookup_serie_with_noparam(cli):
 
 
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value={"path": "some/path/"})
-@patch("pycliarr.api.sonarr.BaseCliMediaApi.request_get", return_value=[TEST_SERIEINFO])
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.request_get", return_value=TEST_SERIEINFO)
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.add_item", return_value=TEST_JSON)
 def test_add_serie_withtvdb(mock_add, mock_root, mock_get, cli):
     exp = deepcopy(TEST_SERIEINFO)
@@ -142,7 +142,7 @@ def test_add_serie_withinfo(mock_add, mock_root, cli):
     mock_add.assert_called_with(json_data=exp)
 
 
-@patch("pycliarr.api.sonarr.BaseCliMediaApi.request_get", return_value=[])
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.lookup_item", return_value={})
 def test_add_serie_noresults(mock_get, cli):
     with pytest.raises(SonarrCliError):
         cli.add_serie(quality=2, tvdb_id=1234)

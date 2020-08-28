@@ -104,7 +104,7 @@ class BaseCliMediaApi(BaseCliApi):
         url_path = f"{self.api_url_item}/{item_id}" if item_id else self.api_url_item
         return self.request_get(url_path)
 
-    def lookup_item(self, term: str) -> json_list:
+    def lookup_item(self, term: str) -> json_data:
         """Search for items
 
         Args:
@@ -113,7 +113,7 @@ class BaseCliMediaApi(BaseCliApi):
             json response
         """
         url_params = {"term": term}
-        return cast(json_list, self.request_get(self.api_url_itemlookup, url_params=url_params))
+        return self.request_get(self.api_url_itemlookup, url_params=url_params)
 
     def add_item(self, json_data: json_data) -> json_data:
         """addMovie adds a new movie to collection

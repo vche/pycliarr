@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional, Union, cast
 
-from pycliarr.api.base_api import BaseCliApiItem, json_data, json_list
+from pycliarr.api.base_api import BaseCliApiItem, json_data
 from pycliarr.api.base_media import BaseCliMediaApi
 from pycliarr.api.exceptions import RadarrCliError
 
@@ -76,7 +76,7 @@ class RadarrCli(BaseCliMediaApi):
 
     def lookup_movie(
         self, term: Optional[str] = None, imdb_id: Optional[str] = None, tmdb_id: Optional[int] = None
-    ) -> List[RadarrMovieItem]:
+    ) -> Optional[Union[RadarrMovieItem, List[RadarrMovieItem]]]:
         """Search for a movie based on keyword, or imbd/tmdb id.
 
         If no imdb id is provided, tvdb id will be used. If neither of them is provided, the keyword will be used.
@@ -92,17 +92,22 @@ class RadarrCli(BaseCliMediaApi):
         if tmdb_id:
             url_path = f"{self.api_url_itemlookup}/tmdb"
             url_params: Dict[str, Any] = {"tmdbId": tmdb_id}
-            res = cast(json_list, self.request_get(url_path, url_params=url_params))
+            res = self.request_get(url_path, url_params=url_params)
         elif imdb_id:
             url_path = f"{self.api_url_itemlookup}/imdb"
             url_params = {"imdbId": imdb_id}
-            res = cast(json_list, self.request_get(url_path, url_params=url_params))
+            res = self.request_get(url_path, url_params=url_params)
         elif term:
             res = self.lookup_item(str(term))
         else:
             raise RadarrCliError("Error, invalid parameters")
 
-        return [RadarrMovieItem.from_dict(movie) for movie in res]
+        if not res:
+            return None
+        elif isinstance(res, list):
+            return [RadarrMovieItem.from_dict(serie) for serie in res]
+        else:
+            return RadarrMovieItem.from_dict(res)
 
     def add_movie(
         self,
@@ -131,12 +136,9 @@ class RadarrCli(BaseCliMediaApi):
 
         # Get info from imdb/tmdb if needed:
         if tmdb_id or imdb_id:
-            movie_list = self.lookup_movie(tmdb_id=tmdb_id, imdb_id=imdb_id)
-            if len(movie_list) != 1:
-                raise RadarrCliError("Error, invalid parameter, {len(movie_list)} results in tvdb.")
-            movie_info = movie_list[0]
-        elif not movie_info:
-            raise RadarrCliError("Error, invalid parameters")
+            movie_info = cast(RadarrMovieItem, self.lookup_movie(tmdb_id=tmdb_id, imdb_id=imdb_id))
+        if not movie_info:
+            raise RadarrCliError("Error, invalid parameters or invalid tmdb/imdb id")
 
         # Prepare movie info for adding
         root_path = self.get_root_folder()
