@@ -5,6 +5,15 @@ Changelog
 master
 ======
 
+v1.0.2
+======
+
+:Date: Aug 28, 2020
+
+Fix
+---
+- Fix issue when adding using tmdb/imdb/tvdb id
+
 v1.0.1
 ======
 
