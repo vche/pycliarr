@@ -1,4 +1,4 @@
-![Codecov](https://img.shields.io/codecov/c/github/vche/pycliarr) ![Read the Docs](https://img.shields.io/readthedocs/pycliarr) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/vche/pycliarr) ![GitHub](https://img.shields.io/github/license/vche/pycliarr)
+![GitHub](https://img.shields.io/github/license/vche/pycliarr) ![Codecov](https://img.shields.io/codecov/c/github/vche/pycliarr) ![Read the Docs](https://img.shields.io/readthedocs/pycliarr) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/vche/pycliarr) ![PyPI](https://img.shields.io/pypi/v/pycliarr)  ![GitHub All Releases](https://img.shields.io/github/downloads/vche/pycliarr/total) [![Downloads](https://pepy.tech/badge/pycliarr)](https://pepy.tech/project/pycliarr)
 
 ## What's pycliarr
 
