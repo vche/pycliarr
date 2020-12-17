@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional, Union, cast
 
-from pycliarr.api.base_api import BaseCliApiItem, json_data, json_list
+from pycliarr.api.base_api import BaseCliApiItem, json_data
 from pycliarr.api.base_media import BaseCliMediaApi
 from pycliarr.api.exceptions import SonarrCliError
 
@@ -122,7 +122,7 @@ class SonarrCli(BaseCliMediaApi):
         if not res:
             return None
         elif isinstance(res, list):
-            return [SonarrSerieItem.from_dict(serie) for serie in cast(json_list, res)]
+            return [SonarrSerieItem.from_dict(serie) for serie in res]
         else:
             return SonarrSerieItem.from_dict(res)
 

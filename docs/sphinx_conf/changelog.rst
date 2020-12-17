@@ -5,6 +5,25 @@ Changelog
 master
 ======
 
+v1.0.4
+======
+
+:Date: Dec 17, 2020
+
+New
+---
+- Added cli status command
+- Use radarr api v3
+
+v1.0.3
+======
+
+:Date: Aug 30, 2020
+
+Fix
+---
+- Re release of 1.0.2 with updated doc
+
 v1.0.2
 ======
 
