@@ -56,9 +56,19 @@ class RadarrCli(BaseCliMediaApi):
         * delete_queue
     """
 
+    # Start using V3 api for implemented commands
+    api_url_base = "/api/v3"
+
     # Set api specific to radarr (differs from the default ones in BaseCliMediaApi)
-    api_url_item = "/api/movie"
+    api_url_item = f"{api_url_base}/movie"
     api_url_itemlookup = "/api/movie/lookup"
+
+    # Keep using v1 for commands not available
+    api_url_profile = f"{api_url_base}/qualityProfile"
+    api_url_rootfolder = "/api/rootfolder"
+    api_url_log = "/api/log"
+    api_url_systembackup = "/api/system/backup"
+    api_url_wanted_missing = "/api/wanted/missing"
 
     def get_movie(self, movie_id: Optional[int] = None) -> Union[RadarrMovieItem, List[RadarrMovieItem]]:
         """Get specified movie, or all if no id provided from server collection.

@@ -237,6 +237,23 @@ def test_cli_radarr_wanted(monkeypatch, mock_exit):
     mock_exit.assert_called_with(0)
 
 
+def test_cli_radarr_status(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "status",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_command", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called()
+    mock_exit.assert_called_with(0)
+
+
 ##############################################
 ########## radarr specific commands ##########
 ##############################################

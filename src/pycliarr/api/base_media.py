@@ -14,21 +14,22 @@ class BaseCliMediaApi(BaseCliApi):
     """
 
     # Default urls for commands. Some might need to be overriden by the childs.
-    api_url_calendar = "/api/calendar"
-    api_url_command = "/api/command"
-    api_url_diskspace = "/api/diskspace"
-    api_url_item = "/api/item"
-    api_url_itemlookup = "/api/item/lookup"
-    api_url_systemstatus = "/api/system/status"
-    api_url_queue = "/api/queue"
-    api_url_history = "/api/history/"
-    api_url_profile = "/api/profile"
-    api_url_rootfolder = "/api/rootfolder"
-    api_url_log = "/api/log"
-    api_url_systembackup = "/api/system/backup"
-    api_url_wanted_missing = "/api/wanted/missing"
+    api_url_base = "/api/"
+    api_url_calendar = f"{api_url_base}/calendar"
+    api_url_command = f"{api_url_base}/command"
+    api_url_diskspace = f"{api_url_base}/diskspace"
+    api_url_item = f"{api_url_base}/item"
+    api_url_itemlookup = f"{api_url_base}/item/lookup"
+    api_url_systemstatus = f"{api_url_base}/system/status"
+    api_url_queue = f"{api_url_base}/queue"
+    api_url_history = f"{api_url_base}/history/"
+    api_url_profile = f"{api_url_base}/profile"
+    api_url_rootfolder = f"{api_url_base}/rootfolder"
+    api_url_log = f"{api_url_base}/log"
+    api_url_systembackup = f"{api_url_base}/system/backup"
+    api_url_wanted_missing = f"{api_url_base}/wanted/missing"
 
-    def get_calendar(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> json_dict:
+    def get_calendar(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> json_data:
         """Retrieve info about when items were/will be downloaded.
 
         If start and end are not provided, retrieves movies airing today and tomorrow.

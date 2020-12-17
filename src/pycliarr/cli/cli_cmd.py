@@ -1,4 +1,5 @@
 import datetime
+import json
 from argparse import ArgumentParser, Namespace, _SubParsersAction
 from pprint import pformat
 from typing import Any, List, Optional, Union
@@ -171,6 +172,21 @@ class CliWantedCommand(CliCommand):
         print(f"Result:\n{res}")
 
 
+class CliStatusCommand(CliCommand):
+    name = "status"
+    description = "Get status of 1 or all currently running commands"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--id", "-i", help="command ID", type=int, default=None)
+        return cmd_parser
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.get_command(args.id)
+        print(f"Result: {json.dumps(res)}\n")
+
+
 ##############################################
 ########## radarr specific commands ##########
 ##############################################
@@ -219,7 +235,7 @@ class CliGetRefreshMovieCommand(CliCommand):
     def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.refresh_movie(args.mid)
-        print(f"Result: {res}\n")
+        print(f"Result: {json.dumps(res)}\n")
 
 
 class CliGetRescanMovieCommand(CliCommand):
@@ -234,7 +250,7 @@ class CliGetRescanMovieCommand(CliCommand):
     def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.rescan_movie(args.mid)
-        print(f"Result: {res}\n")
+        print(f"Result: {json.dumps(res)}\n")
 
 
 class CliAddMovieCommand(CliCommand):
@@ -317,7 +333,7 @@ class CliGetRefreshSerieCommand(CliCommand):
     def run(self, cli: sonarr.SonarrCli, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.refresh_serie(args.sid)
-        print(f"Result: {res}\n")
+        print(f"Result:\n{json.dumps(res)}\n")
 
 
 class CliGetRescanSerieCommand(CliCommand):
@@ -332,7 +348,7 @@ class CliGetRescanSerieCommand(CliCommand):
     def run(self, cli: sonarr.SonarrCli, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.rescan_serie(args.sid)
-        print(f"Result: {res}\n")
+        print(f"Result: {json.dumps(res)}\n")
 
 
 class CliAddSerieCommand(CliCommand):
@@ -436,6 +452,7 @@ CLI_LIST: List[CliApiCommand] = [
             CliGetCalendarCommand(),
             CliDeleteQueueCommand(),
             CliWantedCommand(),
+            CliStatusCommand(),
         ],
     ),
     CliApiCommand(
@@ -454,6 +471,7 @@ CLI_LIST: List[CliApiCommand] = [
             CliGetCalendarCommand(),
             CliDeleteQueueCommand(),
             CliWantedCommand(),
+            CliStatusCommand(),
         ],
     ),
 ]

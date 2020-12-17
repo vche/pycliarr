@@ -10,7 +10,7 @@ from pycliarr.api.exceptions import CliArrError, CliDecodeError, CliServerError
 log = logging.getLogger(__name__)
 json_dict = Dict[str, Any]
 json_list = List[json_dict]
-json_data = Union[json_dict, json_dict]
+json_data = Union[json_dict, json_list]
 BaseItemClass = TypeVar("BaseItemClass", bound="BaseCliApiItem")
 
 
