@@ -71,13 +71,20 @@ def test_get_serie_with_id(mock_base, cli):
     assert res[0].year == 2020
 
 
-@patch("pycliarr.api.sonarr.BaseCliMediaApi.lookup_item", return_value=[TEST_SERIE])
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.lookup_item", return_value=[TEST_SERIE, TEST_SERIE])
 def test_lookup_serie_with_term(mock_base, cli):
     res = cli.lookup_serie(term="some title")
     mock_base.assert_called_with("some title")
     assert res[0].title == "some serie"
     assert res[0].year == 2020
 
+
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.lookup_item", return_value=[TEST_SERIE])
+def test_lookup_serie_with_term_single_res(mock_base, cli):
+    res = cli.lookup_serie(term="some title")
+    mock_base.assert_called_with("some title")
+    assert res.title == "some serie"
+    assert res.year == 2020
 
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.lookup_item", return_value=TEST_SERIE)
 def test_lookup_serie_with_tvdb(mock_base, cli):

@@ -115,9 +115,11 @@ class RadarrCli(BaseCliMediaApi):
         if not res:
             return None
         elif isinstance(res, list):
-            return [RadarrMovieItem.from_dict(serie) for serie in res]
-        else:
-            return RadarrMovieItem.from_dict(res)
+            if len(res) > 1:
+                return [RadarrMovieItem.from_dict(movie) for movie in res]
+            else:
+                res = res[0]
+        return RadarrMovieItem.from_dict(res)
 
     def add_movie(
         self,

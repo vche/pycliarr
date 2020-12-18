@@ -122,9 +122,11 @@ class SonarrCli(BaseCliMediaApi):
         if not res:
             return None
         elif isinstance(res, list):
-            return [SonarrSerieItem.from_dict(serie) for serie in res]
-        else:
-            return SonarrSerieItem.from_dict(res)
+            if len(res) > 1:
+                return [SonarrSerieItem.from_dict(serie) for serie in res]
+            else:
+                res = res[0]
+        return SonarrSerieItem.from_dict(res)
 
     def add_serie(
         self,

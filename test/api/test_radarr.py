@@ -55,12 +55,20 @@ def test_get_movie_with_id(mock_base, cli):
     assert res[0].year == 2020
 
 
-@patch("pycliarr.api.radarr.BaseCliMediaApi.lookup_item", return_value=[TEST_MOVIE])
+@patch("pycliarr.api.radarr.BaseCliMediaApi.lookup_item", return_value=[TEST_MOVIE, TEST_MOVIE])
 def test_lookup_movie_with_term(mock_base, cli):
     res = cli.lookup_movie(term="some title")
     mock_base.assert_called_with("some title")
     assert res[0].title == "some movie"
     assert res[0].year == 2020
+
+
+@patch("pycliarr.api.radarr.BaseCliMediaApi.lookup_item", return_value=[TEST_MOVIE])
+def test_lookup_movie_with_term_single_res(mock_base, cli):
+    res = cli.lookup_movie(term="some title")
+    mock_base.assert_called_with("some title")
+    assert res.title == "some movie"
+    assert res.year == 2020
 
 
 @patch("pycliarr.api.radarr.BaseCliMediaApi.request_get", return_value=TEST_MOVIE)
