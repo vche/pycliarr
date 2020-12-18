@@ -5,6 +5,21 @@ Changelog
 master
 ======
 
+v1.0.5
+======
+
+:Date: Dec 18, 2020
+
+New
+---
+- Add raw server response in server exception
+- Add classes imports to api module
+
+Fix
+---
+- Radarr quality profile parsing issue in CLI aith api v3
+- Cleanup debug logs
+
 v1.0.4
 ======
 
