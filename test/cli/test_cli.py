@@ -2,6 +2,7 @@ import pytest
 import sys
 
 from pycliarr.cli import cli
+from pycliarr.cli.cli_cmd import select_profile
 from pycliarr.api.exceptions import CliArrError
 from unittest.mock import Mock, patch
 
@@ -386,7 +387,17 @@ def test_cli_radarr_add_manual(mock_input, monkeypatch, mock_exit):
     mock_profiles.return_value = [{
         'name': 'name',
         'id': '1',
-        'items': [{'quality': {'name': 'item1'}, 'allowed': 'true'}]
+        'items': [
+            {'quality': {'name': 'item1'}, 'allowed': True},
+            {'quality': {'name': 'item2'}, 'allowed': False},
+            {'id': '2', 'allowed': True},
+            {
+                'name': 'name2',
+                'id': '2',
+                'allowed': True,
+                'items': [{'quality': {'name': 'item2'}, 'allowed': True}]
+            },
+        ]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
@@ -395,6 +406,27 @@ def test_cli_radarr_add_manual(mock_input, monkeypatch, mock_exit):
     mock_lookup.assert_called_with(term="some movie")
     mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id=None, movie_info=mock_info)
     mock_exit.assert_called_with(0)
+
+
+@patch('builtins.input', return_value="1c")
+def test_select_profile_nok(mock_input):
+    mock_cli = Mock()
+    mock_cli.get_quality_profiles.return_value = [{
+        'name': 'name',
+        'id': '13',
+        'items': [
+            {'quality': {'name': 'item1'}, 'allowed': 'true'},
+            {'quality': {'name': 'item2'}, 'allowed': 'false'},
+            {
+                'name': 'name2',
+                'id': '2',
+                'allowed': 'true',
+                'items': [{'quality': {'name': 'item2'}, 'allowed': 'true'}]
+            },
+        ]
+    }]
+    with pytest.raises(Exception):
+        select_profile(mock_cli)
 
 
 @patch('builtins.input', return_value="2")
@@ -417,7 +449,16 @@ def test_cli_radarr_add_manual_badmovie(mock_input, monkeypatch, mock_exit):
     mock_profiles.return_value = [{
         'name': 'name',
         'id': '1',
-        'items': [{'quality': {'name': 'item1'}, 'allowed': 'true'}]
+        'items': [
+            {'quality': {'name': 'item1'}, 'allowed': True},
+            {'quality': {'name': 'item2'}, 'allowed': False},
+            {
+                'name': 'name2',
+                'id': '2',
+                'allowed': 'true',
+                'items': [{'quality': {'name': 'item2'}, 'allowed': 'true'}]
+            },
+        ]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
@@ -426,7 +467,7 @@ def test_cli_radarr_add_manual_badmovie(mock_input, monkeypatch, mock_exit):
     mock_exit.assert_called_with(2)
 
 
-@patch('builtins.input', return_value="2")
+@patch('builtins.input', return_value="2b")
 def test_cli_radarr_add_manual_badprofile(mock_input, monkeypatch, mock_exit):
     test_args = [
         "pycliarr",
@@ -446,7 +487,7 @@ def test_cli_radarr_add_manual_badprofile(mock_input, monkeypatch, mock_exit):
     mock_profiles.return_value = [{
         'name': 'name',
         'id': '1',
-        'items': [{'quality': {'name': 'item1'}, 'allowed': 'true'}]
+        'items': [{'quality': {'name': 'item1'}, 'allowed': True}]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
@@ -475,7 +516,7 @@ def test_cli_radarr_add_manual_nomovie(mock_input, monkeypatch, mock_exit):
     mock_profiles.return_value = [{
         'name': 'name',
         'id': '1',
-        'items': [{'quality': {'name': 'item1'}, 'allowed': 'true'}]
+        'items': [{'quality': {'name': 'item1'}, 'allowed': True}]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
@@ -616,7 +657,7 @@ def test_cli_sonarr_add_manual(mock_input, monkeypatch, mock_exit):
     mock_profiles.return_value = [{
         'name': 'name',
         'id': '1',
-        'items': [{'quality': {'name': 'item1'}, 'allowed': 'true'}]
+        'items': [{'quality': {'name': 'item1'}, 'allowed': True}]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_quality_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.lookup_serie", mock_lookup)

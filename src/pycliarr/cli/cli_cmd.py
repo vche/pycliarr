@@ -55,10 +55,18 @@ class CliApiCommand:
 def select_profile(cli: base_media.BaseCliMediaApi) -> int:
     res = cli.get_quality_profiles()
     for profile in res:
-        qualities = ",".join([qual["quality"]["name"] for qual in profile["items"] if qual["allowed"]])
+        qualities = []
+        for qual in profile["items"]:
+            if qual["allowed"]:
+                # Quality items
+                if "quality" in qual:
+                    qualities.append(qual["quality"]["name"])
+                # Quality groups
+                elif "name" in qual:
+                    qualities.append(qual["name"])
         print(f"[{profile['id']}]: {profile['name']} ({qualities})")
     profile_id = input(f"Profile id to use (1-{len(res)}):")
-    if profile_id.isdigit() and int(profile_id) <= len(res):
+    if profile_id.isdigit():
         return int(profile_id)
     else:
         raise Exception("Invalid profile selection: {}")

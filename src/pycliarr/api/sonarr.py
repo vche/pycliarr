@@ -153,7 +153,6 @@ class SonarrCli(BaseCliMediaApi):
             serie_info = cast(SonarrSerieItem, self.lookup_serie(tvdb_id=tvdb_id))
         if not serie_info:
             raise SonarrCliError("Error, invalid parameters or invalid tvdb id")
-        print(f"fuck seris {serie_info}")
 
         # Prepare serie info for adding
         root_path = self.get_root_folder()

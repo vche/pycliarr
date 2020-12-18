@@ -81,6 +81,7 @@ class BaseCliApi:
             raise CliServerError(
                 f"Error from server {request_url}, status: {res.status_code}, msg: {pformat(res.content.decode())}",
                 status_code=res.status_code,
+                response=res.content.decode(),
             )
         try:
             body: Dict[str, Any] = res.json()
