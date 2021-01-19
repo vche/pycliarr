@@ -5,6 +5,15 @@ Changelog
 master
 ======
 
+v1.0.6
+======
+
+:Date: Jan 19, 2021
+
+Fix
+---
+-  Fix bug when servers return an array of 1 element
+
 v1.0.5
 ======
 
