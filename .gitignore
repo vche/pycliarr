@@ -3,6 +3,7 @@ pyvenv
 .coverage
 .tox
 docs/doc
+docs/coverage
 __pycache__
 dist
 build

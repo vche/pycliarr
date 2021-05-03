@@ -372,6 +372,7 @@ class CliAddSerieCommand(CliCommand):
             "--terms", "-t", help="Keyword to search for the serie to add", type=str, default=None
         )
         cmd_parser.add_argument("--quality", "-q", help="Quality profile to use", type=int, default=None)
+        cmd_parser.add_argument("--seasons", "-s", help="Comma separated list of seasons nums", type=str, default=None)
         return cmd_parser
 
     def run(self, cli: sonarr.SonarrCli, args: Namespace) -> None:
@@ -386,7 +387,16 @@ class CliAddSerieCommand(CliCommand):
         if not args.quality:
             args.quality = select_profile(cli)
 
-        res = cli.add_serie(quality=args.quality, tvdb_id=args.tvdb, serie_info=serie_info)  # type: ignore
+        # Get the optional season list
+        seasons_str = args.seasons.replace(" ", "").split(",") if args.seasons else []
+        try:
+            seasons = [int(season_num) for season_num in seasons_str]
+        except ValueError as e:
+            raise Exception(f"Error, invalid season list: {args.seasons} ({e})")
+
+        res = cli.add_serie(
+            quality=args.quality, tvdb_id=args.tvdb, serie_info=serie_info, monitored_seasons=seasons  # type: ignore
+        )
         print(f"Result:\n{res}")
 
 

@@ -5,6 +5,15 @@ Changelog
 master
 ======
 
+v1.0.7
+======
+
+:Date: May 3, 2021
+
+New
+---
+-  Added optional selection of seaons to monitor in sonarr.add_serie(), (use case from https://github.com/marc0janssen/pixlovarr)
+
 v1.0.6
 ======
 

@@ -618,7 +618,7 @@ def test_cli_sonarr_refresh(monkeypatch, mock_exit):
     mock_exit.assert_called_with(0)
 
 
-def test_cli_sonarr_add_imdb(monkeypatch, mock_exit):
+def test_cli_sonarr_add_tvdb(monkeypatch, mock_exit):
     test_args = [
         "pycliarr",
         "-t", TEST_HOST,
@@ -633,8 +633,48 @@ def test_cli_sonarr_add_imdb(monkeypatch, mock_exit):
     mock_sonarr.return_value = TEST_JSON
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
     cli.main()
-    mock_sonarr.assert_called_with(quality=1, tvdb_id=1234, serie_info=None)
+    mock_sonarr.assert_called_with(quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[])
     mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_add_tvdb_with_seasons(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "add",
+        "--tvdb", "1234",
+        "-q", "1",
+        "-s", "1, 3"
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[1, 3])
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_add_tvdb_with_invalidseasons(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "add",
+        "--tvdb", "1234",
+        "-q", "1",
+        "-s", "1, x"
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_not_called
+    mock_exit.assert_called_with(2)
 
 
 @patch('builtins.input', return_value="1")
@@ -664,7 +704,7 @@ def test_cli_sonarr_add_manual(mock_input, monkeypatch, mock_exit):
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
     cli.main()
     mock_lookup.assert_called_with(term="some serie")
-    mock_sonarr.assert_called_with(quality=1, tvdb_id=None, serie_info=mock_info)
+    mock_sonarr.assert_called_with(quality=1, tvdb_id=None, serie_info=mock_info, monitored_seasons=[])
     mock_exit.assert_called_with(0)
 
 

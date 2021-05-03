@@ -133,6 +133,7 @@ class SonarrCli(BaseCliMediaApi):
         quality: int,
         tvdb_id: Optional[int] = None,
         serie_info: Optional[SonarrSerieItem] = None,
+        monitored_seasons: List[int] = [],
         monitored: bool = True,
         search: bool = True,
     ) -> json_data:
@@ -145,16 +146,24 @@ class SonarrCli(BaseCliMediaApi):
             quality: Quality profile to use, as retrieved by get_quality_profiles()
             tvdb_id (Optional[int]): TVDB id of the serie to add
             serie_info (Optional[RadarrserieItem]): Description of the serie to add
+            monitored_seasons: Optional list of seasons numbers to monitor. Latest season only by default.
             monitored (bool): Whether to monitor the serie. Default is True
             search (bool): Whether to search for the serie once added. Default is True
         Returns:
             json response
+
+        Note: To further customize the parameters of the serie to add, manually look it up
+        Example:
+            info = sonarr.lookup_serie(tvdb_id=tvdb_id)
+            info["seasons"] = {"seasonNumber": 1, "monitored": False}
+            sonarr.add_serie(quality: 1, serie_info: info)
         """
         # Get info from imdb/tvdb if needed:
         if tvdb_id:
             serie_info = cast(SonarrSerieItem, self.lookup_serie(tvdb_id=tvdb_id))
         if not serie_info:
             raise SonarrCliError("Error, invalid parameters or invalid tvdb id")
+        print(f"pipo0: {serie_info.seasons}")
 
         # Prepare serie info for adding
         root_path = self.get_root_folder()
@@ -162,10 +171,19 @@ class SonarrCli(BaseCliMediaApi):
         serie_info.profileId = quality
         serie_info.qualityProfileId = quality
         serie_info.monitored = monitored
+        # serie_info.seasons = [{"seasonNumber": snum, "monitored": monitored} for snum in seasons if seasons]
+
+        # Specifically monitors only the specified seasons
+        print(f"pipo: {serie_info.seasons}")
+        if monitored_seasons:
+            for season in serie_info.seasons:
+                season["monitored"] = season["seasonNumber"] in monitored_seasons
+        print(f"prout: {serie_info.seasons}")
+
         options = {
             "searchForMissingEpisodes": search,
             "ignoreEpisodesWithFiles": True,
-            "ignoreEpisodesWithoutFiles": True,
+            "ignoreEpisodesWithoutFiles": False if monitored_seasons else True,
         }
         serie_info.add_attribute("addOptions", options)
 

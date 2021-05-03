@@ -23,7 +23,11 @@ TEST_SERIEINFO = {
     "network": "",
     "airTime": "",
     "images": [],
-    "seasons": [],
+    "seasons": [
+        {"seasonNumber": 1, "monitored": True},
+        {"seasonNumber": 2, "monitored": True},
+        {"seasonNumber": 3, "monitored": True}
+    ],
     "year": 0,
     "path": "",
     "profileId": 0,
@@ -48,6 +52,10 @@ TEST_SERIEINFO = {
     "qualityProfileId": 0,
     "id": 0,
 }
+
+
+def new_serie_info():
+    return deepcopy(TEST_SERIEINFO)
 
 
 @pytest.fixture
@@ -86,6 +94,7 @@ def test_lookup_serie_with_term_single_res(mock_base, cli):
     assert res.title == "some serie"
     assert res.year == 2020
 
+
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.lookup_item", return_value=TEST_SERIE)
 def test_lookup_serie_with_tvdb(mock_base, cli):
     res = cli.lookup_serie(tvdb_id=1234)
@@ -108,10 +117,10 @@ def test_lookup_serie_with_noparam(cli):
 
 
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value={"path": "some/path/"})
-@patch("pycliarr.api.sonarr.BaseCliMediaApi.request_get", return_value=TEST_SERIEINFO)
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.request_get", return_value=new_serie_info())
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.add_item", return_value=TEST_JSON)
 def test_add_serie_withtvdb(mock_add, mock_root, mock_get, cli):
-    exp = deepcopy(TEST_SERIEINFO)
+    exp = new_serie_info()
     exp.update({
         "title": "some serie",
         "path": "some/path/some serie",
@@ -129,9 +138,35 @@ def test_add_serie_withtvdb(mock_add, mock_root, mock_get, cli):
 
 
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value={"path": "some/path/"})
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.request_get", return_value=new_serie_info())
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.add_item", return_value=TEST_JSON)
+def test_add_serie_withseasons(mock_add, mock_root, mock_get, cli):
+    exp = new_serie_info()
+    exp.update({
+        "title": "some serie",
+        "path": "some/path/some serie",
+        "profileId": 1,
+        "qualityProfileId": 1,
+        "monitored": True,
+        "seasons": [
+            {"seasonNumber": 1, "monitored": True},
+            {"seasonNumber": 2, "monitored": True},
+            {"seasonNumber": 3, "monitored": False}
+        ],
+        "addOptions": {
+            "searchForMissingEpisodes": True,
+            "ignoreEpisodesWithFiles": True,
+            "ignoreEpisodesWithoutFiles": False,
+        }
+    })
+    cli.add_serie(quality=1, tvdb_id=1234, monitored_seasons=[1, 2])
+    mock_add.assert_called_with(json_data=exp)
+
+
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value={"path": "some/path/"})
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.add_item", return_value=TEST_JSON)
 def test_add_serie_withinfo(mock_add, mock_root, cli):
-    exp = deepcopy(TEST_SERIEINFO)
+    exp = new_serie_info()
     exp.update({
         "title": "some serie",
         "path": "some/path/some serie",
@@ -145,6 +180,11 @@ def test_add_serie_withinfo(mock_add, mock_root, cli):
         }
     })
     info = SonarrSerieItem(title="some serie")
+    info.seasons = [
+        {"seasonNumber": 1, "monitored": True},
+        {"seasonNumber": 2, "monitored": True},
+        {"seasonNumber": 3, "monitored": True}
+    ]
     cli.add_serie(quality=1, serie_info=info, monitored=False, search=False)
     mock_add.assert_called_with(json_data=exp)
 
