@@ -163,7 +163,6 @@ class SonarrCli(BaseCliMediaApi):
             serie_info = cast(SonarrSerieItem, self.lookup_serie(tvdb_id=tvdb_id))
         if not serie_info:
             raise SonarrCliError("Error, invalid parameters or invalid tvdb id")
-        print(f"pipo0: {serie_info.seasons}")
 
         # Prepare serie info for adding
         root_path = self.get_root_folder()
@@ -174,11 +173,9 @@ class SonarrCli(BaseCliMediaApi):
         # serie_info.seasons = [{"seasonNumber": snum, "monitored": monitored} for snum in seasons if seasons]
 
         # Specifically monitors only the specified seasons
-        print(f"pipo: {serie_info.seasons}")
         if monitored_seasons:
             for season in serie_info.seasons:
                 season["monitored"] = season["seasonNumber"] in monitored_seasons
-        print(f"prout: {serie_info.seasons}")
 
         options = {
             "searchForMissingEpisodes": search,
