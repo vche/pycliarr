@@ -5,6 +5,19 @@ Changelog
 master
 ======
 
+v1.0.8
+======
+
+:Date: May 9, 2021
+
+New
+---
+- Issue with delete requests parameters sent as data instead of url parameters
+
+New
+---
+- Add season folder creation option to sonarr
+
 v1.0.7
 ======
 
