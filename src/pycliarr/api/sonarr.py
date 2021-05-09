@@ -136,6 +136,7 @@ class SonarrCli(BaseCliMediaApi):
         monitored_seasons: List[int] = [],
         monitored: bool = True,
         search: bool = True,
+        season_folder: bool = True,
     ) -> json_data:
         """addMovie adds a new serie to collection.
 
@@ -149,6 +150,7 @@ class SonarrCli(BaseCliMediaApi):
             monitored_seasons: Optional list of seasons numbers to monitor. Latest season only by default.
             monitored (bool): Whether to monitor the serie. Default is True
             search (bool): Whether to search for the serie once added. Default is True
+            season_folder (bool): If True (default), create a folder for each season.
         Returns:
             json response
 
@@ -170,7 +172,7 @@ class SonarrCli(BaseCliMediaApi):
         serie_info.profileId = quality
         serie_info.qualityProfileId = quality
         serie_info.monitored = monitored
-        # serie_info.seasons = [{"seasonNumber": snum, "monitored": monitored} for snum in seasons if seasons]
+        serie_info.seasonFolder = season_folder
 
         # Specifically monitors only the specified seasons
         if monitored_seasons:

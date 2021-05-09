@@ -23,7 +23,7 @@ pyvenv/bin/pycliarr -t "http://192.168.0.199:7878" -k "2ac2d8f667524da3bax849e81
 
 Using radarr client
 ```python
-from pycliarr.api.radarr import RadarrCli
+from pycliarr.api import RadarrCli
 radarr_cli = RadarrCli('http://192.168.0.199:7878', '5f5e32qf3ff8463e9f3d2388af0fd3e8')
 radarr_cli.add_movie(imdb_id="tt1234", quality=1)
 movie = radarr_cli.get_movie(12)
@@ -32,7 +32,7 @@ print(movie.title)
 
 Using sonarr client
 ```python
-from pycliarr.api.sonarr import SonarrCli
+from pycliarr.api import SonarrCli
 sonarr_cli = SonarrCli('http://192.168.0.199:8989', '2ac2d8f667524da3bx1849e81dba5a84')
 sonarr_cli.add_serie(imdb_id="tt1234", quality=1)
 serie = sonarr_cli.get_serie(12)

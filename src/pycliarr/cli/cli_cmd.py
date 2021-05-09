@@ -221,7 +221,7 @@ class CliDeleteMovieCommand(CliCommand):
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--mid", "-i", help="ID of the movie to delete", type=int, required=True)
         cmd_parser.add_argument(
-            "--delfiles", "-d", help="Also delete files on disk", default=False, action="store_true"
+            "--delfiles", "-f", help="Also delete files on disk", default=False, action="store_true"
         )
         return cmd_parser
 
@@ -319,7 +319,7 @@ class CliDeleteSerieCommand(CliCommand):
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--sid", "-i", help="ID of the serie to delete", type=int, required=True)
         cmd_parser.add_argument(
-            "--delfiles", "-d", help="Also delete files on disk", default=False, action="store_true"
+            "--delfiles", "-f", help="Also delete files on disk", default=False, action="store_true"
         )
         return cmd_parser
 
@@ -373,6 +373,13 @@ class CliAddSerieCommand(CliCommand):
         )
         cmd_parser.add_argument("--quality", "-q", help="Quality profile to use", type=int, default=None)
         cmd_parser.add_argument("--seasons", "-s", help="Comma separated list of seasons nums", type=str, default=None)
+        cmd_parser.add_argument(
+            "--season-folders",
+            "-f",
+            help="Whether to create season folders, default is false",
+            default=False,
+            action="store_true",
+        )
         return cmd_parser
 
     def run(self, cli: sonarr.SonarrCli, args: Namespace) -> None:
@@ -395,7 +402,11 @@ class CliAddSerieCommand(CliCommand):
             raise Exception(f"Error, invalid season list: {args.seasons} ({e})")
 
         res = cli.add_serie(
-            quality=args.quality, tvdb_id=args.tvdb, serie_info=serie_info, monitored_seasons=seasons  # type: ignore
+            quality=args.quality,
+            tvdb_id=args.tvdb,
+            serie_info=serie_info,  # type: ignore
+            monitored_seasons=seasons,
+            season_folder=args.season_folders,
         )
         print(f"Result:\n{res}")
 

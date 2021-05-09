@@ -101,9 +101,9 @@ class BaseCliApi:
         """Shortcut for request withe method=put."""
         return self.request("PUT", path, json_data=json_data)
 
-    def request_delete(self, path: str, json_data: Optional[json_data] = None) -> json_data:
+    def request_delete(self, path: str, url_params: Optional[Dict[str, Any]] = None) -> json_data:
         """Shortcut for request withe method=delete."""
-        return self.request("DELETE", path, json_data=json_data)
+        return self.request("DELETE", path, url_params=url_params)
 
     def close(self) -> None:
         """Close session with the endpoint."""

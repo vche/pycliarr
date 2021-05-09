@@ -105,7 +105,7 @@ def test_delete(patch_session):
 
     assert patch_session().headers == {"X-Api-Key": TEST_APIKEY}
     patch_session().request.assert_called_with(
-        "DELETE", f"{TEST_HOST}{TEST_PATH}", params=None, json={'param': 'value'}
+        "DELETE", f"{TEST_HOST}{TEST_PATH}", params={'param': 'value'}, json=None
     )
     assert rep == TEST_JSON
 

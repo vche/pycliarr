@@ -127,13 +127,14 @@ def test_add_serie_withtvdb(mock_add, mock_root, mock_get, cli):
         "profileId": 1,
         "qualityProfileId": 1,
         "monitored": True,
+        "seasonFolder": False,
         "addOptions": {
             "searchForMissingEpisodes": True,
             "ignoreEpisodesWithFiles": True,
             "ignoreEpisodesWithoutFiles": True,
         }
     })
-    cli.add_serie(quality=1, tvdb_id=1234)
+    cli.add_serie(quality=1, tvdb_id=1234, season_folder=False)
     mock_add.assert_called_with(json_data=exp)
 
 

@@ -627,13 +627,14 @@ def test_cli_sonarr_add_tvdb(monkeypatch, mock_exit):
         "add",
         "--tvdb", "1234",
         "-q", "1",
+        "--season-folders",
     ]
     monkeypatch.setattr(sys, "argv", test_args)
     mock_sonarr = Mock()
     mock_sonarr.return_value = TEST_JSON
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
     cli.main()
-    mock_sonarr.assert_called_with(quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[])
+    mock_sonarr.assert_called_with(quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[], season_folder=True)
     mock_exit.assert_called_with(0)
 
 
@@ -653,7 +654,9 @@ def test_cli_sonarr_add_tvdb_with_seasons(monkeypatch, mock_exit):
     mock_sonarr.return_value = TEST_JSON
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
     cli.main()
-    mock_sonarr.assert_called_with(quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[1, 3])
+    mock_sonarr.assert_called_with(
+        quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[1, 3], season_folder=False
+    )
     mock_exit.assert_called_with(0)
 
 
@@ -704,7 +707,9 @@ def test_cli_sonarr_add_manual(mock_input, monkeypatch, mock_exit):
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
     cli.main()
     mock_lookup.assert_called_with(term="some serie")
-    mock_sonarr.assert_called_with(quality=1, tvdb_id=None, serie_info=mock_info, monitored_seasons=[])
+    mock_sonarr.assert_called_with(
+        quality=1, tvdb_id=None, serie_info=mock_info, monitored_seasons=[], season_folder=False
+    )
     mock_exit.assert_called_with(0)
 
 
