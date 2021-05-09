@@ -4,7 +4,7 @@ from argparse import ArgumentParser, Namespace, _SubParsersAction
 from pprint import pformat
 from typing import Any, List, Optional, Union
 
-from pycliarr.api import base_media, radarr, sonarr
+from pycliarr.api import base_api, base_media, radarr, sonarr
 
 
 class CliCommand:
@@ -75,8 +75,11 @@ def select_profile(cli: base_media.BaseCliMediaApi) -> int:
 def select_item(
     terms: str, choices: List[Union[radarr.RadarrMovieItem, sonarr.SonarrSerieItem]]
 ) -> Union[radarr.RadarrMovieItem, sonarr.SonarrSerieItem]:
-    if len(choices) == 0:
+    if not choices or (isinstance(choices, list) and len(choices) == 0):
         raise Exception(f"No match found for terms {terms}")
+    elif issubclass(choices.__class__, base_api.BaseCliApiItem):
+        # Only one result is returned
+        return choices  # type: ignore
     for item in choices:
         print(f"[{choices.index(item)+1}]: {item.title} ({item.year})")
     item_id = input(f"Select the item to add (1-{len(choices)}):")

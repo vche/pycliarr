@@ -3,6 +3,7 @@ import sys
 
 from pycliarr.cli import cli
 from pycliarr.cli.cli_cmd import select_profile
+from pycliarr.api import radarr, sonarr
 from pycliarr.api.exceptions import CliArrError
 from unittest.mock import Mock, patch
 
@@ -407,6 +408,47 @@ def test_cli_radarr_add_manual(mock_input, monkeypatch, mock_exit):
     mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id=None, movie_info=mock_info)
     mock_exit.assert_called_with(0)
 
+
+@patch('builtins.input', return_value="1")
+def test_cli_radarr_add_one_result(mock_input, monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "add",
+        "-t", "some movie",
+        # "-q", 1
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    mock_lookup = Mock()
+    mock_info = radarr.RadarrMovieItem(title="test1", year=2020)
+    mock_lookup.return_value = mock_info
+    mock_profiles = Mock()
+    mock_profiles.return_value = [{
+        'name': 'name',
+        'id': '1',
+        'items': [
+            {'quality': {'name': 'item1'}, 'allowed': True},
+            {'quality': {'name': 'item2'}, 'allowed': False},
+            {'id': '2', 'allowed': True},
+            {
+                'name': 'name2',
+                'id': '2',
+                'allowed': True,
+                'items': [{'quality': {'name': 'item2'}, 'allowed': True}]
+            },
+        ]
+    }]
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
+    cli.main()
+    mock_lookup.assert_called_with(term="some movie")
+    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id=None, movie_info=mock_info)
+    mock_exit.assert_called_with(0)
 
 @patch('builtins.input', return_value="1c")
 def test_select_profile_nok(mock_input):
