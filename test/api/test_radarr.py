@@ -32,6 +32,18 @@ TEST_MOVIEINFO = {
     "alternativeTitles": [],
     "qualityProfileId": 0,
     "id": 0,
+    "overview": "",
+    "inCinemas": "",
+    "physicalRelease": "",
+    "website": "",
+    "youTubeTrailerId": "",
+    "studio": "",
+    "rootFolderPath": "",
+    "isAvailable": "",
+    "folderName": "",
+    "certification": "",
+    "ratings": {},
+    "collection": {},
 }
 
 @pytest.fixture
