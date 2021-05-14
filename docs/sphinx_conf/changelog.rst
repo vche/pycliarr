@@ -5,6 +5,15 @@ Changelog
 master
 ======
 
+v1.0.10
+=======
+
+:Date: May 14, 2021
+
+Fix
+---
+- Remove debug log
+
 v1.0.9
 ======
 
@@ -14,7 +23,6 @@ Fix
 ---
 - Add missing files to radarr item
 - Fix issue when a single item is returned as lookup results
-
 
 v1.0.8
 ======

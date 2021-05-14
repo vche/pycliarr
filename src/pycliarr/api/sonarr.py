@@ -119,7 +119,6 @@ class SonarrCli(BaseCliMediaApi):
             raise SonarrCliError("Error invalid parameters")
 
         res = self.lookup_item(str(term))
-        print(res)
         if not res:
             return None
         elif isinstance(res, list):
