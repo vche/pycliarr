@@ -138,14 +138,14 @@ def test_get_queue(mock_base, cli):
 @patch("pycliarr.api.base_media.BaseCliApi.request_delete", return_value=TEST_JSON)
 def test_delete_queue(mock_base, cli):
     res = cli.delete_queue(1234)
-    mock_base.assert_called_with(cli.api_url_queue, {"id": 1234})
+    mock_base.assert_called_with(f"{cli.api_url_queue}/1234", {})
     assert res == TEST_JSON
 
 
 @patch("pycliarr.api.base_media.BaseCliApi.request_delete", return_value=TEST_JSON)
 def test_delete_queue_with_options(mock_base, cli):
     res = cli.delete_queue(1234, blacklist=True)
-    mock_base.assert_called_with(cli.api_url_queue, {"id": 1234, "blacklist": True})
+    mock_base.assert_called_with(f"{cli.api_url_queue}/1234", {"blacklist": True})
     assert res == TEST_JSON
 
 

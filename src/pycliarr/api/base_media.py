@@ -162,10 +162,10 @@ class BaseCliMediaApi(BaseCliApi):
         Returns:
             json response
         """
-        data = {"id": item_id}
+        data = {}
         if blacklist:
             data["blacklist"] = blacklist
-        return self.request_delete(self.api_url_queue, data)
+        return self.request_delete(f"{self.api_url_queue}/{item_id}", data)
 
     def get_history(
         self,

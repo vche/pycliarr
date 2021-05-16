@@ -5,6 +5,15 @@ Changelog
 master
 ======
 
+v1.0.11
+=======
+
+:Date: May 16, 2021
+
+Fix
+---
+- Fix wrong url format with delete queue commands
+
 v1.0.10
 =======
 
