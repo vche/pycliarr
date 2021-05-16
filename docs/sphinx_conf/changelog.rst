@@ -5,6 +5,15 @@ Changelog
 master
 ======
 
+v1.0.12
+=======
+
+:Date: May 16, 2021
+
+Fix
+---
+- Fix issue with default values for dates
+
 v1.0.11
 =======
 
