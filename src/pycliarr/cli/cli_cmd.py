@@ -278,6 +278,7 @@ class CliAddMovieCommand(CliCommand):
             "--terms", "-t", help="Keyword to search for the movie to add", type=str, default=None
         )
         cmd_parser.add_argument("--quality", "-q", help="Quality profile to use", type=int, default=None)
+        cmd_parser.add_argument("--path", help="Full path where the serie should be stored", type=str, default=None)
         return cmd_parser
 
     def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
@@ -292,7 +293,13 @@ class CliAddMovieCommand(CliCommand):
         if not args.quality:
             args.quality = select_profile(cli)
 
-        res = cli.add_movie(quality=args.quality, tmdb_id=args.tmdb, imdb_id=args.imdb, movie_info=movie_info)  # type: ignore
+        res = cli.add_movie(
+            quality=args.quality,
+            tmdb_id=args.tmdb,
+            imdb_id=args.imdb,
+            movie_info=movie_info,  # type: ignore
+            path=args.path,
+        )
         print(f"Result:\n{res}")
 
 
@@ -383,6 +390,7 @@ class CliAddSerieCommand(CliCommand):
             default=False,
             action="store_true",
         )
+        cmd_parser.add_argument("--path", help="Full path where the serie should be stored", type=str, default=None)
         return cmd_parser
 
     def run(self, cli: sonarr.SonarrCli, args: Namespace) -> None:
@@ -410,6 +418,7 @@ class CliAddSerieCommand(CliCommand):
             serie_info=serie_info,  # type: ignore
             monitored_seasons=seasons,
             season_folder=args.season_folders,
+            path=args.path,
         )
         print(f"Result:\n{res}")
 

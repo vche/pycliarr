@@ -85,14 +85,14 @@ class BaseCliMediaApi(BaseCliApi):
         """
         return self.request_get(self.api_url_diskspace)
 
-    def get_root_folder(self) -> json_dict:
+    def get_root_folder(self) -> List[json_dict]:
         """Retrieve the server root folder.
 
         Returns:
             json response
         """
         res = cast(json_list, self.request_get(self.api_url_rootfolder))
-        return res[0]
+        return res
 
     def get_item(self, item_id: Optional[int] = None) -> json_data:
         """Get specified item, or all if no id provided from server collection.

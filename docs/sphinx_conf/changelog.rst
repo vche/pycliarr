@@ -5,6 +5,21 @@ Changelog
 master
 ======
 
+v1.0.13
+=======
+
+:Date: May 16, 2021
+
+New
+---
+- Add option to specify folder path in add_movie and add_serie
+- Default folder path builders
+- Update default movie folder with release year to match radarr gui default
+
+Fix
+---
+- Support for several root folders in get_root_folder()
+
 v1.0.12
 =======
 

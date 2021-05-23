@@ -4,6 +4,7 @@ from unittest.mock import patch
 from pycliarr.api.sonarr import SonarrCli, SonarrSerieItem
 from pycliarr.api.exceptions import SonarrCliError
 
+TEST_ROOT_PATH = [{"path": "some/path/", "id": 1},{"path": "yet/otherpath/", "id": 3}]
 TEST_JSON = {'somefield': "some value"}
 TEST_SERIE = {'title': "some serie", "year": 2020}
 TEST_HOST = "http://example.com"
@@ -116,7 +117,7 @@ def test_lookup_serie_with_noparam(cli):
         cli.lookup_serie()
 
 
-@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value={"path": "some/path/"})
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.request_get", return_value=new_serie_info())
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.add_item", return_value=TEST_JSON)
 def test_add_serie_withtvdb(mock_add, mock_root, mock_get, cli):
@@ -138,7 +139,29 @@ def test_add_serie_withtvdb(mock_add, mock_root, mock_get, cli):
     mock_add.assert_called_with(json_data=exp)
 
 
-@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value={"path": "some/path/"})
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.request_get", return_value=new_serie_info())
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.add_item", return_value=TEST_JSON)
+def test_add_serie_withpath(mock_add, mock_root, mock_get, cli):
+    exp = new_serie_info()
+    exp.update({
+        "title": "some serie",
+        "path": "some/other_path/some_other_serie",
+        "profileId": 1,
+        "qualityProfileId": 1,
+        "monitored": True,
+        "seasonFolder": False,
+        "addOptions": {
+            "searchForMissingEpisodes": True,
+            "ignoreEpisodesWithFiles": True,
+            "ignoreEpisodesWithoutFiles": True,
+        }
+    })
+    cli.add_serie(quality=1, tvdb_id=1234, season_folder=False, path="some/other_path/some_other_serie")
+    mock_add.assert_called_with(json_data=exp)
+
+
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.request_get", return_value=new_serie_info())
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.add_item", return_value=TEST_JSON)
 def test_add_serie_withseasons(mock_add, mock_root, mock_get, cli):
@@ -164,7 +187,7 @@ def test_add_serie_withseasons(mock_add, mock_root, mock_get, cli):
     mock_add.assert_called_with(json_data=exp)
 
 
-@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value={"path": "some/path/"})
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.add_item", return_value=TEST_JSON)
 def test_add_serie_withinfo(mock_add, mock_root, cli):
     exp = new_serie_info()
@@ -286,3 +309,21 @@ def test_delete_episode_file(mock_base, cli):
     res = cli.delete_episode_file(1234)
     mock_base.assert_called_with(cli.api_url_episodefile + "/1234")
     assert res == TEST_JSON
+
+
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
+def test_build_movie_path_no_idx(mock_rootcli, cli):
+    serie = SonarrSerieItem(title="some serie")
+    assert cli.build_serie_path(serie) == "some/path/some serie"
+
+
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
+def test_build_movie_path_idx(mock_rootcli, cli):
+    serie = SonarrSerieItem(title="some serie")
+    assert cli.build_serie_path(serie, root_folder_id=3) == "yet/otherpath/some serie"
+
+
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
+def test_build_movie_path_bad_idx(mock_rootcli, cli):
+    serie = SonarrSerieItem(title="some serie")
+    assert cli.build_serie_path(serie, root_folder_id=33) == "some/path/some serie"

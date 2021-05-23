@@ -364,7 +364,7 @@ def test_cli_radarr_add_imdb(monkeypatch, mock_exit):
     mock_sonarr.return_value = TEST_JSON
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
-    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id='tt1234', movie_info=None)
+    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id='tt1234', movie_info=None, path=None)
     mock_exit.assert_called_with(0)
 
 
@@ -377,6 +377,7 @@ def test_cli_radarr_add_manual(mock_input, monkeypatch, mock_exit):
         "radarr",
         "add",
         "-t", "some movie",
+        "--path", "some/path",
     ]
     monkeypatch.setattr(sys, "argv", test_args)
     mock_sonarr = Mock()
@@ -405,7 +406,7 @@ def test_cli_radarr_add_manual(mock_input, monkeypatch, mock_exit):
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
     mock_lookup.assert_called_with(term="some movie")
-    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id=None, movie_info=mock_info)
+    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id=None, movie_info=mock_info, path="some/path")
     mock_exit.assert_called_with(0)
 
 
@@ -447,7 +448,7 @@ def test_cli_radarr_add_one_result(mock_input, monkeypatch, mock_exit):
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
     mock_lookup.assert_called_with(term="some movie")
-    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id=None, movie_info=mock_info)
+    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id=None, movie_info=mock_info, path=None)
     mock_exit.assert_called_with(0)
 
 @patch('builtins.input', return_value="1c")
@@ -676,7 +677,9 @@ def test_cli_sonarr_add_tvdb(monkeypatch, mock_exit):
     mock_sonarr.return_value = TEST_JSON
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
     cli.main()
-    mock_sonarr.assert_called_with(quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[], season_folder=True)
+    mock_sonarr.assert_called_with(
+        quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[], season_folder=True, path=None
+    )
     mock_exit.assert_called_with(0)
 
 
@@ -689,7 +692,8 @@ def test_cli_sonarr_add_tvdb_with_seasons(monkeypatch, mock_exit):
         "add",
         "--tvdb", "1234",
         "-q", "1",
-        "-s", "1, 3"
+        "-s", "1, 3",
+        "--path", "some/path"
     ]
     monkeypatch.setattr(sys, "argv", test_args)
     mock_sonarr = Mock()
@@ -697,7 +701,7 @@ def test_cli_sonarr_add_tvdb_with_seasons(monkeypatch, mock_exit):
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
     cli.main()
     mock_sonarr.assert_called_with(
-        quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[1, 3], season_folder=False
+        quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[1, 3], season_folder=False, path="some/path"
     )
     mock_exit.assert_called_with(0)
 
@@ -750,7 +754,7 @@ def test_cli_sonarr_add_manual(mock_input, monkeypatch, mock_exit):
     cli.main()
     mock_lookup.assert_called_with(term="some serie")
     mock_sonarr.assert_called_with(
-        quality=1, tvdb_id=None, serie_info=mock_info, monitored_seasons=[], season_folder=False
+        quality=1, tvdb_id=None, serie_info=mock_info, monitored_seasons=[], season_folder=False, path=None
     )
     mock_exit.assert_called_with(0)
 

@@ -141,6 +141,7 @@ class RadarrCli(BaseCliMediaApi):
         movie_info: Optional[RadarrMovieItem] = None,
         monitored: bool = True,
         search: bool = True,
+        path: Optional[str] = None,
     ) -> json_data:
         """addMovie adds a new movie to collection.
 
@@ -154,6 +155,8 @@ class RadarrCli(BaseCliMediaApi):
             movie_info (Optional[RadarrMovieItem]): Description of the movie to add
             monitored (bool): Whether to monitor the movie. Default is True
             search (bool): Whether to search for the movie once added. Default is True
+            path (Optional[str]): Specify the path awhere the movie should be stored.
+                Default is root/<movie name> (<movie year>).
         Returns:
             json response
         """
@@ -165,14 +168,30 @@ class RadarrCli(BaseCliMediaApi):
             raise RadarrCliError("Error, invalid parameters or invalid tmdb/imdb id")
 
         # Prepare movie info for adding
-        root_path = self.get_root_folder()
-        movie_info.path = root_path["path"] + movie_info.title
+        movie_info.path = path or self.build_movie_path(movie_info)
         movie_info.profileId = quality
         movie_info.qualityProfileId = quality
         movie_info.monitored = monitored
         movie_info.add_attribute("addOptions", {"searchForMovie": search})
 
         return self.add_item(json_data=movie_info.to_dict())
+
+    def build_movie_path(self, movie_info: RadarrMovieItem, root_folder_id: int = 0) -> str:
+        """Build a movie folder path using the root folder specified.
+        Args:
+            serie_info (SonarrSerieItem) Item for which to build the path
+            root_folder_id (int): Id of the root folder (can be retrieved with get_root_folder())
+                If the id is not found or not specified, the first root folder in the list is used.
+
+        Returns: Full path of the serie in the format <root path>/<movie name> (<movie year>)
+        """
+        root_paths = self.get_root_folder()
+        root_path = root_paths[0]
+        for path in root_paths:
+            if path["id"] == root_folder_id:
+                root_path = path
+
+        return root_path["path"] + movie_info.title + (f" ({movie_info.year})" if movie_info.year else "")
 
     def delete_movie(self, movie_id: int, delete_files: bool = True, add_exclusion: bool = False) -> json_data:
         """Delete the movie with the given ID

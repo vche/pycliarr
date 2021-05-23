@@ -69,7 +69,7 @@ def test_diskspace(mock_base, cli):
 def test_rootfolder(mock_base, cli):
     res = cli.get_root_folder()
     mock_base.assert_called_with(cli.api_url_rootfolder)
-    assert res == TEST_JSON
+    assert res == [TEST_JSON]
 
 
 @patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)

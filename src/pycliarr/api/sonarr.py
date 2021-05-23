@@ -137,6 +137,7 @@ class SonarrCli(BaseCliMediaApi):
         monitored: bool = True,
         search: bool = True,
         season_folder: bool = True,
+        path: Optional[str] = None,
     ) -> json_data:
         """addMovie adds a new serie to collection.
 
@@ -151,6 +152,8 @@ class SonarrCli(BaseCliMediaApi):
             monitored (bool): Whether to monitor the serie. Default is True
             search (bool): Whether to search for the serie once added. Default is True
             season_folder (bool): If True (default), create a folder for each season.
+            path (Optional[str]): Specify the path awhere the movie should be stored. Default is root/<serie name>.
+
         Returns:
             json response
 
@@ -167,8 +170,7 @@ class SonarrCli(BaseCliMediaApi):
             raise SonarrCliError("Error, invalid parameters or invalid tvdb id")
 
         # Prepare serie info for adding
-        root_path = self.get_root_folder()
-        serie_info.path = root_path["path"] + serie_info.title
+        serie_info.path = path or self.build_serie_path(serie_info)
         serie_info.profileId = quality
         serie_info.qualityProfileId = quality
         serie_info.monitored = monitored
@@ -187,6 +189,23 @@ class SonarrCli(BaseCliMediaApi):
         serie_info.add_attribute("addOptions", options)
 
         return self.add_item(json_data=serie_info.to_dict())
+
+    def build_serie_path(self, serie_info: SonarrSerieItem, root_folder_id: int = 0) -> str:
+        """Build a serie folder path using the root folder specified.
+        Args:
+            serie_info (SonarrSerieItem) Item for which to build the path
+            root_folder_id (int): Id of the root folder (can be retrieved with get_root_folder())
+                If the id is not found or not specified, the first root folder in the list is used.
+
+        Returns: Full path of the serie in the format <root path>/<serie name>
+        """
+        root_paths = self.get_root_folder()
+        root_path = root_paths[0]
+        for path in root_paths:
+            if path["id"] == root_folder_id:
+                root_path = path
+
+        return root_path["path"] + serie_info.title
 
     def delete_serie(self, serie_id: int, delete_files: bool = True, add_exclusion: bool = False) -> json_data:
         """Delete the serie with the given ID
