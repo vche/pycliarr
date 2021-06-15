@@ -150,7 +150,7 @@ class RadarrCli(BaseCliMediaApi):
 
         Args:
             quality: Quality profile to use, as retrieved by get_quality_profiles()
-            imdb_id (Optional[int]): IMDB id of the movie to add
+            imdbp_id (Optional[int]): IMDB id of the movie to add
             tmdb_id (Optional[int]): TMDB id of the movie to add
             movie_info (Optional[RadarrMovieItem]): Description of the movie to add
             monitored (bool): Whether to monitor the movie. Default is True
@@ -181,17 +181,11 @@ class RadarrCli(BaseCliMediaApi):
         Args:
             serie_info (SonarrSerieItem) Item for which to build the path
             root_folder_id (int): Id of the root folder (can be retrieved with get_root_folder())
-                If the id is not found or not specified, the first root folder in the list is used.
+            If the id is not found or not specified, the first root folder in the list is used.
 
         Returns: Full path of the serie in the format <root path>/<movie name> (<movie year>)
         """
-        root_paths = self.get_root_folder()
-        root_path = root_paths[0]
-        for path in root_paths:
-            if path["id"] == root_folder_id:
-                root_path = path
-
-        return root_path["path"] + movie_info.title.replace(":", "") + (f" ({movie_info.year})" if movie_info.year else "")
+        return self.build_item_path(movie_info.title + (f" ({movie_info.year})" if movie_info.year else ""))
 
     def delete_movie(self, movie_id: int, delete_files: bool = True, add_exclusion: bool = False) -> json_data:
         """Delete the movie with the given ID

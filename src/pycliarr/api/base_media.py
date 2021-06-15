@@ -239,3 +239,19 @@ class BaseCliMediaApi(BaseCliApi):
         }
         data.update({"sortKey": sort_key})
         return self.request_get(self.api_url_wanted_missing, url_params=data)
+
+    def build_item_path(self, title: str, root_folder_id: int = 0) -> str:
+        """Build an item folder path using the root folder specified.
+        Args:
+            title (str): Title to add to root path. All invalid characters are removed
+            root_folder_id (int): Id of the root folder (can be retrieved with get_root_folder())
+                If the id is not found or not specified, the first root folder in the list is used.
+
+        Returns: Full path of the serie in the format <root path>/<serie name>
+        """
+        root_paths = self.get_root_folder()
+        root_path = root_paths[0]
+        for path in root_paths:
+            if path["id"] == root_folder_id:
+                root_path = path
+        return str(root_path["path"]) + self.to_path(title)

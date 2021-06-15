@@ -7,6 +7,7 @@ TEST_JSON = {'somefield': "some value"}
 TEST_JSON2 = {'someotherfield': "some other value"}
 TEST_HOST = "http://example.com"
 TEST_APIKEY = "abcd1234"
+TEST_ROOT_PATH = [{"path": "some/path/", "id": 1},{"path": "yet/otherpath/", "id": 3}]
 
 
 @pytest.fixture
@@ -208,3 +209,18 @@ def test_get_wanted_with_options(mock_base, cli):
     data = {"page": 12, "pageSize": 11, "sortKey": "abc", "sortDir": "desc"}
     mock_base.assert_called_with(cli.api_url_wanted_missing, url_params=data)
     assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
+def test_build_movie_path_no_idx(mock_rootcli, cli):
+    assert cli.build_item_path("some serie") == "some/path/some serie"
+
+
+@patch("pycliarr.api.base_media.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
+def test_build_movie_path_idx(mock_rootcli, cli):
+    assert cli.build_item_path("some serie", root_folder_id=3) == "yet/otherpath/some serie"
+
+
+@patch("pycliarr.api.base_media.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
+def test_build_movie_path_bad_idx(mock_rootcli, cli):
+    assert cli.build_item_path("some serie", root_folder_id=33) == "some/path/some serie"

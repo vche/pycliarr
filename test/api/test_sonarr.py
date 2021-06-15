@@ -311,19 +311,8 @@ def test_delete_episode_file(mock_base, cli):
     assert res == TEST_JSON
 
 
-@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
-def test_build_movie_path_no_idx(mock_rootcli, cli):
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.build_item_path")
+def test_build_serie_path(mock_buildpath, cli):
     serie = SonarrSerieItem(title="some serie")
-    assert cli.build_serie_path(serie) == "some/path/some serie"
-
-
-@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
-def test_build_movie_path_idx(mock_rootcli, cli):
-    serie = SonarrSerieItem(title="some serie")
-    assert cli.build_serie_path(serie, root_folder_id=3) == "yet/otherpath/some serie"
-
-
-@patch("pycliarr.api.sonarr.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
-def test_build_movie_path_bad_idx(mock_rootcli, cli):
-    serie = SonarrSerieItem(title="some serie")
-    assert cli.build_serie_path(serie, root_folder_id=33) == "some/path/some serie"
+    cli.build_serie_path(serie)
+    mock_buildpath.assert_called_with("some serie")

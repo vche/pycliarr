@@ -4,7 +4,7 @@ from unittest.mock import patch
 from pycliarr.api.radarr import RadarrCli, RadarrMovieItem
 from pycliarr.api.exceptions import RadarrCliError
 
-TEST_ROOT_PATH=[{"path": "some/path/", "id": 1},{"path": "yet/otherpath/", "id": 3}]
+TEST_ROOT_PATH = [{"path": "some/path/", "id": 1},{"path": "yet/otherpath/", "id": 3}]
 TEST_JSON = {'somefield': "some value"}
 TEST_MOVIE = {'title': "some movie", "year": 2020}
 TEST_HOST = "http://example.com"
@@ -13,39 +13,40 @@ TEST_MOVIEINFO = {
     "title": "some movie",
     "sortTitle": "",
     "sizeOnDisk": 0,
+    "overview": "",
+    "inCinemas": None,
+    "physicalRelease": None,
     "status": "",
     "images": [],
+    "website": "",
     "downloaded": False,
     "year": 0,
     "hasFile": False,
+    "youTubeTrailerId": "",
+    "studio": "",
     "path": "",
+    "rootFolderPath": "",
     "profileId": 0,
     "monitored": True,
     "minimumAvailability": "",
+    "isAvailable": "",
+    "folderName": "",
     "runtime": 0,
     "cleanTitle": "",
     "imdbId": "",
     "tmdbId": 0,
     "titleSlug": "",
+    "certification": "",
     "genres": [],
     "tags": [],
     "added": None,
+    "ratings": {},
+    "collection": {},
     "alternativeTitles": [],
     "qualityProfileId": 0,
     "id": 0,
-    "overview": "",
-    "inCinemas": None,
-    "physicalRelease": None,
-    "website": "",
-    "youTubeTrailerId": "",
-    "studio": "",
-    "rootFolderPath": "",
-    "isAvailable": "",
-    "folderName": "",
-    "certification": "",
-    "ratings": {},
-    "collection": {},
 }
+
 
 @pytest.fixture
 def cli():
@@ -234,19 +235,15 @@ def test_rescan_movie(mock_base, cli):
     assert res == TEST_JSON
 
 
-@patch("pycliarr.api.radarr.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
-def test_build_movie_path_no_year_no_idx(mock_rootcli, cli):
+@patch("pycliarr.api.radarr.BaseCliMediaApi.build_item_path")
+def test_build_movie_path_no_year(mock_buildpath, cli):
     movie = RadarrMovieItem(title="some movie", year=0)
-    assert cli.build_movie_path(movie) == "some/path/some movie"
+    cli.build_movie_path(movie)
+    mock_buildpath.assert_called_with("some movie")
 
 
-@patch("pycliarr.api.radarr.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
-def test_build_movie_path_year_idx(mock_rootcli, cli):
+@patch("pycliarr.api.radarr.BaseCliMediaApi.build_item_path")
+def test_build_movie_path_year(mock_buildpath, cli):
     movie = RadarrMovieItem(title="some movie", year=2020)
-    assert cli.build_movie_path(movie, root_folder_id=3) == "yet/otherpath/some movie (2020)"
-
-
-@patch("pycliarr.api.radarr.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
-def test_build_movie_path_year_bad_idx(mock_rootcli, cli):
-    movie = RadarrMovieItem(title="some movie", year=2020)
-    assert cli.build_movie_path(movie, root_folder_id=33) == "some/path/some movie (2020)"
+    cli.build_movie_path(movie, root_folder_id=3)
+    mock_buildpath.assert_called_with("some movie (2020)")

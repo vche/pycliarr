@@ -5,10 +5,19 @@ Changelog
 master
 ======
 
+v1.0.14
+=======
+
+:Date: June 15, 2021
+
+Fix
+---
+- Remove unsupported chars from movie/serie paths depending on the platform
+
 v1.0.13
 =======
 
-:Date: May 16, 2021
+:Date: May 23, 2021
 
 New
 ---

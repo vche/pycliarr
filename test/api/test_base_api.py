@@ -110,6 +110,29 @@ def test_delete(patch_session):
     assert rep == TEST_JSON
 
 
+@patch("pycliarr.api.base_api.platform.system", return_value="Linux")
+@patch("pycliarr.api.base_api.requests.Session")
+def test_to_path_linux(patch_platform, patch_session):
+    # For all unix based platforms (linux, bsd, osx...)
+    TEST_DIRNAME = "some title"
+    cli = BaseCliApi(TEST_HOST, TEST_APIKEY, username=TEST_USER, password=TEST_PASS)
+
+    assert cli.to_path("some title") == TEST_DIRNAME
+    assert cli.to_path("some /title") == TEST_DIRNAME
+    assert cli.to_path("some:title") == "some:title"
+
+
+@patch("pycliarr.api.base_api.platform.system", return_value="Windows")
+@patch("pycliarr.api.base_api.requests.Session")
+def test_to_path_windows(patch_platform, patch_session):
+    TEST_DIRNAME = "some title"
+    cli = BaseCliApi(TEST_HOST, TEST_APIKEY, username=TEST_USER, password=TEST_PASS)
+
+    assert cli.to_path("some title") == TEST_DIRNAME
+    assert cli.to_path("some /title") == TEST_DIRNAME
+    assert cli.to_path("some: title") == TEST_DIRNAME
+
+
 def test_base_item():
     item = BaseCliApiItem(test="a")
     item.add_attribute("b", "c")

@@ -1,5 +1,6 @@
 import json
 import logging
+import platform
 from pprint import pformat
 from typing import Any, Dict, List, Optional, Type, TypeVar, Union
 
@@ -34,6 +35,7 @@ class BaseCliApi:
         self._host_url = host_url
         self._api_key = api_key
         self._session = self._build_session(username, password)
+        self._invalid_path_chars = '<>:"/\\|?*' if platform.system() == "Windows" else "/"
 
     @property
     def host_url(self) -> str:
@@ -108,6 +110,12 @@ class BaseCliApi:
     def close(self) -> None:
         """Close session with the endpoint."""
         self._session.close()
+
+    def to_path(self, basename: str) -> str:
+        """Remove invalid chars from a file/directory name depending on the platform."""
+        for c in self._invalid_path_chars:
+            basename = basename.replace(c, "")
+        return basename
 
 
 class BaseCliApiItem:
