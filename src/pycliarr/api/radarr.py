@@ -191,7 +191,7 @@ class RadarrCli(BaseCliMediaApi):
             if path["id"] == root_folder_id:
                 root_path = path
 
-        return root_path["path"] + movie_info.title + (f" ({movie_info.year})" if movie_info.year else "")
+        return root_path["path"] + movie_info.title.replace(":", "") + (f" ({movie_info.year})" if movie_info.year else "")
 
     def delete_movie(self, movie_id: int, delete_files: bool = True, add_exclusion: bool = False) -> json_data:
         """Delete the movie with the given ID
