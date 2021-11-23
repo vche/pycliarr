@@ -5,6 +5,15 @@ Changelog
 master
 ======
 
+v1.0.15
+=======
+
+:Date: Nov 23, 2021
+
+Fix
+---
+- Fix delete movie exclusion option for api v3
+
 v1.0.14
 =======
 

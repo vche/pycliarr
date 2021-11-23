@@ -151,6 +151,11 @@ pip install tox
 tox
 ```
 
+If mypy fails due to missing import stubs:
+```
+.tox/checkers/bin/mypy --install-types
+```
+
 ### Generate documentation:
 
 ```sh

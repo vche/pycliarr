@@ -197,7 +197,7 @@ class RadarrCli(BaseCliMediaApi):
         Returns:
             json response
         """
-        options = {"addExclusion": add_exclusion} if add_exclusion else {}
+        options = {"addImportExclusion": add_exclusion} if add_exclusion else {}
         return self.delete_item(movie_id, delete_files, options)
 
     def refresh_movie(self, movie_id: Optional[int] = None) -> json_data:

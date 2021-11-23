@@ -203,7 +203,7 @@ def test_delete_movie(mock_base, cli):
 @patch("pycliarr.api.radarr.BaseCliMediaApi.delete_item", return_value=TEST_JSON)
 def test_delete_movie_withoptions(mock_base, cli):
     res = cli.delete_movie(1234, delete_files=False, add_exclusion=True)
-    mock_base.assert_called_with(1234, False, {"addExclusion": True})
+    mock_base.assert_called_with(1234, False, {"addImportExclusion": True})
     assert res == TEST_JSON
 
 
