@@ -159,7 +159,7 @@ If mypy fails due to missing import stubs:
 ### Generate documentation:
 
 ```sh
-pip install sphinx sphinx_rtd_theme m2r
+pip install sphinx sphinx_rtd_theme m2r2
 ./setup.py doc
 ```
 
