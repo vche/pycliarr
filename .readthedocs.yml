@@ -25,5 +25,5 @@ python:
         path: .
         extra_requirements:
             - sphinx_rtd_theme
-            - m2r
+            - m2r2
    system_packages: true
