@@ -66,20 +66,18 @@ class RadarrCli(BaseCliMediaApi):
         * get_system_status
         * get_queue
         * delete_queue
+        * get_history
+        * get_logs
+        * get_wanted
+        * get_blocklist
+        * delete_blocklist
     """
 
-    # Start using V3 api for implemented commands
-    api_url_base = "/api/v3"
-
     # Set api specific to radarr (differs from the default ones in BaseCliMediaApi)
-    api_url_item = f"{api_url_base}/movie"
-    api_url_itemlookup = "/api/movie/lookup"
+    api_url_item = f"{BaseCliMediaApi.api_url_base}/movie"
+    api_url_itemlookup = "f{BaseCliMediaApi.api_url_base}/movie/lookup"
 
-    # Keep using v1 for commands not available
-    api_url_profile = f"{api_url_base}/qualityProfile"
-    api_url_rootfolder = "/api/rootfolder"
-    api_url_log = "/api/log"
-    api_url_systembackup = "/api/system/backup"
+    # Keep using v1 for commands not available in v3
     api_url_wanted_missing = "/api/wanted/missing"
 
     def get_movie(self, movie_id: Optional[int] = None) -> Union[RadarrMovieItem, List[RadarrMovieItem]]:
@@ -112,18 +110,13 @@ class RadarrCli(BaseCliMediaApi):
             json response
         """
         if tmdb_id:
-            url_path = f"{self.api_url_itemlookup}/tmdb"
-            url_params: Dict[str, Any] = {"tmdbId": tmdb_id}
-            res = self.request_get(url_path, url_params=url_params)
+            term = "tmdb:" + str(tmdb_id)
         elif imdb_id:
-            url_path = f"{self.api_url_itemlookup}/imdb"
-            url_params = {"imdbId": imdb_id}
-            res = self.request_get(url_path, url_params=url_params)
-        elif term:
-            res = self.lookup_item(str(term))
-        else:
+            term = "imdb:" + str(imdb_id)
+        elif not term:
             raise RadarrCliError("Error, invalid parameters")
 
+        res = self.lookup_item(str(term))
         if not res:
             return None
         elif isinstance(res, list):

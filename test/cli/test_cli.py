@@ -175,7 +175,7 @@ def test_cli_radarr_deletequeue(monkeypatch, mock_exit):
         "-t", TEST_HOST,
         "-k", TEST_APIKEY,
         "radarr",
-        "delqueue",
+        "delete-queue",
         "-i", "1234",
     ]
     monkeypatch.setattr(sys, "argv", test_args)
@@ -210,7 +210,7 @@ def test_cli_radarr_delete(monkeypatch, mock_exit):
         "-t", TEST_HOST,
         "-k", TEST_APIKEY,
         "radarr",
-        "delqueue",
+        "delete-queue",
         '-i', '1234',
     ]
     monkeypatch.setattr(sys, "argv", test_args)
@@ -450,6 +450,7 @@ def test_cli_radarr_add_one_result(mock_input, monkeypatch, mock_exit):
     mock_lookup.assert_called_with(term="some movie")
     mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id=None, movie_info=mock_info, path=None)
     mock_exit.assert_called_with(0)
+
 
 @patch('builtins.input', return_value="1c")
 def test_select_profile_nok(mock_input):

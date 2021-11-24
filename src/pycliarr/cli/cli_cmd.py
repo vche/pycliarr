@@ -109,7 +109,7 @@ class CliSystemStatusCommand(CliCommand):
     def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.get_system_status()
-        print(f"System status: {pformat(res)}\n")
+        print(f"{pformat(res)}\n")
 
 
 class CliGetDiskSpaceCommand(CliCommand):
@@ -119,7 +119,7 @@ class CliGetDiskSpaceCommand(CliCommand):
     def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.get_disk_space()
-        print(f"Disk space: {pformat(res)}\n")
+        print(f"{pformat(res)}\n")
 
 
 class CliGetQueueCommand(CliCommand):
@@ -129,7 +129,7 @@ class CliGetQueueCommand(CliCommand):
     def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.get_queue()
-        print(f"Queue: {pformat(res)}\n")
+        print(f"{pformat(res)}\n")
 
 
 class CliGetCalendarCommand(CliCommand):
@@ -147,11 +147,11 @@ class CliGetCalendarCommand(CliCommand):
         start_date = datetime.datetime.strptime(args.start, "%Y-%m-%d") if args.start else None
         end_date = datetime.datetime.strptime(args.end, "%Y-%m-%d") if args.end else None
         res = cli.get_calendar(start_date=start_date, end_date=end_date)
-        print(f"Calendar events: {res}\n")
+        print(f"{pformat(res)}\n")
 
 
 class CliDeleteQueueCommand(CliCommand):
-    name = "delqueue"
+    name = "delete-queue"
     description = "Get list of quality profiles"
 
     def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
@@ -162,7 +162,7 @@ class CliDeleteQueueCommand(CliCommand):
     def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.delete_queue(args.id)
-        print(f"Result: {res}\n")
+        print(f"{pformat(res)}\n")
 
 
 class CliWantedCommand(CliCommand):
@@ -180,7 +180,7 @@ class CliWantedCommand(CliCommand):
     def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.get_wanted(page=args.page, sort_key=args.sort_key, page_size=args.page_size, sort_dir=args.sort_dir)
-        print(f"Result:\n{res}")
+        print(f"{pformat(res)}\n")
 
 
 class CliStatusCommand(CliCommand):
@@ -195,12 +195,180 @@ class CliStatusCommand(CliCommand):
     def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.get_command(args.id)
-        print(f"Result: {json.dumps(res)}\n")
+        print(f"{pformat(res)}\n")
+
+
+class CliGetBlocklistCommand(CliCommand):
+    name = "blocklist"
+    description = "Get blocklisted items"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--page", help="Page to get", type=int, default=1)
+        cmd_parser.add_argument("--sort-key", help="Sort key", default="date")
+        cmd_parser.add_argument("--page-size", help="Page size", type=int, default=20)
+        cmd_parser.add_argument("--sort-dir", help="Sort direction", default="descending")
+        return cmd_parser
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.get_blocklist(
+            page=args.page, sort_key=args.sort_key, page_size=args.page_size, sort_dir=args.sort_dir
+        )
+        print(f"{pformat(res)}\n")
+
+
+class CliDeleteBlocklistCommand(CliCommand):
+    name = "delete-blocklist"
+    description = "Get list of quality profiles"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--id", "-i", help="item ID", type=int, default=None)
+        return cmd_parser
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.delete_blocklist(args.id)
+        print(f"{pformat(res)}\n")
+
+
+class CliGetNotificationCommand(CliCommand):
+    name = "notification"
+    description = "Get notification(s)"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--id", "-i", help="item ID", type=int, default=None)
+        return cmd_parser
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.get_notification(args.id)
+        print(f"{pformat(res)}\n")
+
+
+class CliDeleteNotificationCommand(CliCommand):
+    name = "delete-notification"
+    description = "Delete the specified notification or all"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--id", "-i", help="item ID", type=int, required=True)
+        return cmd_parser
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.delete_notification(args.id)
+        print(f"{pformat(res)}\n")
+
+
+class CliPutNotificationCommand(CliCommand):
+    name = "put-notification"
+    description = "Create the specified notification"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--id", "-i", help="item ID", type=int, required=True)
+        group = cmd_parser.add_mutually_exclusive_group()
+        group.add_argument("--json", "-j", help="json data", default=None)
+        group.add_argument("--file", "-f", help="json file path", default=None)
+        return cmd_parser
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+
+        # Use json data from argument by default, but load json file if specified
+        notification_data = args.json
+        if args.file:
+            with open(args.file, "r") as f:
+                notification_data = json.load(f)
+
+        res = cli.put_notification(args.id, notification_data)
+        print(f"{pformat(res)}\n")
+
+
+class CliGetTagCommand(CliCommand):
+    name = "tag"
+    description = "Get tag(s)"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--id", "-i", help="item ID", type=int, default=None)
+        return cmd_parser
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.get_tag(args.id)
+        print(f"{pformat(res)}\n")
+
+
+class CliGetTagDetailCommand(CliCommand):
+    name = "tag-detail"
+    description = "Get tag(s) details"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--id", "-i", help="item ID", type=int, default=None)
+        return cmd_parser
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.get_tag_detail(args.id)
+        print(f"{pformat(res)}\n")
+
+
+class CliDeleteTagCommand(CliCommand):
+    name = "delete-tag"
+    description = "Delete the specified tag"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--id", "-i", help="item ID", type=int, required=True)
+        return cmd_parser
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.delete_tag(args.id)
+        print(f"{pformat(res)}\n")
+
+
+class CliEditTagCommand(CliCommand):
+    name = "edit-tag"
+    description = "Edit the specified tag"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--id", "-i", help="item ID", type=int, required=True)
+        cmd_parser.add_argument("--label", "-l", help="tag label", type=str, required=True)
+        return cmd_parser
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.edit_tag(args.id, args.label)
+        print(f"{pformat(res)}\n")
+
+
+class CliCreateTagCommand(CliCommand):
+    name = "create-tag"
+    description = "Edit the specified tag"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("label")
+        return cmd_parser
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.create_tag(args.label)
+        print(f"{pformat(res)}\n")
 
 
 ##############################################
 ########## radarr specific commands ##########
 ##############################################
+
+
 class CliGetMovieCommand(CliCommand):
     name = "get"
     description = "Get info on a of movie"
@@ -494,6 +662,15 @@ CLI_LIST: List[CliApiCommand] = [
             CliDeleteQueueCommand(),
             CliWantedCommand(),
             CliStatusCommand(),
+            CliGetBlocklistCommand(),
+            CliDeleteBlocklistCommand(),
+            CliGetNotificationCommand(),
+            CliDeleteNotificationCommand(),
+            CliGetTagCommand(),
+            CliGetTagDetailCommand(),
+            CliDeleteTagCommand(),
+            CliEditTagCommand(),
+            CliCreateTagCommand(),
         ],
     ),
     CliApiCommand(
@@ -513,6 +690,15 @@ CLI_LIST: List[CliApiCommand] = [
             CliDeleteQueueCommand(),
             CliWantedCommand(),
             CliStatusCommand(),
+            CliGetBlocklistCommand(),
+            CliDeleteBlocklistCommand(),
+            CliGetNotificationCommand(),
+            CliDeleteNotificationCommand(),
+            CliGetTagCommand(),
+            CliGetTagDetailCommand(),
+            CliDeleteTagCommand(),
+            CliEditTagCommand(),
+            CliCreateTagCommand(),
         ],
     ),
 ]

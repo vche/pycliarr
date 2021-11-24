@@ -4,7 +4,7 @@ from unittest.mock import patch
 from pycliarr.api.radarr import RadarrCli, RadarrMovieItem
 from pycliarr.api.exceptions import RadarrCliError
 
-TEST_ROOT_PATH = [{"path": "some/path/", "id": 1},{"path": "yet/otherpath/", "id": 3}]
+TEST_ROOT_PATH = [{"path": "some/path/", "id": 1}, {"path": "yet/otherpath/", "id": 3}]
 TEST_JSON = {'somefield': "some value"}
 TEST_MOVIE = {'title': "some movie", "year": 2020}
 TEST_HOST = "http://example.com"
@@ -85,26 +85,26 @@ def test_lookup_movie_with_term_single_res(mock_base, cli):
     assert res.year == 2020
 
 
-@patch("pycliarr.api.radarr.BaseCliMediaApi.request_get", return_value=TEST_MOVIE)
+@patch("pycliarr.api.radarr.BaseCliMediaApi.lookup_item", return_value=[TEST_MOVIE])
 def test_lookup_movie_with_imdb(mock_base, cli):
     res = cli.lookup_movie(imdb_id="tt1234")
-    mock_base.assert_called_with(f"{cli.api_url_itemlookup}/imdb", url_params={"imdbId": "tt1234"})
+    mock_base.assert_called_with("imdb:tt1234")
     assert res.title == "some movie"
     assert res.year == 2020
 
 
-@patch("pycliarr.api.radarr.BaseCliMediaApi.request_get", return_value=TEST_MOVIE)
+@patch("pycliarr.api.radarr.BaseCliMediaApi.lookup_item", return_value=[TEST_MOVIE])
 def test_lookup_movie_with_tmdb(mock_base, cli):
     res = cli.lookup_movie(tmdb_id=1234)
-    mock_base.assert_called_with(f"{cli.api_url_itemlookup}/tmdb", url_params={"tmdbId": 1234})
+    mock_base.assert_called_with("tmdb:1234")
     assert res.title == "some movie"
     assert res.year == 2020
 
 
-@patch("pycliarr.api.radarr.BaseCliMediaApi.request_get", return_value=TEST_MOVIE)
+@patch("pycliarr.api.radarr.BaseCliMediaApi.lookup_item", return_value=[TEST_MOVIE])
 def test_lookup_movie_with_all(mock_base, cli):
     res = cli.lookup_movie(term="some title", tmdb_id=1234, imdb_id="tt1234")
-    mock_base.assert_called_with(f"{cli.api_url_itemlookup}/tmdb", url_params={"tmdbId": 1234})
+    mock_base.assert_called_with("tmdb:1234")
     assert res.title == "some movie"
     assert res.year == 2020
 

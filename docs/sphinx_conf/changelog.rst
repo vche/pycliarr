@@ -5,6 +5,22 @@ Changelog
 master
 ======
 
+v1.0.16
+=======
+
+:Date: Nov 23, 2021
+
+Fix
+---
+- delete serie with exclusion list
+
+New
+---
+- Fully moved to api v3 on both sonarr and radarr
+- Added blocklist commands
+- Added notification commands
+- Added tag commands
+
 v1.0.15
 =======
 

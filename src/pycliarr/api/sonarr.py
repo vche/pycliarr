@@ -80,10 +80,13 @@ class SonarrCli(BaseCliMediaApi):
     """
 
     # Set api specific to radarr (differs from the default ones in BaseCliMediaApi)
-    api_url_item = "/api/series"
-    api_url_itemlookup = "/api/series/lookup"
-    api_url_episode = "/api/episode"
-    api_url_episodefile = "/api/episodefile"
+    api_url_item = f"{BaseCliMediaApi.api_url_base}/series"
+    api_url_itemlookup = f"{BaseCliMediaApi.api_url_base}series/lookup"
+    api_url_episode = f"{BaseCliMediaApi.api_url_base}/episode"
+    api_url_episodefile = f"{BaseCliMediaApi.api_url_base}/episodefile"
+
+    # Keep using v1 for commands not available in v3
+    api_url_wanted_missing = "/api/wanted/missing"
 
     def get_serie(self, serie_id: Optional[int] = None) -> Union[SonarrSerieItem, List[SonarrSerieItem]]:
         """Get specified serie, or all if no id provided from server collection.
@@ -211,7 +214,7 @@ class SonarrCli(BaseCliMediaApi):
         Returns:
             json response
         """
-        options = {"addExclusion": add_exclusion} if add_exclusion else {}
+        options = {"addImportExclusion": add_exclusion} if add_exclusion else {}
         return self.delete_item(serie_id, delete_files, options)
 
     def refresh_serie(self, serie_id: Optional[int] = None) -> json_data:

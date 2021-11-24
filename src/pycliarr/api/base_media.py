@@ -14,7 +14,7 @@ class BaseCliMediaApi(BaseCliApi):
     """
 
     # Default urls for commands. Some might need to be overriden by the childs.
-    api_url_base = "/api/"
+    api_url_base = "/api/v3"
     api_url_calendar = f"{api_url_base}/calendar"
     api_url_command = f"{api_url_base}/command"
     api_url_diskspace = f"{api_url_base}/diskspace"
@@ -23,11 +23,14 @@ class BaseCliMediaApi(BaseCliApi):
     api_url_systemstatus = f"{api_url_base}/system/status"
     api_url_queue = f"{api_url_base}/queue"
     api_url_history = f"{api_url_base}/history/"
-    api_url_profile = f"{api_url_base}/profile"
+    api_url_profile = f"{api_url_base}/qualityProfile"
     api_url_rootfolder = f"{api_url_base}/rootfolder"
     api_url_log = f"{api_url_base}/log"
     api_url_systembackup = f"{api_url_base}/system/backup"
     api_url_wanted_missing = f"{api_url_base}/wanted/missing"
+    api_url_blocklist = f"{api_url_base}/blocklist"
+    api_url_notification = f"{api_url_base}/notification"
+    api_url_tag = f"{api_url_base}/tag"
 
     def get_calendar(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> json_data:
         """Retrieve info about when items were/will be downloaded.
@@ -255,3 +258,119 @@ class BaseCliMediaApi(BaseCliApi):
             if path["id"] == root_folder_id:
                 root_path = path
         return str(root_path["path"]) + self.to_path(title)
+
+    def get_blocklist(
+        self, page: int = 1, sort_key: str = "date", page_size: int = 20, sort_dir: str = "descending"
+    ) -> json_data:
+        """Get blocklisted releases
+
+        Args:
+            page (int) - 1-indexed (1 default)
+            sort_key (string) - date
+            page_size (int) - Default: 20
+            sort_dir (string) - ascending or descending - Default: descending
+        """
+        data = {
+            "page": page,
+            "pageSize": page_size,
+            "sortKey": sort_key,
+            "sortDirection": sort_dir,
+        }
+        return self.request_get(self.api_url_blocklist, url_params=data)
+
+    def delete_blocklist(self, item_id: Optional[int] = None) -> json_data:
+        """Remove the specified item from the blocklist, or all items if none specified
+
+        Args:
+            item_id (int):  Item to delete, None to delete all items
+        Returns:
+            json response
+        """
+        if item_id:
+            return self.request_delete(self.api_url_queue, url_params={"id": item_id})
+        else:
+            return self.request_delete(f"{self.api_url_queue}/bulk")
+
+    def get_notification(self, item_id: Optional[int] = None) -> json_data:
+        """Get specified notification or all if none specified
+
+        Args:
+            item_id (int):  id of the notification to get, or None to get all of them
+        Returns:
+            json response
+        """
+        return self.request_get(f"{self.api_url_notification}/{item_id if item_id else ''}")
+
+    def delete_notification(self, item_id: int) -> json_data:
+        """Remove the specified item from the blocklist, or all items if none specified
+
+        Args:
+            item_id (int):  id of the notification to delete
+        Returns:
+            json response
+        """
+        return self.request_delete(f"{self.api_url_notification}/{item_id}")
+
+    def put_notification(self, item_id: int, notification_data: json_data) -> json_data:
+        """Create the specified notification
+
+        Args:
+            item_id (int):  id of the notification to create
+            notification_data (json_data): Json dict describing the notification formated as in
+                https://radarr.video/docs/api/#/Notification/put-notification-id
+        Returns:
+            json response
+        """
+        return self.request_put(f"{self.api_url_notification}/{item_id}", json_data=notification_data)
+
+    def get_tag(self, item_id: Optional[int] = None) -> json_data:
+        """Get specified tag or all if none specified
+
+        Args:
+            item_id (int):  id of the tag to get, or None to get all of them
+        Returns:
+            json response
+        """
+        return self.request_get(f"{self.api_url_tag}/{item_id if item_id else ''}")
+
+    def get_tag_detail(self, item_id: Optional[int] = None) -> json_data:
+        """Get specified tag detail or all if none specified
+
+        Args:
+            item_id (int):  id of the tag to get, or None to get all of them
+        Returns:
+            json response
+        """
+        return self.request_get(f"{self.api_url_tag}/detail/{item_id if item_id else ''}")
+
+    def delete_tag(self, item_id: int) -> json_data:
+        """Remove the specified tag
+
+        Args:
+            item_id (int):  id of the notification to delete
+        Returns:
+            json response
+        """
+        return self.request_delete(f"{self.api_url_tag}/{item_id}")
+
+    def edit_tag(self, item_id: int, value: str) -> json_data:
+        """Edit the specified tag
+
+        Args:
+            item_id (int):  id of the tag to edit
+            value (str): Tag label
+        Returns:
+            json response
+        """
+        return self.request_put(f"{self.api_url_tag}/{item_id}", json_data={"id": item_id, "label": value})
+
+    def create_tag(self, value: str) -> json_data:
+        """Create the specified tag
+
+        Args:
+            item_id (int):  id of the tag to edit
+            value (str): Tag label
+        Returns:
+            json response
+        """
+        return self.request_post(self.api_url_tag, json_data={"id": 0, "label": value})

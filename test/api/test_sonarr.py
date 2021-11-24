@@ -4,7 +4,7 @@ from unittest.mock import patch
 from pycliarr.api.sonarr import SonarrCli, SonarrSerieItem
 from pycliarr.api.exceptions import SonarrCliError
 
-TEST_ROOT_PATH = [{"path": "some/path/", "id": 1},{"path": "yet/otherpath/", "id": 3}]
+TEST_ROOT_PATH = [{"path": "some/path/", "id": 1}, {"path": "yet/otherpath/", "id": 3}]
 TEST_JSON = {'somefield': "some value"}
 TEST_SERIE = {'title': "some serie", "year": 2020}
 TEST_HOST = "http://example.com"
@@ -234,7 +234,7 @@ def test_delete_serie(mock_base, cli):
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.delete_item", return_value=TEST_JSON)
 def test_delete_serie_withoptions(mock_base, cli):
     res = cli.delete_serie(1234, delete_files=False, add_exclusion=True)
-    mock_base.assert_called_with(1234, False, {"addExclusion": True})
+    mock_base.assert_called_with(1234, False, {"addImportExclusion": True})
     assert res == TEST_JSON
 
 
