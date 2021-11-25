@@ -2,7 +2,7 @@ import datetime
 import json
 from argparse import ArgumentParser, Namespace, _SubParsersAction
 from pprint import pformat
-from typing import Any, List, Optional, Union
+from typing import Any, List, Optional, Union, no_type_check
 
 from pycliarr.api import base_api, base_media, radarr, sonarr
 
@@ -270,7 +270,7 @@ class CliPutNotificationCommand(CliCommand):
     def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--id", "-i", help="item ID", type=int, required=True)
-        group = cmd_parser.add_mutually_exclusive_group()
+        group = cmd_parser.add_mutually_exclusive_group(required=True)
         group.add_argument("--json", "-j", help="json data", default=None)
         group.add_argument("--file", "-f", help="json file path", default=None)
         return cmd_parser
@@ -279,10 +279,11 @@ class CliPutNotificationCommand(CliCommand):
         super().run(cli, args)
 
         # Use json data from argument by default, but load json file if specified
-        notification_data = args.json
         if args.file:
             with open(args.file, "r") as f:
                 notification_data = json.load(f)
+        else:
+            notification_data = json.loads(args.json)
 
         res = cli.put_notification(args.id, notification_data)
         print(f"{pformat(res)}\n")
@@ -347,6 +348,43 @@ class CliEditTagCommand(CliCommand):
         super().run(cli, args)
         res = cli.edit_tag(args.id, args.label)
         print(f"{pformat(res)}\n")
+
+
+class CliGetTagItemsCommand(CliCommand):
+    name = "tag-items"
+    description = "List items with specifed tag"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        group = cmd_parser.add_mutually_exclusive_group(required=True)
+        group.add_argument("--id", "-i", help="tag id", type=int, default=None)
+        group.add_argument("--label", "-l", help="tag label", type=str, default=None)
+        return cmd_parser
+
+    @no_type_check
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        res = None
+        if args.label:
+            tags = cli.get_tag_detail()
+            for tag in tags:
+                if tag["label"] == args.label:
+                    res = tag
+        else:
+            res = cli.get_tag_detail(args.id)
+
+        if res:
+            print(f"Items with tag \"{res['label']}\" ({res['id']}):")
+            if "seriesIds" in res:
+                for tag_item in res["seriesIds"]:
+                    item = cli.get_serie(tag_item)
+                    print(f"    {item.title} ({item.year})")
+            elif "movieIds" in res:
+                for tag_item in res["movieIds"]:
+                    item = cli.get_movie(tag_item)
+                    print(f"    {item.title} ({item.year})")
+        else:
+            print("no such tag")
 
 
 class CliCreateTagCommand(CliCommand):
@@ -666,11 +704,13 @@ CLI_LIST: List[CliApiCommand] = [
             CliDeleteBlocklistCommand(),
             CliGetNotificationCommand(),
             CliDeleteNotificationCommand(),
+            CliPutNotificationCommand(),
             CliGetTagCommand(),
             CliGetTagDetailCommand(),
             CliDeleteTagCommand(),
             CliEditTagCommand(),
             CliCreateTagCommand(),
+            CliGetTagItemsCommand(),
         ],
     ),
     CliApiCommand(
@@ -694,11 +734,13 @@ CLI_LIST: List[CliApiCommand] = [
             CliDeleteBlocklistCommand(),
             CliGetNotificationCommand(),
             CliDeleteNotificationCommand(),
+            CliPutNotificationCommand(),
             CliGetTagCommand(),
             CliGetTagDetailCommand(),
             CliDeleteTagCommand(),
             CliEditTagCommand(),
             CliCreateTagCommand(),
+            CliGetTagItemsCommand(),
         ],
     ),
 ]

@@ -7,7 +7,7 @@ TEST_JSON = {'somefield': "some value"}
 TEST_JSON2 = {'someotherfield': "some other value"}
 TEST_HOST = "http://example.com"
 TEST_APIKEY = "abcd1234"
-TEST_ROOT_PATH = [{"path": "some/path/", "id": 1},{"path": "yet/otherpath/", "id": 3}]
+TEST_ROOT_PATH = [{"path": "some/path/", "id": 1}, {"path": "yet/otherpath/", "id": 3}]
 
 
 @pytest.fixture
@@ -224,3 +224,120 @@ def test_build_movie_path_idx(mock_rootcli, cli):
 @patch("pycliarr.api.base_media.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
 def test_build_movie_path_bad_idx(mock_rootcli, cli):
     assert cli.build_item_path("some serie", root_folder_id=33) == "some/path/some serie"
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)
+def test_get_blocklist(mock_base, cli):
+    res = cli.get_blocklist()
+    data = {
+                "page": 1,
+                "pageSize": 20,
+                "sortKey": "date",
+                "sortDirection": "descending",
+            }
+    mock_base.assert_called_with(cli.api_url_blocklist, url_params=data)
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)
+def test_get_blocklist_paging(mock_base, cli):
+    res = cli.get_blocklist(page=2, page_size=4, sort_key="title", sort_dir="ascending")
+    data = {
+                "page": 2,
+                "pageSize": 4,
+                "sortKey": "title",
+                "sortDirection": "ascending",
+            }
+    mock_base.assert_called_with(cli.api_url_blocklist, url_params=data)
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_delete", return_value=TEST_JSON)
+def test_delete_blocklist(mock_base, cli):
+    res = cli.delete_blocklist(3)
+    mock_base.assert_called_with(cli.api_url_blocklist, url_params={"id": 3})
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_delete", return_value=TEST_JSON)
+def test_delete_blocklist_all(mock_base, cli):
+    res = cli.delete_blocklist()
+    mock_base.assert_called_with(f"{cli.api_url_blocklist}/bulk")
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)
+def test_get_notification_all(mock_base, cli):
+    res = cli.get_notification()
+    mock_base.assert_called_with(f"{cli.api_url_notification}/")
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)
+def test_get_notification(mock_base, cli):
+    res = cli.get_notification(3)
+    mock_base.assert_called_with(f"{cli.api_url_notification}/3")
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_delete", return_value=TEST_JSON)
+def test_delete_notification(mock_base, cli):
+    res = cli.delete_notification(3)
+    mock_base.assert_called_with(f"{cli.api_url_notification}/3")
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_put", return_value=TEST_JSON)
+def test_put_notification(mock_base, cli):
+    res = cli.put_notification(3, {"test": "value"})
+    mock_base.assert_called_with(f"{cli.api_url_notification}/3", json_data={"test": "value"})
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)
+def test_get_tag(mock_base, cli):
+    res = cli.get_tag(3)
+    mock_base.assert_called_with(f"{cli.api_url_tag}/3")
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)
+def test_get_tag_all(mock_base, cli):
+    res = cli.get_tag()
+    mock_base.assert_called_with(f"{cli.api_url_tag}/")
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_delete", return_value=TEST_JSON)
+def test_delete_tag(mock_base, cli):
+    res = cli.delete_tag(3)
+    mock_base.assert_called_with(f"{cli.api_url_tag}/3")
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_put", return_value=TEST_JSON)
+def test_edit_tag(mock_base, cli):
+    res = cli.edit_tag(3, 'value')
+    mock_base.assert_called_with(f"{cli.api_url_tag}/3", json_data={"id": 3, "label": "value"})
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_post", return_value=TEST_JSON)
+def test_create_tag(mock_base, cli):
+    res = cli.create_tag('value')
+    mock_base.assert_called_with(cli.api_url_tag, json_data={"id": 0, "label": "value"})
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)
+def test_get_tag_detail(mock_base, cli):
+    res = cli.get_tag_detail(3)
+    mock_base.assert_called_with(f"{cli.api_url_tag}/detail/3")
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)
+def test_get_tag_detail_all(mock_base, cli):
+    res = cli.get_tag_detail()
+    mock_base.assert_called_with(f"{cli.api_url_tag}/detail/")
+    assert res == TEST_JSON

@@ -5,7 +5,7 @@ from pycliarr.cli import cli
 from pycliarr.cli.cli_cmd import select_profile
 from pycliarr.api import radarr, sonarr
 from pycliarr.api.exceptions import CliArrError
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, call
 
 
 TEST_HOST = "http://example.com"
@@ -256,9 +256,376 @@ def test_cli_radarr_status(monkeypatch, mock_exit):
     mock_exit.assert_called_with(0)
 
 
+def test_cli_radarr_blocklist_all(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "blocklist",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_blocklist", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(page=1, sort_key="date", page_size=20, sort_dir="descending")
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_blocklist(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "blocklist",
+        "--page-size", "10",
+        "--sort-key", "time",
+        "--page", "2",
+        "--sort-dir", "descending",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_blocklist", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(page=2, sort_key="time", page_size=10, sort_dir="descending")
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_deleteblocklist(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "delete-blocklist",
+        "-i", "1234",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.delete_blocklist", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(1234)
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_notification_all(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "notification",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_notification", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(None)
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_notification(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "notification",
+        "-i", "1234",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_notification", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(1234)
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_deletenotification(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "delete-notification",
+        "-i", "1234",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.delete_notification", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(1234)
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_putnotification(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "put-notification",
+        "-i", "1234",
+        "-j", '{"key": "value"}',
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.put_notification", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(1234, {'key': 'value'})
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_putnotificationfile(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "put-notification",
+        "-i", "1234",
+        "-f", 'test/data.json',
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.put_notification", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(1234, {'key': 'value'})
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_tagdetail(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "tag-detail",
+        "-i", "1234",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_tag_detail", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(1234)
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_tagetail_all(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "tag-detail",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_tag_detail", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(None)
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_tag(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "tag",
+        "-i", "1234",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_tag", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(1234)
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_tag_all(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "tag",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_tag", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(None)
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_deletetag(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "delete-tag",
+        "-i", "1234",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.delete_tag", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(1234)
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_edittag(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "edit-tag",
+        "-i", "1234",
+        "-l", "value",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.edit_tag", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(1234, 'value')
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_createttag(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "create-tag",
+        "value",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.create_tag", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with('value')
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_tagitems_serie(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "tag-items",
+        "-l", "value",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value=[
+        {"id": 1234, "label": "value", "seriesIds": [1, 2, 3]},
+        {"id": 456, "label": "value2", "seriesIds": [4, 5, 6]}
+    ])
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_tag_detail", mock_sonarr)
+    mock_sonarr2 = Mock(return_value=sonarr.SonarrSerieItem())
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_serie", mock_sonarr2)
+    cli.main()
+    mock_sonarr2.assert_has_calls([call(1), call(2), call(3)])
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_tagitems_id(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "tag-items",
+        "-i", "456",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value={"id": 456, "label": "value2", "seriesIds": [4, 5, 6]})
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_tag_detail", mock_sonarr)
+    mock_sonarr2 = Mock(return_value=sonarr.SonarrSerieItem())
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_serie", mock_sonarr2)
+    cli.main()
+    mock_sonarr2.assert_has_calls([call(4), call(5), call(6)])
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_tagitems_badval(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "tag-items",
+        "-i", "456",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value={"id": 456, "label": "value2"})
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_tag_detail", mock_sonarr)
+    mock_sonarr2 = Mock(return_value=sonarr.SonarrSerieItem())
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_serie", mock_sonarr2)
+    cli.main()
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_tagitems_badtag(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "tag-items",
+        "-l", "something",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value=[{"id": 456, "label": "value2"}])
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_tag_detail", mock_sonarr)
+    cli.main()
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_tagitems_serie(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "tag-items",
+        "-l", "value",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value=[{"id": 1234, "label": "value", "movieIds": [1, 2, 3]}])
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_tag_detail", mock_sonarr)
+    mock_sonarr2 = Mock(return_value=radarr.RadarrMovieItem())
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_movie", mock_sonarr2)
+    cli.main()
+    mock_sonarr2.assert_has_calls([call(1), call(2), call(3)])
+    mock_exit.assert_called_with(0)
+
 ##############################################
 ########## radarr specific commands ##########
 ##############################################
+
+
 def test_cli_radarr_list(monkeypatch, mock_exit):
     test_args = [
         "pycliarr",

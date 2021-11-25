@@ -287,9 +287,9 @@ class BaseCliMediaApi(BaseCliApi):
             json response
         """
         if item_id:
-            return self.request_delete(self.api_url_queue, url_params={"id": item_id})
+            return self.request_delete(self.api_url_blocklist, url_params={"id": item_id})
         else:
-            return self.request_delete(f"{self.api_url_queue}/bulk")
+            return self.request_delete(f"{self.api_url_blocklist}/bulk")
 
     def get_notification(self, item_id: Optional[int] = None) -> json_data:
         """Get specified notification or all if none specified
