@@ -75,7 +75,7 @@ class RadarrCli(BaseCliMediaApi):
 
     # Set api specific to radarr (differs from the default ones in BaseCliMediaApi)
     api_url_item = f"{BaseCliMediaApi.api_url_base}/movie"
-    api_url_itemlookup = "f{BaseCliMediaApi.api_url_base}/movie/lookup"
+    api_url_itemlookup = f"{BaseCliMediaApi.api_url_base}/movie/lookup"
 
     # Keep using v1 for commands not available in v3
     api_url_wanted_missing = "/api/wanted/missing"
