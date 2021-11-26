@@ -76,6 +76,7 @@ class RadarrCli(BaseCliMediaApi):
     # Set api specific to radarr (differs from the default ones in BaseCliMediaApi)
     api_url_item = f"{BaseCliMediaApi.api_url_base}/movie"
     api_url_itemlookup = f"{BaseCliMediaApi.api_url_base}/movie/lookup"
+    api_url_exclusions = f"{BaseCliMediaApi.api_url_base}/exclusions"
 
     # Keep using v1 for commands not available in v3
     api_url_wanted_missing = "/api/wanted/missing"
@@ -218,3 +219,15 @@ class RadarrCli(BaseCliMediaApi):
         if movie_id:
             data["movieId"] = movie_id
         return self._sendCommand(data)
+
+    def create_exclusion(self, title: str, tmdb_id: int, year: int) -> json_data:
+        """Create the specified exclusions
+
+        Args:
+            item_id (int):  id of the exclusions to create
+        Returns:
+            json response
+        """
+        return self.request_post(
+            self.api_url_exclusions, json_data={"movieTitle": title, "tmdbId": tmdb_id, "movieYear": year}
+        )

@@ -48,6 +48,7 @@ class SonarrSerieItem(BaseCliApiItem):
             "added": "",
             "ratings": {},
             "qualityProfileId": 0,
+            "languageProfileId": 0,
             "id": 0,
         }
 
@@ -81,7 +82,7 @@ class SonarrCli(BaseCliMediaApi):
 
     # Set api specific to radarr (differs from the default ones in BaseCliMediaApi)
     api_url_item = f"{BaseCliMediaApi.api_url_base}/series"
-    api_url_itemlookup = f"{BaseCliMediaApi.api_url_base}series/lookup"
+    api_url_itemlookup = f"{BaseCliMediaApi.api_url_base}/series/lookup"
     api_url_episode = f"{BaseCliMediaApi.api_url_base}/episode"
     api_url_episodefile = f"{BaseCliMediaApi.api_url_base}/episodefile"
 
@@ -141,6 +142,7 @@ class SonarrCli(BaseCliMediaApi):
         search: bool = True,
         season_folder: bool = True,
         path: Optional[str] = None,
+        language: int = 1,
     ) -> json_data:
         """addMovie adds a new serie to collection.
 
@@ -156,6 +158,7 @@ class SonarrCli(BaseCliMediaApi):
             search (bool): Whether to search for the serie once added. Default is True
             season_folder (bool): If True (default), create a folder for each season.
             path (Optional[str]): Specify the path awhere the movie should be stored. Default is root/<serie name>.
+            language (int): Specify the language to use. Default is the first enabled (1)
 
         Returns:
             json response
@@ -176,6 +179,7 @@ class SonarrCli(BaseCliMediaApi):
         serie_info.path = path or self.build_serie_path(serie_info)
         serie_info.profileId = quality
         serie_info.qualityProfileId = quality
+        serie_info.languageProfileId = language
         serie_info.monitored = monitored
         serie_info.seasonFolder = season_folder
 
@@ -214,7 +218,7 @@ class SonarrCli(BaseCliMediaApi):
         Returns:
             json response
         """
-        options = {"addImportExclusion": add_exclusion} if add_exclusion else {}
+        options = {"addImportListExclusion": add_exclusion} if add_exclusion else {}
         return self.delete_item(serie_id, delete_files, options)
 
     def refresh_serie(self, serie_id: Optional[int] = None) -> json_data:
@@ -290,3 +294,13 @@ class SonarrCli(BaseCliMediaApi):
             json response
         """
         return self.request_delete(f"{self.api_url_episodefile}/{episode_id}")
+
+    def create_exclusion(self, title: str, tvdb_id: int) -> json_data:
+        """Create the specified exclusions
+
+        Args:
+            item_id (int):  id of the exclusions to create
+        Returns:
+            json response
+        """
+        return self.request_post(self.api_url_exclusions, json_data={"title": title, "tvdbId": tvdb_id})

@@ -24,6 +24,7 @@ class BaseCliMediaApi(BaseCliApi):
     api_url_queue = f"{api_url_base}/queue"
     api_url_history = f"{api_url_base}/history/"
     api_url_profile = f"{api_url_base}/qualityProfile"
+    api_url_language_profile = f"{api_url_base}/languageProfile"
     api_url_rootfolder = f"{api_url_base}/rootfolder"
     api_url_log = f"{api_url_base}/log"
     api_url_systembackup = f"{api_url_base}/system/backup"
@@ -31,6 +32,7 @@ class BaseCliMediaApi(BaseCliApi):
     api_url_blocklist = f"{api_url_base}/blocklist"
     api_url_notification = f"{api_url_base}/notification"
     api_url_tag = f"{api_url_base}/tag"
+    api_url_exclusions = f"{api_url_base}/importlistexclusion"
 
     def get_calendar(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> json_data:
         """Retrieve info about when items were/will be downloaded.
@@ -151,6 +153,10 @@ class BaseCliMediaApi(BaseCliApi):
     def get_quality_profiles(self) -> json_list:
         """Return the quality profiles"""
         return cast(json_list, self.request_get(self.api_url_profile))
+
+    def get_language_profiles(self) -> json_list:
+        """Return the quality profiles"""
+        return cast(json_list, self.request_get(self.api_url_language_profile))
 
     def get_queue(self) -> json_data:
         """Get queue info (downloading/completed, ok/warning) as json"""
@@ -374,3 +380,23 @@ class BaseCliMediaApi(BaseCliApi):
             json response
         """
         return self.request_post(self.api_url_tag, json_data={"id": 0, "label": value})
+
+    def get_exclusion(self, item_id: Optional[int] = None) -> json_data:
+        """Get import list exclusions
+
+        Args:
+            item_id (int):  id of the exclusion to get, or None to get all of them
+        Returns:
+            json response
+        """
+        return self.request_get(f"{self.api_url_exclusions}/{item_id if item_id else ''}")
+
+    def delete_exclusion(self, item_id: int) -> json_data:
+        """Remove the specified exclusions
+
+        Args:
+            item_id (int):  id of the exclusions to delete
+        Returns:
+            json response
+        """
+        return self.request_delete(f"{self.api_url_exclusions}/{item_id}")

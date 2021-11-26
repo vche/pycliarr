@@ -204,24 +204,6 @@ def test_cli_radarr_calendar(monkeypatch, mock_exit):
     mock_exit.assert_called_with(0)
 
 
-def test_cli_radarr_delete(monkeypatch, mock_exit):
-    test_args = [
-        "pycliarr",
-        "-t", TEST_HOST,
-        "-k", TEST_APIKEY,
-        "radarr",
-        "delete-queue",
-        '-i', '1234',
-    ]
-    monkeypatch.setattr(sys, "argv", test_args)
-    mock_sonarr = Mock()
-    mock_sonarr.return_value = TEST_JSON
-    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.delete_queue", mock_sonarr)
-    cli.main()
-    mock_sonarr.assert_called_with(1234)
-    mock_exit.assert_called_with(0)
-
-
 def test_cli_radarr_wanted(monkeypatch, mock_exit):
     test_args = [
         "pycliarr",
@@ -676,7 +658,7 @@ def test_cli_radarr_delete(monkeypatch, mock_exit):
     mock_sonarr.return_value = TEST_JSON
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.delete_movie", mock_sonarr)
     cli.main()
-    mock_sonarr.assert_called_with(1234, delete_files=False)
+    mock_sonarr.assert_called_with(1234, delete_files=False, add_exclusion=False)
     mock_exit.assert_called_with(0)
 
 
@@ -811,6 +793,7 @@ def test_cli_radarr_add_one_result(mock_input, monkeypatch, mock_exit):
         ]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_language_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
@@ -872,6 +855,7 @@ def test_cli_radarr_add_manual_badmovie(mock_input, monkeypatch, mock_exit):
         ]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_language_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
@@ -901,6 +885,7 @@ def test_cli_radarr_add_manual_badprofile(mock_input, monkeypatch, mock_exit):
         'items': [{'quality': {'name': 'item1'}, 'allowed': True}]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_language_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
@@ -930,6 +915,7 @@ def test_cli_radarr_add_manual_nomovie(mock_input, monkeypatch, mock_exit):
         'items': [{'quality': {'name': 'item1'}, 'allowed': True}]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_language_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
@@ -989,7 +975,7 @@ def test_cli_sonarr_delete(monkeypatch, mock_exit):
     mock_sonarr.return_value = TEST_JSON
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.delete_serie", mock_sonarr)
     cli.main()
-    mock_sonarr.assert_called_with(1234, delete_files=False)
+    mock_sonarr.assert_called_with(1234, delete_files=False, add_exclusion=False)
     mock_exit.assert_called_with(0)
 
 
@@ -1038,6 +1024,7 @@ def test_cli_sonarr_add_tvdb(monkeypatch, mock_exit):
         "add",
         "--tvdb", "1234",
         "-q", "1",
+        "-l", "1",
         "--season-folders",
     ]
     monkeypatch.setattr(sys, "argv", test_args)
@@ -1046,7 +1033,7 @@ def test_cli_sonarr_add_tvdb(monkeypatch, mock_exit):
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
     cli.main()
     mock_sonarr.assert_called_with(
-        quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[], season_folder=True, path=None
+        quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[], season_folder=True, path=None, language=1
     )
     mock_exit.assert_called_with(0)
 
@@ -1060,6 +1047,7 @@ def test_cli_sonarr_add_tvdb_with_seasons(monkeypatch, mock_exit):
         "add",
         "--tvdb", "1234",
         "-q", "1",
+        "-l", "1",
         "-s", "1, 3",
         "--path", "some/path"
     ]
@@ -1069,7 +1057,13 @@ def test_cli_sonarr_add_tvdb_with_seasons(monkeypatch, mock_exit):
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
     cli.main()
     mock_sonarr.assert_called_with(
-        quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[1, 3], season_folder=False, path="some/path"
+        quality=1,
+        tvdb_id=1234,
+        serie_info=None,
+        monitored_seasons=[1, 3],
+        season_folder=False,
+        path="some/path",
+        language=1
     )
     mock_exit.assert_called_with(0)
 
@@ -1083,6 +1077,7 @@ def test_cli_sonarr_add_tvdb_with_invalidseasons(monkeypatch, mock_exit):
         "add",
         "--tvdb", "1234",
         "-q", "1",
+        "-l", "1",
         "-s", "1, x"
     ]
     monkeypatch.setattr(sys, "argv", test_args)
@@ -1117,12 +1112,13 @@ def test_cli_sonarr_add_manual(mock_input, monkeypatch, mock_exit):
         'items': [{'quality': {'name': 'item1'}, 'allowed': True}]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_quality_profiles", mock_profiles)
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_language_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.lookup_serie", mock_lookup)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
     cli.main()
     mock_lookup.assert_called_with(term="some serie")
     mock_sonarr.assert_called_with(
-        quality=1, tvdb_id=None, serie_info=mock_info, monitored_seasons=[], season_folder=False, path=None
+        quality=1, tvdb_id=None, serie_info=mock_info, monitored_seasons=[], season_folder=False, path=None, language=1
     )
     mock_exit.assert_called_with(0)
 

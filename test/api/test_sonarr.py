@@ -127,6 +127,7 @@ def test_add_serie_withtvdb(mock_add, mock_root, mock_get, cli):
         "path": "some/path/some serie",
         "profileId": 1,
         "qualityProfileId": 1,
+        "languageProfileId": 1,
         "monitored": True,
         "seasonFolder": False,
         "addOptions": {
@@ -135,7 +136,7 @@ def test_add_serie_withtvdb(mock_add, mock_root, mock_get, cli):
             "ignoreEpisodesWithoutFiles": True,
         }
     })
-    cli.add_serie(quality=1, tvdb_id=1234, season_folder=False)
+    cli.add_serie(quality=1, tvdb_id=1234, season_folder=False, language=1)
     mock_add.assert_called_with(json_data=exp)
 
 
@@ -149,6 +150,7 @@ def test_add_serie_withpath(mock_add, mock_root, mock_get, cli):
         "path": "some/other_path/some_other_serie",
         "profileId": 1,
         "qualityProfileId": 1,
+        "languageProfileId": 1,
         "monitored": True,
         "seasonFolder": False,
         "addOptions": {
@@ -157,7 +159,7 @@ def test_add_serie_withpath(mock_add, mock_root, mock_get, cli):
             "ignoreEpisodesWithoutFiles": True,
         }
     })
-    cli.add_serie(quality=1, tvdb_id=1234, season_folder=False, path="some/other_path/some_other_serie")
+    cli.add_serie(quality=1, tvdb_id=1234, season_folder=False, path="some/other_path/some_other_serie", language=1)
     mock_add.assert_called_with(json_data=exp)
 
 
@@ -171,6 +173,7 @@ def test_add_serie_withseasons(mock_add, mock_root, mock_get, cli):
         "path": "some/path/some serie",
         "profileId": 1,
         "qualityProfileId": 1,
+        "languageProfileId": 1,
         "monitored": True,
         "seasons": [
             {"seasonNumber": 1, "monitored": True},
@@ -183,7 +186,7 @@ def test_add_serie_withseasons(mock_add, mock_root, mock_get, cli):
             "ignoreEpisodesWithoutFiles": False,
         }
     })
-    cli.add_serie(quality=1, tvdb_id=1234, monitored_seasons=[1, 2])
+    cli.add_serie(quality=1, tvdb_id=1234, monitored_seasons=[1, 2], language=1)
     mock_add.assert_called_with(json_data=exp)
 
 
@@ -196,6 +199,7 @@ def test_add_serie_withinfo(mock_add, mock_root, cli):
         "path": "some/path/some serie",
         "profileId": 1,
         "qualityProfileId": 1,
+        "languageProfileId": 1,
         "monitored": False,
         "addOptions": {
             "searchForMissingEpisodes": False,
@@ -209,7 +213,7 @@ def test_add_serie_withinfo(mock_add, mock_root, cli):
         {"seasonNumber": 2, "monitored": True},
         {"seasonNumber": 3, "monitored": True}
     ]
-    cli.add_serie(quality=1, serie_info=info, monitored=False, search=False)
+    cli.add_serie(quality=1, serie_info=info, monitored=False, search=False, language=1)
     mock_add.assert_called_with(json_data=exp)
 
 
@@ -234,7 +238,7 @@ def test_delete_serie(mock_base, cli):
 @patch("pycliarr.api.sonarr.BaseCliMediaApi.delete_item", return_value=TEST_JSON)
 def test_delete_serie_withoptions(mock_base, cli):
     res = cli.delete_serie(1234, delete_files=False, add_exclusion=True)
-    mock_base.assert_called_with(1234, False, {"addImportExclusion": True})
+    mock_base.assert_called_with(1234, False, {"addImportListExclusion": True})
     assert res == TEST_JSON
 
 

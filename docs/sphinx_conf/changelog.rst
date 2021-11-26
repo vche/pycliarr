@@ -5,10 +5,24 @@ Changelog
 master
 ======
 
+v1.0.17
+=======
+
+:Date: Nov 26, 2021
+
+Fix
+---
+- fix radarr lookup url
+- fix sonarr add serie new api with language id
+
+New
+---
+- add import list inclusion api
+
 v1.0.16
 =======
 
-:Date: Nov 23, 2021
+:Date: Nov 25, 2021
 
 Fix
 ---

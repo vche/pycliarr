@@ -72,6 +72,17 @@ def select_profile(cli: base_media.BaseCliMediaApi) -> int:
         raise Exception("Invalid profile selection: {}")
 
 
+def select_language_profile(cli: base_media.BaseCliMediaApi) -> int:
+    res = cli.get_language_profiles()
+    for profile in res:
+        print(f"[{profile['id']}]: {profile['name']}")
+    profile_id = input(f"Profile id to use (1-{len(res)}):")
+    if profile_id.isdigit():
+        return int(profile_id)
+    else:
+        raise Exception("Invalid profile selection: {}")
+
+
 def select_item(
     terms: str, choices: List[Union[radarr.RadarrMovieItem, sonarr.SonarrSerieItem]]
 ) -> Union[radarr.RadarrMovieItem, sonarr.SonarrSerieItem]:
@@ -389,7 +400,7 @@ class CliGetTagItemsCommand(CliCommand):
 
 class CliCreateTagCommand(CliCommand):
     name = "create-tag"
-    description = "Edit the specified tag"
+    description = "Create the specified tag"
 
     def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
@@ -399,6 +410,36 @@ class CliCreateTagCommand(CliCommand):
     def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.create_tag(args.label)
+        print(f"{pformat(res)}\n")
+
+
+class CliGetExclusionCommand(CliCommand):
+    name = "exclusion"
+    description = "Get exclusion(s)"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--id", "-i", help="item ID", type=int, default=None)
+        return cmd_parser
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.get_exclusion(args.id)
+        print(f"{pformat(res)}\n")
+
+
+class CliDeleteExclusionCommand(CliCommand):
+    name = "delete-exclusion"
+    description = "Delete the specified exclusion"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--id", "-i", help="item ID", type=int, required=True)
+        return cmd_parser
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.delete_exclusion(args.id)
         print(f"{pformat(res)}\n")
 
 
@@ -432,11 +473,14 @@ class CliDeleteMovieCommand(CliCommand):
         cmd_parser.add_argument(
             "--delfiles", "-f", help="Also delete files on disk", default=False, action="store_true"
         )
+        cmd_parser.add_argument(
+            "--exclude", "-e", help="Ass exclusion from import lists", default=False, action="store_true"
+        )
         return cmd_parser
 
     def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
         super().run(cli, args)
-        res = cli.delete_movie(args.mid, delete_files=args.delfiles)
+        res = cli.delete_movie(args.mid, delete_files=args.delfiles, add_exclusion=args.exclude)
         print(f"Result:\n{res}")
 
 
@@ -509,6 +553,23 @@ class CliAddMovieCommand(CliCommand):
         print(f"Result:\n{res}")
 
 
+class CliCreateRadarrExclusionCommand(CliCommand):
+    name = "create-exclusion"
+    description = "Create the specified exclusion"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--title", "-t", help="title", required=True)
+        cmd_parser.add_argument("--id", "-i", help="tvdb ID", type=int, required=True)
+        cmd_parser.add_argument("--year", "-y", help="movie year", type=int, required=True)
+        return cmd_parser
+
+    def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.create_exclusion(args.title, args.id, args.year)
+        print(f"{pformat(res)}\n")
+
+
 ##############################################
 ########## sonarr specific commands ##########
 ##############################################
@@ -537,11 +598,14 @@ class CliDeleteSerieCommand(CliCommand):
         cmd_parser.add_argument(
             "--delfiles", "-f", help="Also delete files on disk", default=False, action="store_true"
         )
+        cmd_parser.add_argument(
+            "--exclude", "-e", help="Ass exclusion from import lists", default=False, action="store_true"
+        )
         return cmd_parser
 
     def run(self, cli: sonarr.SonarrCli, args: Namespace) -> None:
         super().run(cli, args)
-        res = cli.delete_serie(args.sid, delete_files=args.delfiles)
+        res = cli.delete_serie(args.sid, delete_files=args.delfiles, add_exclusion=args.exclude)
         print(f"Result:\n{res}")
 
 
@@ -588,6 +652,7 @@ class CliAddSerieCommand(CliCommand):
             "--terms", "-t", help="Keyword to search for the serie to add", type=str, default=None
         )
         cmd_parser.add_argument("--quality", "-q", help="Quality profile to use", type=int, default=None)
+        cmd_parser.add_argument("--language", "-l", help="Language profile to use", type=int, default=None)
         cmd_parser.add_argument("--seasons", "-s", help="Comma separated list of seasons nums", type=str, default=None)
         cmd_parser.add_argument(
             "--season-folders",
@@ -610,6 +675,8 @@ class CliAddSerieCommand(CliCommand):
         # If no quality profile specified, list them qnd prompt for choice
         if not args.quality:
             args.quality = select_profile(cli)
+        if not args.language:
+            args.language = select_language_profile(cli)
 
         # Get the optional season list
         seasons_str = args.seasons.replace(" ", "").split(",") if args.seasons else []
@@ -625,6 +692,7 @@ class CliAddSerieCommand(CliCommand):
             monitored_seasons=seasons,
             season_folder=args.season_folders,
             path=args.path,
+            language=args.language,
         )
         print(f"Result:\n{res}")
 
@@ -676,6 +744,22 @@ class CliDeleteEpisodeFileCommand(CliCommand):
         print(f"Res:\n{res}")
 
 
+class CliCreateSonarrExclusionCommand(CliCommand):
+    name = "create-exclusion"
+    description = "Create the specified exclusion"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--title", "-t", help="title", required=True)
+        cmd_parser.add_argument("--id", "-i", help="tvdb ID", type=int, required=True)
+        return cmd_parser
+
+    def run(self, cli: sonarr.SonarrCli, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.create_exclusion(args.title, args.id)
+        print(f"{pformat(res)}\n")
+
+
 #####################################################
 ########## Clients and commands definition ##########
 #####################################################
@@ -711,6 +795,9 @@ CLI_LIST: List[CliApiCommand] = [
             CliEditTagCommand(),
             CliCreateTagCommand(),
             CliGetTagItemsCommand(),
+            CliGetExclusionCommand(),
+            CliDeleteExclusionCommand(),
+            CliCreateSonarrExclusionCommand(),
         ],
     ),
     CliApiCommand(
@@ -741,6 +828,9 @@ CLI_LIST: List[CliApiCommand] = [
             CliEditTagCommand(),
             CliCreateTagCommand(),
             CliGetTagItemsCommand(),
+            CliGetExclusionCommand(),
+            CliDeleteExclusionCommand(),
+            CliCreateRadarrExclusionCommand(),
         ],
     ),
 ]
