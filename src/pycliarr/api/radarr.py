@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Union, cast
 
 from pycliarr.api.base_api import BaseCliApiItem, json_data
@@ -162,7 +163,7 @@ class RadarrCli(BaseCliMediaApi):
             raise RadarrCliError("Error, invalid parameters or invalid tmdb/imdb id")
 
         # Prepare movie info for adding
-        movie_info.path = path or self.build_movie_path(movie_info)
+        movie_info.path = path or str(self.build_movie_path(movie_info))
         movie_info.profileId = quality
         movie_info.qualityProfileId = quality
         movie_info.monitored = monitored
@@ -170,7 +171,7 @@ class RadarrCli(BaseCliMediaApi):
 
         return self.add_item(json_data=movie_info.to_dict())
 
-    def build_movie_path(self, movie_info: RadarrMovieItem, root_folder_id: int = 0) -> str:
+    def build_movie_path(self, movie_info: RadarrMovieItem, root_folder_id: int = 0) -> Path:
         """Build a movie folder path using the root folder specified.
         Args:
             serie_info (SonarrSerieItem) Item for which to build the path

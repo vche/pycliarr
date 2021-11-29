@@ -1,6 +1,7 @@
 import json
 import logging
 import platform
+from pathlib import Path
 from pprint import pformat
 from typing import Any, Dict, List, Optional, Type, TypeVar, Union
 
@@ -111,11 +112,11 @@ class BaseCliApi:
         """Close session with the endpoint."""
         self._session.close()
 
-    def to_path(self, basename: str) -> str:
+    def to_path(self, basename: str) -> Path:
         """Remove invalid chars from a file/directory name depending on the platform."""
         for c in self._invalid_path_chars:
             basename = basename.replace(c, "")
-        return basename
+        return Path(basename)
 
 
 class BaseCliApiItem:

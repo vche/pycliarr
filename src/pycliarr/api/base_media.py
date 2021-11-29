@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List, Optional, cast
 
 from pycliarr.api.base_api import BaseCliApi, json_data, json_dict, json_list
@@ -249,7 +250,7 @@ class BaseCliMediaApi(BaseCliApi):
         data.update({"sortKey": sort_key})
         return self.request_get(self.api_url_wanted_missing, url_params=data)
 
-    def build_item_path(self, title: str, root_folder_id: int = 0) -> str:
+    def build_item_path(self, title: str, root_folder_id: int = 0) -> Path:
         """Build an item folder path using the root folder specified.
         Args:
             title (str): Title to add to root path. All invalid characters are removed
@@ -263,7 +264,7 @@ class BaseCliMediaApi(BaseCliApi):
         for path in root_paths:
             if path["id"] == root_folder_id:
                 root_path = path
-        return str(root_path["path"]) + self.to_path(title)
+        return Path(root_path["path"]) / self.to_path(title)
 
     def get_blocklist(
         self, page: int = 1, sort_key: str = "date", page_size: int = 20, sort_dir: str = "descending"

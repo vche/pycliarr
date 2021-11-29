@@ -3,6 +3,7 @@ from pycliarr.api.base_media import BaseCliMediaApi
 from pycliarr.api.exceptions import CliArrError, CliServerError
 from unittest.mock import Mock, patch
 import pytest
+from pathlib import Path
 
 
 TEST_HOST = "http://example.com"
@@ -114,18 +115,18 @@ def test_delete(patch_session):
 @patch("pycliarr.api.base_api.requests.Session")
 def test_to_path_linux(patch_platform, patch_session):
     # For all unix based platforms (linux, bsd, osx...)
-    TEST_DIRNAME = "some title"
+    TEST_DIRNAME = Path("some title")
     cli = BaseCliApi(TEST_HOST, TEST_APIKEY, username=TEST_USER, password=TEST_PASS)
 
     assert cli.to_path("some title") == TEST_DIRNAME
     assert cli.to_path("some /title") == TEST_DIRNAME
-    assert cli.to_path("some:title") == "some:title"
+    assert cli.to_path("some:title") == Path("some:title")
 
 
 @patch("pycliarr.api.base_api.platform.system", return_value="Windows")
 @patch("pycliarr.api.base_api.requests.Session")
 def test_to_path_windows(patch_platform, patch_session):
-    TEST_DIRNAME = "some title"
+    TEST_DIRNAME = Path("some title")
     cli = BaseCliApi(TEST_HOST, TEST_APIKEY, username=TEST_USER, password=TEST_PASS)
 
     assert cli.to_path("some title") == TEST_DIRNAME

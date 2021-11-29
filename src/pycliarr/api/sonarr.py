@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Union, cast
 
 from pycliarr.api.base_api import BaseCliApiItem, json_data
@@ -176,7 +177,7 @@ class SonarrCli(BaseCliMediaApi):
             raise SonarrCliError("Error, invalid parameters or invalid tvdb id")
 
         # Prepare serie info for adding
-        serie_info.path = path or self.build_serie_path(serie_info)
+        serie_info.path = path or str(self.build_serie_path(serie_info))
         serie_info.profileId = quality
         serie_info.qualityProfileId = quality
         serie_info.languageProfileId = language
@@ -197,7 +198,7 @@ class SonarrCli(BaseCliMediaApi):
 
         return self.add_item(json_data=serie_info.to_dict())
 
-    def build_serie_path(self, serie_info: SonarrSerieItem, root_folder_id: int = 0) -> str:
+    def build_serie_path(self, serie_info: SonarrSerieItem, root_folder_id: int = 0) -> Path:
         """Build a serie folder path using the root folder specified.
         Args:
             serie_info (SonarrSerieItem) Item for which to build the path

@@ -2,12 +2,13 @@ import pytest
 from unittest.mock import patch
 from pycliarr.api.base_media import BaseCliMediaApi
 from datetime import datetime
+from pathlib import Path
 
 TEST_JSON = {'somefield': "some value"}
 TEST_JSON2 = {'someotherfield': "some other value"}
 TEST_HOST = "http://example.com"
 TEST_APIKEY = "abcd1234"
-TEST_ROOT_PATH = [{"path": "some/path/", "id": 1}, {"path": "yet/otherpath/", "id": 3}]
+TEST_ROOT_PATH = [{"path": "some/path/", "id": 1}, {"path": "yet/otherpath", "id": 3}]
 
 
 @pytest.fixture
@@ -213,17 +214,17 @@ def test_get_wanted_with_options(mock_base, cli):
 
 @patch("pycliarr.api.base_media.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
 def test_build_movie_path_no_idx(mock_rootcli, cli):
-    assert cli.build_item_path("some serie") == "some/path/some serie"
+    assert cli.build_item_path("some serie") == Path("some/path/some serie")
 
 
 @patch("pycliarr.api.base_media.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
 def test_build_movie_path_idx(mock_rootcli, cli):
-    assert cli.build_item_path("some serie", root_folder_id=3) == "yet/otherpath/some serie"
+    assert cli.build_item_path("some serie", root_folder_id=3) == Path("yet/otherpath/some serie")
 
 
 @patch("pycliarr.api.base_media.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
 def test_build_movie_path_bad_idx(mock_rootcli, cli):
-    assert cli.build_item_path("some serie", root_folder_id=33) == "some/path/some serie"
+    assert cli.build_item_path("some serie", root_folder_id=33) == Path("some/path/some serie")
 
 
 @patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)

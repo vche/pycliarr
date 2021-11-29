@@ -5,6 +5,15 @@ Changelog
 master
 ======
 
+v1.0.18
+=======
+
+:Date: Nov 29, 2021
+
+Fix
+---
+- fix issue with root paths in radnarr with api v3
+
 v1.0.17
 =======
 
