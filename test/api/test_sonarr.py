@@ -319,7 +319,14 @@ def test_delete_episode_file(mock_base, cli):
 def test_build_serie_path(mock_buildpath, cli):
     serie = SonarrSerieItem(title="some serie")
     cli.build_serie_path(serie)
-    mock_buildpath.assert_called_with("some serie")
+    mock_buildpath.assert_called_with("some serie", 0)
+
+
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.build_item_path")
+def test_build_serie_path_with_root(mock_buildpath, cli):
+    serie = SonarrSerieItem(title="some serie")
+    cli.build_serie_path(serie, 1)
+    mock_buildpath.assert_called_with("some serie", 1)
 
 
 @patch("pycliarr.api.sonarr.BaseCliMediaApi._sendCommand", return_value=TEST_JSON)

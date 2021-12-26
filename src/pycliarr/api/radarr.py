@@ -180,7 +180,9 @@ class RadarrCli(BaseCliMediaApi):
 
         Returns: Full path of the serie in the format <root path>/<movie name> (<movie year>)
         """
-        return self.build_item_path(movie_info.title + (f" ({movie_info.year})" if movie_info.year else ""))
+        return self.build_item_path(
+            movie_info.title + (f" ({movie_info.year})" if movie_info.year else ""), root_folder_id
+        )
 
     def delete_movie(self, movie_id: int, delete_files: bool = True, add_exclusion: bool = False) -> json_data:
         """Delete the movie with the given ID

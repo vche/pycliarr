@@ -207,7 +207,7 @@ class SonarrCli(BaseCliMediaApi):
 
         Returns: Full path of the serie in the format <root path>/<serie name>
         """
-        return self.build_item_path(serie_info.title)
+        return self.build_item_path(serie_info.title, root_folder_id)
 
     def delete_serie(self, serie_id: int, delete_files: bool = True, add_exclusion: bool = False) -> json_data:
         """Delete the serie with the given ID

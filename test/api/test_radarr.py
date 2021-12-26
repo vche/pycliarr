@@ -239,14 +239,14 @@ def test_rescan_movie(mock_base, cli):
 def test_build_movie_path_no_year(mock_buildpath, cli):
     movie = RadarrMovieItem(title="some movie", year=0)
     cli.build_movie_path(movie)
-    mock_buildpath.assert_called_with("some movie")
+    mock_buildpath.assert_called_with("some movie", 0)
 
 
 @patch("pycliarr.api.radarr.BaseCliMediaApi.build_item_path")
 def test_build_movie_path_year(mock_buildpath, cli):
     movie = RadarrMovieItem(title="some movie", year=2020)
     cli.build_movie_path(movie, root_folder_id=3)
-    mock_buildpath.assert_called_with("some movie (2020)")
+    mock_buildpath.assert_called_with("some movie (2020)", 3)
 
 
 @patch("pycliarr.api.radarr.BaseCliMediaApi._sendCommand", return_value=TEST_JSON)
