@@ -262,7 +262,7 @@ class BaseCliMediaApi(BaseCliApi):
         root_paths = self.get_root_folder()
         root_path = root_paths[0]
         for path in root_paths:
-            if path["id"] == root_folder_id:
+            if path["id"] == int(root_folder_id):
                 root_path = path
         return Path(root_path["path"]) / self.to_path(title)
 

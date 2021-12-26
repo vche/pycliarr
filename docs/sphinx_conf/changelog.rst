@@ -5,6 +5,19 @@ Changelog
 master
 ======
 
+v1.0.19
+=======
+
+:Date: Nov 29, 2021
+
+New
+---
+- Add commands to search missing movies and episodes
+
+Fix
+---
+- fix issue building paths, not using root ids other than the default one and type conversion
+
 v1.0.18
 =======
 
