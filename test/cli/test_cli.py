@@ -2,7 +2,7 @@ import pytest
 import sys
 
 from pycliarr.cli import cli
-from pycliarr.cli.cli_cmd import select_profile
+from pycliarr.cli.cli_cmd import select_profile, select_language_profile
 from pycliarr.api import radarr, sonarr
 from pycliarr.api.exceptions import CliArrError
 from unittest.mock import Mock, patch, call
@@ -603,6 +603,54 @@ def test_cli_radarr_tagitems_serie(monkeypatch, mock_exit):
     mock_sonarr2.assert_has_calls([call(1), call(2), call(3)])
     mock_exit.assert_called_with(0)
 
+
+def test_cli_sonarr_get_exclusion(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "exclusion",
+        "-i", "12345",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value={"id": 12345})
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_exclusion", mock_sonarr)
+    cli.main()
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_get_exclusion_all(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "exclusion",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value=[{"id": 12345}, {"id": 2233}])
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_exclusion", mock_sonarr)
+    cli.main()
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_delete_exclusion(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "delete-exclusion",
+        "-i", "12345",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value={"id": 12345})
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.delete_exclusion", mock_sonarr)
+    cli.main()
+    mock_exit.assert_called_with(0)
+
+
 ##############################################
 ########## radarr specific commands ##########
 ##############################################
@@ -906,7 +954,6 @@ def test_cli_radarr_add_manual_nomovie(mock_input, monkeypatch, mock_exit):
     mock_sonarr = Mock()
     mock_sonarr.return_value = TEST_JSON
     mock_lookup = Mock()
-    mock_info = Mock(title="test1", year=2020)
     mock_lookup.return_value = []
     mock_profiles = Mock()
     mock_profiles.return_value = [{
@@ -920,6 +967,41 @@ def test_cli_radarr_add_manual_nomovie(mock_input, monkeypatch, mock_exit):
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
     mock_exit.assert_called_with(2)
+
+
+def test_cli_radarr_search_missing(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "search-missing",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.missing_movies_search", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called()
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_create_exclusion(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "create-exclusion",
+        "-t", "a title",
+        "-i", "12345"
+        "-y", "2020"
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value={"id": 12345})
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.create_exclusion", mock_sonarr)
+    cli.main()
+    mock_exit.assert_called_with(0)
 
 
 ##############################################
@@ -1123,6 +1205,18 @@ def test_cli_sonarr_add_manual(mock_input, monkeypatch, mock_exit):
     mock_exit.assert_called_with(0)
 
 
+@patch('builtins.input', return_value="1c")
+def test_select_language_nok(mock_input):
+    mock_cli = Mock()
+    mock_cli.get_language_profiles.return_value = [{
+        'name': 'name',
+        'id': '1',
+        'items': [{'quality': {'name': 'item1'}, 'allowed': True}]
+    }]
+    with pytest.raises(Exception):
+        select_language_profile(mock_cli)
+
+
 def test_cli_sonarr_getepisodefile(monkeypatch, mock_exit):
     test_args = [
         "pycliarr",
@@ -1159,7 +1253,7 @@ def test_cli_sonarr_getepisode(monkeypatch, mock_exit):
     mock_exit.assert_called_with(0)
 
 
-def test_cli_sonarr_get(monkeypatch, mock_exit):
+def test_cli_sonarr_deleteepisode(monkeypatch, mock_exit):
     test_args = [
         "pycliarr",
         "-t", TEST_HOST,
@@ -1174,4 +1268,38 @@ def test_cli_sonarr_get(monkeypatch, mock_exit):
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.delete_episode_file", mock_sonarr)
     cli.main()
     mock_sonarr.assert_called_with(1234)
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_search_missing(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "search-missing",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.missing_episodes_search", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called()
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_create_exclusion(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "create-exclusion",
+        "-t", "a title",
+        "-i", "12345"
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value={"id": 12345})
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.create_exclusion", mock_sonarr)
+    cli.main()
     mock_exit.assert_called_with(0)

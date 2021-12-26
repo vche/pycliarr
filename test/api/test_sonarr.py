@@ -320,3 +320,18 @@ def test_build_serie_path(mock_buildpath, cli):
     serie = SonarrSerieItem(title="some serie")
     cli.build_serie_path(serie)
     mock_buildpath.assert_called_with("some serie")
+
+
+@patch("pycliarr.api.sonarr.BaseCliMediaApi._sendCommand", return_value=TEST_JSON)
+def test_search_missing(mock_base, cli):
+    res = cli.missing_episodes_search()
+    mock_base.assert_called_with({"name": "missingEpisodeSearch"})
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.sonarr.BaseCliMediaApi.request_post", return_value={})
+def test_create_exclusion(mock_post, cli):
+    cli.create_exclusion("a title", 12345)
+    mock_post.assert_called_with(
+        cli.api_url_exclusions, json_data={"title": "a title", "tvdbId": 12345}
+    )

@@ -570,9 +570,21 @@ class CliCreateRadarrExclusionCommand(CliCommand):
         print(f"{pformat(res)}\n")
 
 
+class CliSearchMissingMovies(CliCommand):
+    name = "search-missing"
+    description = "Search missing movies"
+
+    def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.missing_movies_search()
+        print(f"Result: {json.dumps(res)}\n")
+
+
 ##############################################
 ########## sonarr specific commands ##########
 ##############################################
+
+
 class CliGetSerieCommand(CliCommand):
     name = "get"
     description = "Get info on a of serie"
@@ -760,6 +772,16 @@ class CliCreateSonarrExclusionCommand(CliCommand):
         print(f"{pformat(res)}\n")
 
 
+class CliSearchMissingEpisodes(CliCommand):
+    name = "search-missing"
+    description = "Search missing episods"
+
+    def run(self, cli: sonarr.SonarrCli, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.missing_episodes_search()
+        print(f"Result: {json.dumps(res)}\n")
+
+
 #####################################################
 ########## Clients and commands definition ##########
 #####################################################
@@ -798,6 +820,7 @@ CLI_LIST: List[CliApiCommand] = [
             CliGetExclusionCommand(),
             CliDeleteExclusionCommand(),
             CliCreateSonarrExclusionCommand(),
+            CliSearchMissingEpisodes(),
         ],
     ),
     CliApiCommand(
@@ -831,6 +854,7 @@ CLI_LIST: List[CliApiCommand] = [
             CliGetExclusionCommand(),
             CliDeleteExclusionCommand(),
             CliCreateRadarrExclusionCommand(),
+            CliSearchMissingMovies(),
         ],
     ),
 ]

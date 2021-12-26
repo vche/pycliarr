@@ -247,3 +247,18 @@ def test_build_movie_path_year(mock_buildpath, cli):
     movie = RadarrMovieItem(title="some movie", year=2020)
     cli.build_movie_path(movie, root_folder_id=3)
     mock_buildpath.assert_called_with("some movie (2020)")
+
+
+@patch("pycliarr.api.radarr.BaseCliMediaApi._sendCommand", return_value=TEST_JSON)
+def test_search_missing(mock_base, cli):
+    res = cli.missing_movies_search()
+    mock_base.assert_called_with({"name": "MissingMoviesSearch"})
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.radarr.BaseCliMediaApi.request_post", return_value={})
+def test_create_exclusion(mock_post, cli):
+    cli.create_exclusion("a title", 12345, 2021)
+    mock_post.assert_called_with(
+        cli.api_url_exclusions, json_data={"movieTitle": "a title", "tmdbId": 12345, "movieYear": 2021}
+    )

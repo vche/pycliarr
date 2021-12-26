@@ -232,3 +232,10 @@ class RadarrCli(BaseCliMediaApi):
         return self.request_post(
             self.api_url_exclusions, json_data={"movieTitle": title, "tmdbId": tmdb_id, "movieYear": year}
         )
+
+    def missing_movies_search(self) -> json_data:
+        """Search for missing movies.
+        Returns:
+            json response
+        """
+        return self._sendCommand({"name": "MissingMoviesSearch"})

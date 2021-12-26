@@ -305,3 +305,10 @@ class SonarrCli(BaseCliMediaApi):
             json response
         """
         return self.request_post(self.api_url_exclusions, json_data={"title": title, "tvdbId": tvdb_id})
+
+    def missing_episodes_search(self) -> json_data:
+        """Search for missing episodes.
+        Returns:
+            json response
+        """
+        return self._sendCommand({"name": "missingEpisodeSearch"})
