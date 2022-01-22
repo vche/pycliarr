@@ -59,6 +59,7 @@ class SonarrCli(BaseCliMediaApi):
 
     API reference:
         https://github.com/Sonarr/Sonarr/wiki/API
+        https://pub.dev/packages/sonarr
 
     Note:
         Not all commands are implemented.
@@ -222,6 +223,19 @@ class SonarrCli(BaseCliMediaApi):
         options = {"addImportListExclusion": add_exclusion} if add_exclusion else {}
         return self.delete_item(serie_id, delete_files, options)
 
+    def edit_serie(self, serie_info: Optional[SonarrSerieItem] = None) -> json_data:
+        """Edit a serie from the collection.
+
+        The serie description movie_info must be specified, usually by getting the information from get_serie()
+
+        Args:
+            serie_info (Optional[RadarrMovieItem]): Description of the movie to edit
+        Returns:
+            json response
+        """
+
+        return self.edit_item(json_data=serie_info.to_dict())
+
     def refresh_serie(self, serie_id: Optional[int] = None) -> json_data:
         """Refresh serie information  and rescan disk.
 
@@ -312,3 +326,24 @@ class SonarrCli(BaseCliMediaApi):
             json response
         """
         return self._sendCommand({"name": "missingEpisodeSearch"})
+
+    def get_queue(
+        self,
+        page: int = 1,
+        sort_key: str = "progress",
+        page_size: int = 20,
+        sort_dir: str = "ascending",
+        include_unknown=True,
+    ) -> json_data:
+        """Get queue info (downloading/completed, ok/warning) as json
+
+        Args:
+            page (int) - 1-indexed (1 default)
+            sort_key (string) - title or date
+            page_size (int) - Default: 10
+            sort_dir (string) - asc or desc - Default: asc
+            options (Dict[str, Any]={}): Optional additional options
+        """
+        return super().get_queue(
+            page, sort_key, page_size, sort_dir, options={"includeUnknownSeriesItems": include_unknown}
+        )

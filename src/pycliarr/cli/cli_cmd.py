@@ -137,9 +137,18 @@ class CliGetQueueCommand(CliCommand):
     name = "queue"
     description = "Get current downloading queue"
 
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--page", help="Page to get", type=int, default=1)
+        cmd_parser.add_argument("--sort-key", help="Sort key", default="progress")
+        cmd_parser.add_argument("--page-size", help="Page size", type=int, default=20)
+        cmd_parser.add_argument("--sort-dir", help="Sort direction", default="ascending")
+        cmd_parser.add_argument("--exclude-unknown", help="Exclude unknown items", action="store_true", default=False)
+        return cmd_parser
+
     def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
         super().run(cli, args)
-        res = cli.get_queue()
+        res = cli.get_queue(args.page, args.sort_key, args.page_size, args.sort_dir, not args.exclude_unknown)
         print(f"{pformat(res)}\n")
 
 
@@ -455,12 +464,16 @@ class CliGetMovieCommand(CliCommand):
     def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--mid", "-i", help="ID of the movie to get info on", type=int, default=None)
+        cmd_parser.add_argument("--json", "-j", action="store_true", help="Print data as json", default=False)
         return cmd_parser
 
     def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.get_movie(args.mid)
-        print(f"Movie info:\n{res}")
+        if args.json:
+            print(f"{res.to_json()}")
+        else:
+            print(res)
 
 
 class CliDeleteMovieCommand(CliCommand):
@@ -481,7 +494,7 @@ class CliDeleteMovieCommand(CliCommand):
     def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.delete_movie(args.mid, delete_files=args.delfiles, add_exclusion=args.exclude)
-        print(f"Result:\n{res}")
+        print(res)
 
 
 class CliGetRefreshMovieCommand(CliCommand):
@@ -496,7 +509,7 @@ class CliGetRefreshMovieCommand(CliCommand):
     def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.refresh_movie(args.mid)
-        print(f"Result: {json.dumps(res)}\n")
+        print(res)
 
 
 class CliGetRescanMovieCommand(CliCommand):
@@ -511,7 +524,7 @@ class CliGetRescanMovieCommand(CliCommand):
     def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.rescan_movie(args.mid)
-        print(f"Result: {json.dumps(res)}\n")
+        print(res)
 
 
 class CliAddMovieCommand(CliCommand):
@@ -550,7 +563,32 @@ class CliAddMovieCommand(CliCommand):
             movie_info=movie_info,  # type: ignore
             path=args.path,
         )
-        print(f"Result:\n{res}")
+        print(f"{json.dumps(res)}")
+
+
+class CliEditMovieCommand(CliCommand):
+    name = "edit"
+    description = "Push an updated item to the movie library"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        search_group = cmd_parser.add_mutually_exclusive_group()
+        search_group.required = True
+        search_group.add_argument("--json", "-j", help="json data")
+        search_group.add_argument("--file", "-f", help="json file")
+        return cmd_parser
+
+    def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
+        super().run(cli, args)
+        json_data = args.json
+        if not json_data and args.file:
+            with open(args.file, "r") as f:
+                json_data = f.read()
+        else:
+            raise Exception("Invalid item data specified")
+        info = radarr.RadarrMovieItem.from_json(json_data)
+        res = cli.edit_movie(info)
+        print(f"{json.dumps(res)}")
 
 
 class CliCreateRadarrExclusionCommand(CliCommand):
@@ -577,7 +615,7 @@ class CliSearchMissingMovies(CliCommand):
     def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.missing_movies_search()
-        print(f"Result: {json.dumps(res)}\n")
+        print(f"{json.dumps(res)}")
 
 
 ##############################################
@@ -592,12 +630,16 @@ class CliGetSerieCommand(CliCommand):
     def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--sid", "-i", help="ID of the serie to get info on", type=int, default=None)
+        cmd_parser.add_argument("--json", "-j", action="store_true", help="Print data as json", default=False)
         return cmd_parser
 
     def run(self, cli: sonarr.SonarrCli, args: Namespace) -> None:
         super().run(cli, args)
         res = cli.get_serie(args.sid)
-        print(f"Serie info:\n{res}")
+        if args.json:
+            print(f"{res.to_json()}")
+        else:
+            print(res)
 
 
 class CliDeleteSerieCommand(CliCommand):
@@ -830,6 +872,7 @@ CLI_LIST: List[CliApiCommand] = [
             CliGetMovieCommand(),
             CliDeleteMovieCommand(),
             CliAddMovieCommand(),
+            CliEditMovieCommand(),
             CliGetRefreshMovieCommand(),
             CliGetRescanMovieCommand(),
             CliGetProfilesCommand(),

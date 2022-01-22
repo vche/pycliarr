@@ -53,7 +53,7 @@ def _build_mapping(cli_list: List[CliApiCommand]) -> Dict[str, CliApiCommand]:
 
 def main() -> None:
     """Main entry point."""
-    print(f"PyCliarr version {pycliarr.__version__}")
+    print(f"PyCliarr version {pycliarr.__version__}", file=sys.stderr)
 
     cli_mapping = _build_mapping(CLI_LIST)
     args = _parse_args(cli_mapping)

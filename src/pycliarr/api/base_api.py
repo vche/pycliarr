@@ -77,7 +77,7 @@ class BaseCliApi:
         log.debug("Request sent: %s %s params: %s data: %s", method, request_url, url_params, json_data)
         try:
             res = self._session.request(method, request_url, params=url_params, json=json_data)
-            # log.debug(f"Result {res.status_code}, Body {res.content}")
+            log.debug(f"Result {res.status_code}, Body {res.content}")
         except Exception as e:
             raise CliArrError(f"Error sending request {request_url}: {e}")
         if res.status_code >= 400:
@@ -100,9 +100,14 @@ class BaseCliApi:
         """Shortcut for request withe method=post."""
         return self.request("POST", path, json_data=json_data)
 
-    def request_put(self, path: str, json_data: Optional[json_data] = None) -> json_data:
+    def request_put(
+        self,
+        path: str,
+        json_data: Optional[json_data] = None,
+        url_params: Optional[Dict[str, Any]] = None,
+    ) -> json_data:
         """Shortcut for request withe method=put."""
-        return self.request("PUT", path, json_data=json_data)
+        return self.request("PUT", path, json_data=json_data, url_params=url_params)
 
     def request_delete(self, path: str, url_params: Optional[Dict[str, Any]] = None) -> json_data:
         """Shortcut for request withe method=delete."""
@@ -119,7 +124,7 @@ class BaseCliApi:
         return Path(basename)
 
 
-class BaseCliApiItem:
+class BaseCliApiItem():
     """Generic handling of an item based on a dict representation.
 
     Items can be build specifying a list of parameters, a dict, or a json string.
@@ -151,6 +156,12 @@ class BaseCliApiItem:
         for key in dict_data:
             if key in self._data:
                 self._data[key] = dict_data[key]
+            else:
+                log.debug(f"Field {key} not in model")
+
+        for key in self._data:
+            if key not in dict_data:
+                log.debug(f"Model Field {key} not in data")
 
     def _model(self) -> Dict[Any, Any]:
         """Define the model of items represented by this class.
@@ -164,6 +175,9 @@ class BaseCliApiItem:
 
     def to_dict(self) -> Dict[Any, Any]:
         return self._data
+
+    def to_json(self):
+        return json.dumps(self._data)
 
     def add_attribute(self, name: str, value: Any) -> None:
         self._data[name] = value

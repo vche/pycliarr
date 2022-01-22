@@ -13,6 +13,7 @@ class RadarrMovieItem(BaseCliApiItem):
         """Define the model of items represented by this class."""
         return {
             "title": "",
+            "originalTitle": "",
             "sortTitle": "",
             "sizeOnDisk": 0,
             "overview": "",
@@ -28,7 +29,6 @@ class RadarrMovieItem(BaseCliApiItem):
             "studio": "",
             "path": "",
             "rootFolderPath": "",
-            "profileId": 0,
             "monitored": True,
             "minimumAvailability": "",
             "isAvailable": "",
@@ -44,8 +44,9 @@ class RadarrMovieItem(BaseCliApiItem):
             "added": None,
             "ratings": {},
             "collection": {},
-            "alternativeTitles": [],
+            "alternateTitles": [],
             "qualityProfileId": 0,
+            "secondaryYearSourceId": 0,
             "id": 0,
         }
 
@@ -55,6 +56,7 @@ class RadarrCli(BaseCliMediaApi):
 
     Radarr API reference:
         https://github.com/Radarr/Radarr/wiki/API
+        https://pub.dev/packages/radarr
 
     Note:
         Not all commands are implemented.
@@ -197,6 +199,24 @@ class RadarrCli(BaseCliMediaApi):
         options = {"addImportExclusion": add_exclusion} if add_exclusion else {}
         return self.delete_item(movie_id, delete_files, options)
 
+    def edit_movie(
+        self,
+        movie_info: Optional[RadarrMovieItem] = None,
+        move_files: bool = False,
+    ) -> json_data:
+        """Edit a movie from the collection.
+
+        The movie description movie_info must be specified, usually by getting the information from get_movie()
+
+        Args:
+            movie_info (Optional[RadarrMovieItem]): Description of the movie to edit
+            move_files (bool): Whether to move files after edition. Default is False
+        Returns:
+            json response
+        """
+
+        return self.edit_item(json_data=movie_info.to_dict())  # , url_params={"moveFiles": False})
+
     def refresh_movie(self, movie_id: Optional[int] = None) -> json_data:
         """Refresh movie information  and rescan disk.
 
@@ -241,3 +261,22 @@ class RadarrCli(BaseCliMediaApi):
             json response
         """
         return self._sendCommand({"name": "MissingMoviesSearch"})
+
+    def get_queue(
+        self,
+        page: int = 1,
+        sort_key: str = "progress",
+        page_size: int = 20,
+        sort_dir: str = "ascending",
+        include_unknown=True,
+    ) -> json_data:
+        """Get queue info (downloading/completed, ok/warning) as json
+
+        Args:
+            page (int) - 1-indexed (1 default)
+            sort_key (string) - title or date
+            page_size (int) - Default: 10
+            sort_dir (string) - asc or desc - Default: asc
+            options (Dict[str, Any]={}): Optional additional options
+        """
+        return super().get_queue(page, sort_key, page_size, sort_dir, options={"includeUnknownMovieItems": include_unknown})

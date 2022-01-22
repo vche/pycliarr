@@ -123,7 +123,7 @@ class BaseCliMediaApi(BaseCliApi):
         return self.request_get(self.api_url_itemlookup, url_params=url_params)
 
     def add_item(self, json_data: json_data) -> json_data:
-        """addMovie adds a new movie to collection
+        """Adds a new item to collection
 
         Args:
             json_data: Dict representation of the item to add
@@ -147,6 +147,17 @@ class BaseCliMediaApi(BaseCliApi):
         url_path = f"{self.api_url_item}/{item_id}"
         return self.request_delete(url_path, data)
 
+    def edit_item(self, json_data: json_data, url_params: Optional[Dict[str, Any]] = None) -> json_data:
+        """Edit an item from the collection
+
+        Args:
+            json_data: Dict representation of the item to add
+        Returns:
+            json response
+        """
+        print(f"diong put: {json_data}")
+        return self.request_put(self.api_url_item, json_data=json_data, url_params=url_params)
+
     def get_system_status(self) -> json_data:
         """Return the System Status as json"""
         return self.request_get(self.api_url_systemstatus)
@@ -159,9 +170,31 @@ class BaseCliMediaApi(BaseCliApi):
         """Return the quality profiles"""
         return cast(json_list, self.request_get(self.api_url_language_profile))
 
-    def get_queue(self) -> json_data:
-        """Get queue info (downloading/completed, ok/warning) as json"""
-        return self.request_get(self.api_url_queue)
+    def get_queue(
+        self,
+        page: int = 1,
+        sort_key: str = "progress",
+        page_size: int = 20,
+        sort_dir: str = "ascending",
+        options: Dict[str, Any] = {},
+    ) -> json_data:
+        """Get queue info (downloading/completed, ok/warning) as json
+
+        Args:
+            page (int) - 1-indexed (1 default)
+            sort_key (string) - title or date
+            page_size (int) - Default: 10
+            sort_dir (string) - asc or desc - Default: asc
+            options (Dict[str, Any]={}): Optional additional options
+        """
+        data = {
+            "page": page,
+            "pageSize": page_size,
+            "sortKey": sort_key,
+            "sortDirection": sort_dir,
+        }
+        data.update(options)
+        return self.request_get(self.api_url_queue, url_params=data)
 
     def delete_queue(self, item_id: int, blacklist: Optional[bool] = None) -> json_data:
         """Delete an item from the queue and download client. Optionally blacklist item after deletion.

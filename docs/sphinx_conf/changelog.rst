@@ -5,6 +5,22 @@ Changelog
 master
 ======
 
+v1.0.20
+=======
+
+:Date: Jan 22, 2022
+
+New
+---
+- Add commands to search missing movies and episodes
+- Add movie/serie edit commands
+
+Fix
+---
+- Missing qet queue parameters
+- Missing int cast in build root path
+- Missing root folder argument in build path
+
 v1.0.19
 =======
 
