@@ -170,7 +170,7 @@ class BaseCliMediaApi(BaseCliApi):
         """Return the quality profiles"""
         return cast(json_list, self.request_get(self.api_url_language_profile))
 
-    def get_queue(
+    def _get_queue(
         self,
         page: int = 1,
         sort_key: str = "progress",
@@ -195,6 +195,16 @@ class BaseCliMediaApi(BaseCliApi):
         }
         data.update(options)
         return self.request_get(self.api_url_queue, url_params=data)
+
+    def get_queue(
+        self,
+        page: int = 1,
+        sort_key: str = "progress",
+        page_size: int = 20,
+        sort_dir: str = "ascending",
+        include_unknown: bool = True,
+    ) -> json_data:
+        return self._get_queue(page, sort_key, page_size, sort_dir)
 
     def delete_queue(self, item_id: int, blacklist: Optional[bool] = None) -> json_data:
         """Delete an item from the queue and download client. Optionally blacklist item after deletion.

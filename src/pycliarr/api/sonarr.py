@@ -223,7 +223,7 @@ class SonarrCli(BaseCliMediaApi):
         options = {"addImportListExclusion": add_exclusion} if add_exclusion else {}
         return self.delete_item(serie_id, delete_files, options)
 
-    def edit_serie(self, serie_info: Optional[SonarrSerieItem] = None) -> json_data:
+    def edit_serie(self, serie_info: SonarrSerieItem) -> json_data:
         """Edit a serie from the collection.
 
         The serie description movie_info must be specified, usually by getting the information from get_serie()
@@ -333,7 +333,7 @@ class SonarrCli(BaseCliMediaApi):
         sort_key: str = "progress",
         page_size: int = 20,
         sort_dir: str = "ascending",
-        include_unknown=True,
+        include_unknown: bool = True,
     ) -> json_data:
         """Get queue info (downloading/completed, ok/warning) as json
 
@@ -344,6 +344,6 @@ class SonarrCli(BaseCliMediaApi):
             sort_dir (string) - asc or desc - Default: asc
             options (Dict[str, Any]={}): Optional additional options
         """
-        return super().get_queue(
+        return self._get_queue(
             page, sort_key, page_size, sort_dir, options={"includeUnknownSeriesItems": include_unknown}
         )

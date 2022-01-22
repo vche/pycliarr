@@ -166,7 +166,6 @@ class RadarrCli(BaseCliMediaApi):
 
         # Prepare movie info for adding
         movie_info.path = path or str(self.build_movie_path(movie_info))
-        movie_info.profileId = quality
         movie_info.qualityProfileId = quality
         movie_info.monitored = monitored
         movie_info.add_attribute("addOptions", {"searchForMovie": search})
@@ -201,7 +200,7 @@ class RadarrCli(BaseCliMediaApi):
 
     def edit_movie(
         self,
-        movie_info: Optional[RadarrMovieItem] = None,
+        movie_info: RadarrMovieItem,
         move_files: bool = False,
     ) -> json_data:
         """Edit a movie from the collection.
@@ -268,7 +267,7 @@ class RadarrCli(BaseCliMediaApi):
         sort_key: str = "progress",
         page_size: int = 20,
         sort_dir: str = "ascending",
-        include_unknown=True,
+        include_unknown: bool = True,
     ) -> json_data:
         """Get queue info (downloading/completed, ok/warning) as json
 
@@ -279,4 +278,6 @@ class RadarrCli(BaseCliMediaApi):
             sort_dir (string) - asc or desc - Default: asc
             options (Dict[str, Any]={}): Optional additional options
         """
-        return super().get_queue(page, sort_key, page_size, sort_dir, options={"includeUnknownMovieItems": include_unknown})
+        return self._get_queue(
+            page, sort_key, page_size, sort_dir, options={"includeUnknownMovieItems": include_unknown}
+        )

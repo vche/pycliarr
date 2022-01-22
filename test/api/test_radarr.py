@@ -11,6 +11,7 @@ TEST_HOST = "http://example.com"
 TEST_APIKEY = "abcd1234"
 TEST_MOVIEINFO = {
     "title": "some movie",
+    "originalTitle": "",
     "sortTitle": "",
     "sizeOnDisk": 0,
     "overview": "",
@@ -26,7 +27,6 @@ TEST_MOVIEINFO = {
     "studio": "",
     "path": "",
     "rootFolderPath": "",
-    "profileId": 0,
     "monitored": True,
     "minimumAvailability": "",
     "isAvailable": "",
@@ -42,8 +42,9 @@ TEST_MOVIEINFO = {
     "added": None,
     "ratings": {},
     "collection": {},
-    "alternativeTitles": [],
+    "alternateTitles": [],
     "qualityProfileId": 0,
+    "secondaryYearSourceId": 0,
     "id": 0,
 }
 
@@ -122,7 +123,6 @@ def test_add_movie_withpath(mock_add, mock_root, mock_get, cli):
     exp.update({
         "title": "some movie",
         "path": "some/other_path/some_other_movie",
-        "profileId": 1,
         "qualityProfileId": 1,
         "monitored": True,
         "addOptions": {"searchForMovie": True}
@@ -139,7 +139,6 @@ def test_add_movie_withtmdb(mock_add, mock_root, mock_get, cli):
     exp.update({
         "title": "some movie",
         "path": "some/path/some movie",
-        "profileId": 1,
         "qualityProfileId": 1,
         "monitored": True,
         "addOptions": {"searchForMovie": True}
@@ -156,7 +155,6 @@ def test_add_movie_withimdb(mock_add, mock_root, mock_get, cli):
     exp.update({
         "title": "some movie",
         "path": "some/path/some movie",
-        "profileId": 2,
         "qualityProfileId": 2,
         "monitored": True,
         "addOptions": {"searchForMovie": True}
@@ -172,7 +170,6 @@ def test_add_movie_withinfo(mock_add, mock_root, cli):
     exp.update({
         "title": "some movie",
         "path": "some/path/some movie",
-        "profileId": 1,
         "qualityProfileId": 1,
         "monitored": False,
         "addOptions": {"searchForMovie": False}

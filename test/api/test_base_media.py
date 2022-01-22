@@ -133,7 +133,14 @@ def test_get_quality_profiles(mock_base, cli):
 @patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)
 def test_get_queue(mock_base, cli):
     res = cli.get_queue()
-    mock_base.assert_called_with(cli.api_url_queue)
+    data = {
+        "page": 1,
+        "pageSize": 20,
+        "sortKey": "progress",
+        "sortDirection": "ascending",
+    }
+
+    mock_base.assert_called_with(cli.api_url_queue, url_params=data)
     assert res == TEST_JSON
 
 

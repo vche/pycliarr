@@ -471,7 +471,11 @@ class CliGetMovieCommand(CliCommand):
         super().run(cli, args)
         res = cli.get_movie(args.mid)
         if args.json:
-            print(f"{res.to_json()}")
+            if isinstance(res, list):
+                json_objs = [item.to_json() for item in res]
+                print(f"[{','.join(json_objs)}]")
+            else:
+                print(f"{res.to_json()}")
         else:
             print(res)
 
@@ -637,7 +641,11 @@ class CliGetSerieCommand(CliCommand):
         super().run(cli, args)
         res = cli.get_serie(args.sid)
         if args.json:
-            print(f"{res.to_json()}")
+            if isinstance(res, list):
+                json_objs = [item.to_json() for item in res]
+                print(f"[{','.join(json_objs)}]")
+            else:
+                print(f"{res.to_json()}")
         else:
             print(res)
 

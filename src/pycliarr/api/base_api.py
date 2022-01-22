@@ -77,7 +77,7 @@ class BaseCliApi:
         log.debug("Request sent: %s %s params: %s data: %s", method, request_url, url_params, json_data)
         try:
             res = self._session.request(method, request_url, params=url_params, json=json_data)
-            log.debug(f"Result {res.status_code}, Body {res.content}")
+            # log.debug("Result %s, Body %s", res.status_code, res.content)
         except Exception as e:
             raise CliArrError(f"Error sending request {request_url}: {e}")
         if res.status_code >= 400:
@@ -124,7 +124,7 @@ class BaseCliApi:
         return Path(basename)
 
 
-class BaseCliApiItem():
+class BaseCliApiItem:
     """Generic handling of an item based on a dict representation.
 
     Items can be build specifying a list of parameters, a dict, or a json string.
@@ -176,7 +176,7 @@ class BaseCliApiItem():
     def to_dict(self) -> Dict[Any, Any]:
         return self._data
 
-    def to_json(self):
+    def to_json(self) -> str:
         return json.dumps(self._data)
 
     def add_attribute(self, name: str, value: Any) -> None:
