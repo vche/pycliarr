@@ -139,6 +139,7 @@ class RadarrCli(BaseCliMediaApi):
         monitored: bool = True,
         search: bool = True,
         path: Optional[str] = None,
+        root_id: Optional[int] = 0,
     ) -> json_data:
         """addMovie adds a new movie to collection.
 
@@ -153,7 +154,8 @@ class RadarrCli(BaseCliMediaApi):
             monitored (bool): Whether to monitor the movie. Default is True
             search (bool): Whether to search for the movie once added. Default is True
             path (Optional[str]): Specify the path awhere the movie should be stored.
-                Default is root/<movie name> (<movie year>).
+                Default is root[0]/<movie name> (<movie year>).
+            root_id (Optional[int]): Specify the root folder to use. Ignored if a path is specified. Default is root[0].
         Returns:
             json response
         """
@@ -165,7 +167,7 @@ class RadarrCli(BaseCliMediaApi):
             raise RadarrCliError("Error, invalid parameters or invalid tmdb/imdb id")
 
         # Prepare movie info for adding
-        movie_info.path = path or str(self.build_movie_path(movie_info))
+        movie_info.path = path or str(self.build_movie_path(movie_info, root_folder_id=root_id))
         movie_info.qualityProfileId = quality
         movie_info.monitored = monitored
         movie_info.add_attribute("addOptions", {"searchForMovie": search})

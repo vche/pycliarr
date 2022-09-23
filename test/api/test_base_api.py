@@ -151,3 +151,6 @@ def test_base_item():
 
     item = BaseCliApiItem.from_json('{"test": "a"}')
     assert item.to_dict() == {"test": "a"}
+
+    item = BaseCliApiItem.from_json('{"test": "a"}')
+    assert item.to_json() == '{"test": "a"}'

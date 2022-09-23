@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, cast
 
 from pycliarr.api.base_api import BaseCliApi, json_data, json_dict, json_list
+from pycliarr.api.exceptions import CliArrError
 
 log = logging.getLogger(__name__)
 
@@ -34,6 +35,18 @@ class BaseCliMediaApi(BaseCliApi):
     api_url_notification = f"{api_url_base}/notification"
     api_url_tag = f"{api_url_base}/tag"
     api_url_exclusions = f"{api_url_base}/importlistexclusion"
+
+    def __init__(self, *args, default_root_folder_id = 0, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._default_root_folder_id = default_root_folder_id
+
+    @property
+    def default_root_folder_id(self) -> int:
+        return self._default_root_folder_id
+
+    @default_root_folder_id.setter
+    def default_root_folder_id(self, value: int):
+        self._default_root_folder_id =  value
 
     def get_calendar(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> json_data:
         """Retrieve info about when items were/will be downloaded.
@@ -155,7 +168,6 @@ class BaseCliMediaApi(BaseCliApi):
         Returns:
             json response
         """
-        print(f"diong put: {json_data}")
         return self.request_put(self.api_url_item, json_data=json_data, url_params=url_params)
 
     def get_system_status(self) -> json_data:
@@ -297,16 +309,22 @@ class BaseCliMediaApi(BaseCliApi):
         """Build an item folder path using the root folder specified.
         Args:
             title (str): Title to add to root path. All invalid characters are removed
-            root_folder_id (int): Id of the root folder (can be retrieved with get_root_folder())
-                If the id is not found or not specified, the first root folder in the list is used.
+            root_folder_id (int): Id of the root folder (can be retrieved with get_root_folder()).
+            If the id is not found or not specified, the default root folder id will be used.
+            If 0, the first root folder in the list is used.
 
         Returns: Full path of the serie in the format <root path>/<serie name>
         """
         root_paths = self.get_root_folder()
-        root_path = root_paths[0]
+        selected_root_folder_id = root_folder_id or self.default_root_folder_id
+        print(f"{selected_root_folder_id} // {root_folder_id} // {self.default_root_folder_id}")
+        root_path = root_paths[0] if not selected_root_folder_id else None
         for path in root_paths:
-            if path["id"] == int(root_folder_id):
+            if path["id"] == int(selected_root_folder_id):
                 root_path = path
+
+        if not root_path:
+            raise CliArrError(f"Invalid root folder Id: {selected_root_folder_id}")
         return Path(root_path["path"]) / self.to_path(title)
 
     def get_blocklist(

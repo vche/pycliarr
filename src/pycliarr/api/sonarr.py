@@ -144,6 +144,7 @@ class SonarrCli(BaseCliMediaApi):
         search: bool = True,
         season_folder: bool = True,
         path: Optional[str] = None,
+        root_id: Optional[int] = 0,
         language: int = 1,
     ) -> json_data:
         """addMovie adds a new serie to collection.
@@ -160,6 +161,7 @@ class SonarrCli(BaseCliMediaApi):
             search (bool): Whether to search for the serie once added. Default is True
             season_folder (bool): If True (default), create a folder for each season.
             path (Optional[str]): Specify the path awhere the movie should be stored. Default is root/<serie name>.
+            root_id (Optional[int]): Specify the root folder to use. Ignored if a path is specified. Default is root[0].
             language (int): Specify the language to use. Default is the first enabled (1)
 
         Returns:
@@ -178,7 +180,7 @@ class SonarrCli(BaseCliMediaApi):
             raise SonarrCliError("Error, invalid parameters or invalid tvdb id")
 
         # Prepare serie info for adding
-        serie_info.path = path or str(self.build_serie_path(serie_info))
+        serie_info.path = path or str(self.build_serie_path(serie_info, root_folder_id=root_id))
         serie_info.profileId = quality
         serie_info.qualityProfileId = quality
         serie_info.languageProfileId = language
@@ -203,8 +205,8 @@ class SonarrCli(BaseCliMediaApi):
         """Build a serie folder path using the root folder specified.
         Args:
             serie_info (SonarrSerieItem) Item for which to build the path
-            root_folder_id (int): Id of the root folder (can be retrieved with get_root_folder())
-                If the id is not found or not specified, the first root folder in the list is used.
+            root_folder_id (int): Id of the root folder (can be retrieved with get_root_folder()).
+            If the id is not found or not specified, the first root folder in the list is used.
 
         Returns: Full path of the serie in the format <root path>/<serie name>
         """

@@ -1,10 +1,12 @@
 import datetime
 import json
 from argparse import ArgumentParser, Namespace, _SubParsersAction
+from curses.ascii import isdigit
 from pprint import pformat
 from typing import Any, List, Optional, Union, no_type_check
 
-from pycliarr.api import base_api, base_media, radarr, sonarr
+from pycliarr.api import base_api, base_media, exceptions, radarr, sonarr
+from pycliarr.cli.utils import size_to_str
 
 
 class CliCommand:
@@ -69,7 +71,7 @@ def select_profile(cli: base_media.BaseCliMediaApi) -> int:
     if profile_id.isdigit():
         return int(profile_id)
     else:
-        raise Exception("Invalid profile selection: {}")
+        raise Exception("Invalid profile selection: {profile_id}")
 
 
 def select_language_profile(cli: base_media.BaseCliMediaApi) -> int:
@@ -80,7 +82,7 @@ def select_language_profile(cli: base_media.BaseCliMediaApi) -> int:
     if profile_id.isdigit():
         return int(profile_id)
     else:
-        raise Exception("Invalid profile selection: {}")
+        raise Exception("Invalid profile selection: {profile_id}")
 
 
 def select_item(
@@ -98,6 +100,40 @@ def select_item(
         return choices[int(item_id) - 1]
     else:
         raise Exception("Invalid selection: {}")
+
+
+def print_root_folder(cli: base_media.BaseCliMediaApi) -> int:
+    res = cli.get_root_folder()
+    print("Id  Free       Path")
+    for root_folder in res:
+        print(f"{root_folder['id']:<3} {size_to_str(root_folder['freeSpace']):<10} {root_folder['path']}")
+
+
+def select_root_folder(cli: base_media.BaseCliMediaApi) -> int:
+    print_root_folder(cli)
+    root_folder_id = input(f"Root folder to use (Id):")
+    if root_folder_id.isdigit():
+        return int(root_folder_id)
+    else:
+        raise Exception("Invalid root folder selection, must be the folder id: {root_folder_id}")
+
+
+def root_folder_id_from_arg(cli: base_media.BaseCliMediaApi, root_arg: str):
+    if root_arg:
+        if root_arg == "auto":
+            # Interactive selection
+            return select_root_folder(cli)
+        elif root_arg.isdigit():
+            # Id specified directly
+            return int(root_arg)
+        else:
+            # Match the path with registered roots to find id
+            res = cli.get_root_folder()
+            for root_path in res:
+                if root_path["path"] == root_arg:
+                    return int(root_path["id"])
+            raise exceptions.CliArrError(f"No root folder with path '{root_arg}'")
+    return 0
 
 
 class CliGetProfilesCommand(CliCommand):
@@ -452,6 +488,15 @@ class CliDeleteExclusionCommand(CliCommand):
         print(f"{pformat(res)}\n")
 
 
+class CliRootFoldersCommand(CliCommand):
+    name = "root-folders"
+    description = "Get root folder list"
+
+    def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
+        super().run(cli, args)
+        print_root_folder(cli)
+
+
 ##############################################
 ########## radarr specific commands ##########
 ##############################################
@@ -546,6 +591,12 @@ class CliAddMovieCommand(CliCommand):
         )
         cmd_parser.add_argument("--quality", "-q", help="Quality profile to use", type=int, default=None)
         cmd_parser.add_argument("--path", help="Full path where the serie should be stored", type=str, default=None)
+        cmd_parser.add_argument(
+            "--root-folder", '-r',
+            help="Root folder id or path, or 'auto' to select it interactively. Ignored if --path is set",
+            type=str,
+            default=None,
+        )
         return cmd_parser
 
     def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
@@ -559,6 +610,7 @@ class CliAddMovieCommand(CliCommand):
         # If no quality profile specified, list them qnd prompt for choice
         if not args.quality:
             args.quality = select_profile(cli)
+        root_id = root_folder_id_from_arg(cli, args.root_folder)
 
         res = cli.add_movie(
             quality=args.quality,
@@ -566,6 +618,7 @@ class CliAddMovieCommand(CliCommand):
             imdb_id=args.imdb,
             movie_info=movie_info,  # type: ignore
             path=args.path,
+            root_id=root_id,
         )
         print(f"{json.dumps(res)}")
 
@@ -588,8 +641,6 @@ class CliEditMovieCommand(CliCommand):
         if not json_data and args.file:
             with open(args.file, "r") as f:
                 json_data = f.read()
-        else:
-            raise Exception("Invalid item data specified")
         info = radarr.RadarrMovieItem.from_json(json_data)
         res = cli.edit_movie(info)
         print(f"{json.dumps(res)}")
@@ -724,6 +775,12 @@ class CliAddSerieCommand(CliCommand):
             action="store_true",
         )
         cmd_parser.add_argument("--path", help="Full path where the serie should be stored", type=str, default=None)
+        cmd_parser.add_argument(
+            "--root-folder", '-r',
+            help="Root folder id or path, or 'auto' to select it interactively. Ignored if --path is set",
+            type=str,
+            default=None,
+        )
         return cmd_parser
 
     def run(self, cli: sonarr.SonarrCli, args: Namespace) -> None:
@@ -739,6 +796,7 @@ class CliAddSerieCommand(CliCommand):
             args.quality = select_profile(cli)
         if not args.language:
             args.language = select_language_profile(cli)
+        root_id = root_folder_id_from_arg(cli, args.root_folder)
 
         # Get the optional season list
         seasons_str = args.seasons.replace(" ", "").split(",") if args.seasons else []
@@ -754,6 +812,7 @@ class CliAddSerieCommand(CliCommand):
             monitored_seasons=seasons,
             season_folder=args.season_folders,
             path=args.path,
+            root_id=root_id,
             language=args.language,
         )
         print(f"Result:\n{res}")
@@ -871,6 +930,7 @@ CLI_LIST: List[CliApiCommand] = [
             CliDeleteExclusionCommand(),
             CliCreateSonarrExclusionCommand(),
             CliSearchMissingEpisodes(),
+            CliRootFoldersCommand(),
         ],
     ),
     CliApiCommand(
@@ -906,6 +966,7 @@ CLI_LIST: List[CliApiCommand] = [
             CliDeleteExclusionCommand(),
             CliCreateRadarrExclusionCommand(),
             CliSearchMissingMovies(),
+            CliRootFoldersCommand(),
         ],
     ),
 ]

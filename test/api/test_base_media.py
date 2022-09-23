@@ -1,6 +1,7 @@
 import pytest
 from unittest.mock import patch
 from pycliarr.api.base_media import BaseCliMediaApi
+from pycliarr.api.exceptions import CliArrError
 from datetime import datetime
 from pathlib import Path
 
@@ -220,18 +221,38 @@ def test_get_wanted_with_options(mock_base, cli):
 
 
 @patch("pycliarr.api.base_media.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
-def test_build_movie_path_no_idx(mock_rootcli, cli):
+def test_build_item_path_no_idx(mock_rootcli, cli):
     assert cli.build_item_path("some serie") == Path("some/path/some serie")
 
 
 @patch("pycliarr.api.base_media.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
-def test_build_movie_path_idx(mock_rootcli, cli):
+def test_build_item_path_idx(mock_rootcli, cli):
     assert cli.build_item_path("some serie", root_folder_id=3) == Path("yet/otherpath/some serie")
 
 
 @patch("pycliarr.api.base_media.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
-def test_build_movie_path_bad_idx(mock_rootcli, cli):
-    assert cli.build_item_path("some serie", root_folder_id=33) == Path("some/path/some serie")
+def test_build_item_path_bad_idx(mock_rootcli, cli):
+    with pytest.raises(CliArrError):
+        cli.build_item_path("some serie", root_folder_id=33)
+
+
+@patch("pycliarr.api.base_media.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
+def test_build_item_path_default_folder(mock_rootcli):
+    cli = BaseCliMediaApi(TEST_HOST, TEST_APIKEY, default_root_folder_id=3)
+    assert cli.build_item_path("some serie") == Path("yet/otherpath/some serie")
+
+
+@patch("pycliarr.api.base_media.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
+def test_build_item_path_default_folder_change(mock_rootcli):
+    cli = BaseCliMediaApi(TEST_HOST, TEST_APIKEY, default_root_folder_id=1)
+    cli.default_root_folder_id = 3
+    assert cli.build_item_path("some serie") == Path("yet/otherpath/some serie")
+
+
+@patch("pycliarr.api.base_media.BaseCliMediaApi.get_root_folder", return_value=TEST_ROOT_PATH)
+def test_build_item_path_default_folder_with_folder(mock_rootcli):
+    cli = BaseCliMediaApi(TEST_HOST, TEST_APIKEY, default_root_folder_id=1)
+    assert cli.build_item_path("some serie", root_folder_id=3) == Path("yet/otherpath/some serie")
 
 
 @patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)

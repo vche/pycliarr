@@ -5,6 +5,19 @@ Changelog
 master
 ======
 
+v1.0.20
+=======
+
+:Date: Sept 23, 2022
+
+New
+---
+* `Issue #30 <https://github.com/vche/pycliarr/issues/30>`_:
+   * Add command line option so list root folders.
+   * Add command line option to specify or select a root folder to use when adding movie/show.
+   * Update add methods to allow specifying root id.
+   * Allow specifying default root folder when creating client
+
 v1.0.19
 =======
 

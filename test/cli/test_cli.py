@@ -510,6 +510,23 @@ def test_cli_radarr_createttag(monkeypatch, mock_exit):
     mock_exit.assert_called_with(0)
 
 
+def test_cli_radarr_root_folders(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "root-folders",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value = [{'id':1, 'path': '/a/b/c', 'freeSpace': 23000000}])
+
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_root_folder", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called()
+    mock_exit.assert_called_with(0)
+
+
 def test_cli_sonarr_tagitems_serie(monkeypatch, mock_exit):
     test_args = [
         "pycliarr",
@@ -665,9 +682,10 @@ def test_cli_radarr_list(monkeypatch, mock_exit):
         "-p", TEST_PASS,
         "radarr",
         "get",
+        "-j",
     ]
     monkeypatch.setattr(sys, "argv", test_args)
-    mock_sonarr = Mock()
+    mock_sonarr = Mock(return_value = [radarr.RadarrMovieItem(), radarr.RadarrMovieItem()])
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_movie", mock_sonarr)
     cli.main()
     mock_sonarr.assert_called()
@@ -684,13 +702,29 @@ def test_cli_radarr_get(monkeypatch, mock_exit):
         "-i", "1234",
     ]
     monkeypatch.setattr(sys, "argv", test_args)
-    mock_sonarr = Mock()
-    mock_sonarr.return_value = TEST_JSON
+    mock_sonarr = Mock(return_value = radarr.RadarrMovieItem())
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_movie", mock_sonarr)
     cli.main()
     mock_sonarr.assert_called_with(1234)
     mock_exit.assert_called_with(0)
 
+
+def test_cli_radarr_get_json(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "get",
+        "-i", "1234",
+        "-j",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value = radarr.RadarrMovieItem())
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_movie", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(1234)
+    mock_exit.assert_called_with(0)
 
 def test_cli_radarr_delete(monkeypatch, mock_exit):
     test_args = [
@@ -707,6 +741,42 @@ def test_cli_radarr_delete(monkeypatch, mock_exit):
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.delete_movie", mock_sonarr)
     cli.main()
     mock_sonarr.assert_called_with(1234, delete_files=False, add_exclusion=False)
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_edit(monkeypatch, mock_exit):
+    item_json = radarr.RadarrMovieItem().to_json()
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "edit",
+        "-j", item_json,
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value = item_json)
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.edit_movie", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called()
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_radarr_edit_file(monkeypatch, mock_exit):
+    item_json = radarr.RadarrMovieItem().to_json()
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "edit",
+        "-f", "test/movie_item.json",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value = item_json)
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.edit_movie", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called()
     mock_exit.assert_called_with(0)
 
 
@@ -761,7 +831,7 @@ def test_cli_radarr_add_imdb(monkeypatch, mock_exit):
     mock_sonarr.return_value = TEST_JSON
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
-    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id='tt1234', movie_info=None, path=None)
+    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id='tt1234', movie_info=None, path=None, root_id=0)
     mock_exit.assert_called_with(0)
 
 
@@ -803,7 +873,14 @@ def test_cli_radarr_add_manual(mock_input, monkeypatch, mock_exit):
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
     mock_lookup.assert_called_with(term="some movie")
-    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id=None, movie_info=mock_info, path="some/path")
+    mock_sonarr.assert_called_with(
+        quality=1,
+        tmdb_id=None,
+        imdb_id=None,
+        movie_info=mock_info,
+        path="some/path",
+        root_id=0
+    )
     mock_exit.assert_called_with(0)
 
 
@@ -816,6 +893,7 @@ def test_cli_radarr_add_one_result(mock_input, monkeypatch, mock_exit):
         "radarr",
         "add",
         "-t", "some movie",
+        "-r", "123"
         # "-q", 1
     ]
     monkeypatch.setattr(sys, "argv", test_args)
@@ -846,9 +924,95 @@ def test_cli_radarr_add_one_result(mock_input, monkeypatch, mock_exit):
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
     mock_lookup.assert_called_with(term="some movie")
-    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id=None, movie_info=mock_info, path=None)
+    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id=None, movie_info=mock_info, path=None, root_id=123)
     mock_exit.assert_called_with(0)
 
+def test_cli_radarr_add_bad_root(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "add",
+        "--imdb", "tt1234",
+        "-q", "1",
+        "-r", "/test",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
+    mock_root_items = Mock(return_value = [{'id':1, 'path': '/a/b/c', 'freeSpace': 230000000000}])
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_root_folder", mock_root_items)
+    cli.main()
+    mock_exit.assert_called_with(1)
+
+
+def test_cli_radarr_add_root_path(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "add",
+        "--imdb", "tt1234",
+        "-q", "1",
+        "-r", '/a/b/c',
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
+    mock_root_items = Mock(return_value = [{'id':13, 'path': '/a/b/c', 'freeSpace': 230000000000}])
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_root_folder", mock_root_items)
+    cli.main()
+    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id="tt1234", movie_info=None, path=None, root_id=13)
+    mock_exit.assert_called_with(0)
+
+
+@patch('builtins.input', return_value="123")
+def test_cli_radarr_add_root_manual(mock_input, monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "add",
+        "--imdb", "tt1234",
+        "-q", "1",
+        "-r", 'auto',
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
+    mock_root_items = Mock(return_value = [{'id':13, 'path': '/a/b/c', 'freeSpace': 230000000000}])
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_root_folder", mock_root_items)
+    cli.main()
+    mock_sonarr.assert_called_with(quality=1, tmdb_id=None, imdb_id="tt1234", movie_info=None, path=None, root_id=123)
+    mock_exit.assert_called_with(0)
+
+
+@patch('builtins.input', return_value="123c")
+def test_cli_radarr_add_root_manual_nok(mock_input, monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "add",
+        "--imdb", "tt1234",
+        "-q", "1",
+        "-r", 'auto',
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
+    mock_root_items = Mock(return_value = [{'id':13, 'path': '/a/b/c', 'freeSpace': 230000000000}])
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_root_folder", mock_root_items)
+    cli.main()
+    mock_exit.assert_called_with(2)
 
 @patch('builtins.input', return_value="1c")
 def test_select_profile_nok(mock_input):
@@ -969,6 +1133,55 @@ def test_cli_radarr_add_manual_nomovie(mock_input, monkeypatch, mock_exit):
     mock_exit.assert_called_with(2)
 
 
+@patch('builtins.input', return_value="1")
+def test_cli_radarr_add_root(mock_input, monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "add",
+        "-t", "some movie",
+        "--path", "some/path",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    mock_lookup = Mock()
+    mock_info = Mock(title="test1", year=2020)
+    mock_lookup.return_value = [mock_info]
+    mock_profiles = Mock()
+    mock_profiles.return_value = [{
+        'name': 'name',
+        'id': '1',
+        'items': [
+            {'quality': {'name': 'item1'}, 'allowed': True},
+            {'quality': {'name': 'item2'}, 'allowed': False},
+            {'id': '2', 'allowed': True},
+            {
+                'name': 'name2',
+                'id': '2',
+                'allowed': True,
+                'items': [{'quality': {'name': 'item2'}, 'allowed': True}]
+            },
+        ]
+    }]
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
+    cli.main()
+    mock_lookup.assert_called_with(term="some movie")
+    mock_sonarr.assert_called_with(
+        quality=1,
+        tmdb_id=None,
+        imdb_id=None,
+        movie_info=mock_info,
+        path="some/path",
+        root_id=0
+    )
+    mock_exit.assert_called_with(0)
+
+
 def test_cli_radarr_search_missing(monkeypatch, mock_exit):
     test_args = [
         "pycliarr",
@@ -1016,9 +1229,10 @@ def test_cli_sonarr_list(monkeypatch, mock_exit):
         "-p", TEST_PASS,
         "sonarr",
         "get",
+        "-j",
     ]
     monkeypatch.setattr(sys, "argv", test_args)
-    mock_sonarr = Mock()
+    mock_sonarr = Mock(return_value=[sonarr.SonarrSerieItem(), sonarr.SonarrSerieItem()])
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_serie", mock_sonarr)
     cli.main()
     mock_sonarr.assert_called()
@@ -1035,8 +1249,25 @@ def test_cli_sonarr_get(monkeypatch, mock_exit):
         "-i", "1234",
     ]
     monkeypatch.setattr(sys, "argv", test_args)
-    mock_sonarr = Mock()
-    mock_sonarr.return_value = TEST_JSON
+    mock_sonarr = Mock(return_value=sonarr.SonarrSerieItem())
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_serie", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(1234)
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_get_json(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "get",
+        "-i", "1234",
+        "-j",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value=sonarr.SonarrSerieItem())
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_serie", mock_sonarr)
     cli.main()
     mock_sonarr.assert_called_with(1234)
@@ -1115,7 +1346,14 @@ def test_cli_sonarr_add_tvdb(monkeypatch, mock_exit):
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
     cli.main()
     mock_sonarr.assert_called_with(
-        quality=1, tvdb_id=1234, serie_info=None, monitored_seasons=[], season_folder=True, path=None, language=1
+        quality=1,
+        tvdb_id=1234,
+        serie_info=None,
+        monitored_seasons=[],
+        season_folder=True,
+        path=None,
+        root_id=0,
+        language=1,
     )
     mock_exit.assert_called_with(0)
 
@@ -1145,6 +1383,7 @@ def test_cli_sonarr_add_tvdb_with_seasons(monkeypatch, mock_exit):
         monitored_seasons=[1, 3],
         season_folder=False,
         path="some/path",
+        root_id=0,
         language=1
     )
     mock_exit.assert_called_with(0)
@@ -1200,7 +1439,14 @@ def test_cli_sonarr_add_manual(mock_input, monkeypatch, mock_exit):
     cli.main()
     mock_lookup.assert_called_with(term="some serie")
     mock_sonarr.assert_called_with(
-        quality=1, tvdb_id=None, serie_info=mock_info, monitored_seasons=[], season_folder=False, path=None, language=1
+        quality=1,
+        tvdb_id=None,
+        serie_info=mock_info,
+        monitored_seasons=[],
+        season_folder=False,
+        path=None,
+        root_id=0,
+        language=1,
     )
     mock_exit.assert_called_with(0)
 
@@ -1302,4 +1548,21 @@ def test_cli_sonarr_create_exclusion(monkeypatch, mock_exit):
     mock_sonarr = Mock(return_value={"id": 12345})
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.create_exclusion", mock_sonarr)
     cli.main()
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_root_folders(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "root-folders",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value = [{'id':1, 'path': '/a/b/c', 'freeSpace': 23000000000000000000000000}])
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_root_folder", mock_sonarr)
+    cli.main()
+
+    mock_sonarr.assert_called()
     mock_exit.assert_called_with(0)

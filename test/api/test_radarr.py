@@ -259,3 +259,41 @@ def test_create_exclusion(mock_post, cli):
     mock_post.assert_called_with(
         cli.api_url_exclusions, json_data={"movieTitle": "a title", "tmdbId": 12345, "movieYear": 2021}
     )
+
+
+@patch("pycliarr.api.radarr.BaseCliMediaApi.request_put", return_value=TEST_JSON)
+def test_edit_movie(mock_put, cli):
+    movie = RadarrMovieItem(title="some movie", year=0)
+    res = cli.edit_movie(movie)
+
+    mock_put.assert_called_with(cli.api_url_item, json_data=movie.to_dict(), url_params=None)
+    assert res == TEST_JSON
+
+
+@patch("pycliarr.api.radarr.BaseCliMediaApi.request_get", return_value=TEST_JSON)
+def test_get_queue(mock_get, cli):
+    res = cli.get_queue()
+
+    data = {
+        "page": 1,
+        "pageSize": 20,
+        "sortKey": "progress",
+        "sortDirection": "ascending",
+        "includeUnknownMovieItems": True,
+    }
+    mock_get.assert_called_with(cli.api_url_queue, url_params=data)
+    assert res == TEST_JSON
+
+@patch("pycliarr.api.radarr.BaseCliMediaApi.request_get", return_value=TEST_JSON)
+def test_get_queue_with_args(mock_get, cli):
+    res = cli.get_queue(page = 2, sort_key = "sort", page_size = 3, sort_dir = "asc", include_unknown = False)
+
+    data = {
+        "page": 2,
+        "pageSize": 3,
+        "sortKey": "sort",
+        "sortDirection": "asc",
+        "includeUnknownMovieItems": False,
+    }
+    mock_get.assert_called_with(cli.api_url_queue, url_params=data)
+    assert res == TEST_JSON
