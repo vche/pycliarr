@@ -5,7 +5,7 @@ from pathlib import Path
 from pprint import pformat
 from typing import Any, Dict, List, Optional, Type, TypeVar, Union
 
-import requests
+import requests  # type: ignore
 
 from pycliarr.api.exceptions import CliArrError, CliDecodeError, CliServerError
 
