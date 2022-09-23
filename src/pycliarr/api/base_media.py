@@ -36,7 +36,7 @@ class BaseCliMediaApi(BaseCliApi):
     api_url_tag = f"{api_url_base}/tag"
     api_url_exclusions = f"{api_url_base}/importlistexclusion"
 
-    def __init__(self, *args, default_root_folder_id = 0, **kwargs):
+    def __init__(self, *args: Any, default_root_folder_id: int = 0, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self._default_root_folder_id = default_root_folder_id
 
@@ -45,8 +45,8 @@ class BaseCliMediaApi(BaseCliApi):
         return self._default_root_folder_id
 
     @default_root_folder_id.setter
-    def default_root_folder_id(self, value: int):
-        self._default_root_folder_id =  value
+    def default_root_folder_id(self, value: int) -> None:
+        self._default_root_folder_id = value
 
     def get_calendar(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> json_data:
         """Retrieve info about when items were/will be downloaded.

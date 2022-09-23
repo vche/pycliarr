@@ -144,7 +144,7 @@ class SonarrCli(BaseCliMediaApi):
         search: bool = True,
         season_folder: bool = True,
         path: Optional[str] = None,
-        root_id: Optional[int] = 0,
+        root_id: int = 0,
         language: int = 1,
     ) -> json_data:
         """addMovie adds a new serie to collection.

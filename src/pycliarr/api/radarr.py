@@ -139,7 +139,7 @@ class RadarrCli(BaseCliMediaApi):
         monitored: bool = True,
         search: bool = True,
         path: Optional[str] = None,
-        root_id: Optional[int] = 0,
+        root_id: int = 0,
     ) -> json_data:
         """addMovie adds a new movie to collection.
 

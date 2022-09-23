@@ -9,7 +9,7 @@ def setup_logging(level: int = logging.INFO, filename: Optional[str] = None) -> 
     )
 
 
-def size_to_str(size):
+def size_to_str(size: float) -> str:
     for unit in ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB"]:
         if abs(size) < 1024.0:
             return f"{size:3.1f}{unit}"

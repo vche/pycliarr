@@ -1,9 +1,8 @@
 import datetime
 import json
 from argparse import ArgumentParser, Namespace, _SubParsersAction
-from curses.ascii import isdigit
 from pprint import pformat
-from typing import Any, List, Optional, Union, no_type_check
+from typing import Any, List, Optional, Union, cast, no_type_check
 
 from pycliarr.api import base_api, base_media, exceptions, radarr, sonarr
 from pycliarr.cli.utils import size_to_str
@@ -18,10 +17,10 @@ class CliCommand:
     def __init__(self) -> None:
         pass
 
-    def configure_args(self, cmdlist_parser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmdlist_parser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = cmdlist_parser.add_parser(self.name, help=self.description)
         cmd_parser.set_defaults(cmd_name=self.name)
-        return cmd_parser
+        return cast(ArgumentParser, cmd_parser)
 
     def run(self, cli: Any, args: Namespace) -> None:
         pass
@@ -42,7 +41,7 @@ class CliApiCommand:
         cli = self.cli_class(host, api_key, username=username, password=password)
         return cli
 
-    def add_commands_args(self, cmd_subparser: _SubParsersAction) -> None:
+    def add_commands_args(self, cmd_subparser: _SubParsersAction[Any]) -> None:
         for cmd in self.cmd_list:
             self.cmd_list[cmd].configure_args(cmd_subparser)
 
@@ -102,7 +101,7 @@ def select_item(
         raise Exception("Invalid selection: {}")
 
 
-def print_root_folder(cli: base_media.BaseCliMediaApi) -> int:
+def print_root_folder(cli: base_media.BaseCliMediaApi) -> None:
     res = cli.get_root_folder()
     print("Id  Free       Path")
     for root_folder in res:
@@ -111,14 +110,14 @@ def print_root_folder(cli: base_media.BaseCliMediaApi) -> int:
 
 def select_root_folder(cli: base_media.BaseCliMediaApi) -> int:
     print_root_folder(cli)
-    root_folder_id = input(f"Root folder to use (Id):")
+    root_folder_id = input("Root folder to use (Id):")
     if root_folder_id.isdigit():
         return int(root_folder_id)
     else:
         raise Exception("Invalid root folder selection, must be the folder id: {root_folder_id}")
 
 
-def root_folder_id_from_arg(cli: base_media.BaseCliMediaApi, root_arg: str):
+def root_folder_id_from_arg(cli: base_media.BaseCliMediaApi, root_arg: str) -> int:
     if root_arg:
         if root_arg == "auto":
             # Interactive selection
@@ -173,7 +172,7 @@ class CliGetQueueCommand(CliCommand):
     name = "queue"
     description = "Get current downloading queue"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--page", help="Page to get", type=int, default=1)
         cmd_parser.add_argument("--sort-key", help="Sort key", default="progress")
@@ -192,7 +191,7 @@ class CliGetCalendarCommand(CliCommand):
     name = "calendar"
     description = "Get events from calendar"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--start", help="Start date, format like 2018-06-29", default=None)
         cmd_parser.add_argument("--end", help="End date, format like 2018-06-29", default=None)
@@ -210,7 +209,7 @@ class CliDeleteQueueCommand(CliCommand):
     name = "delete-queue"
     description = "Get list of quality profiles"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--id", "-i", help="item ID", type=int, required=True)
         return cmd_parser
@@ -225,7 +224,7 @@ class CliWantedCommand(CliCommand):
     name = "wanted"
     description = "List wanted/missing"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--page", help="Page to get", type=int, default=1)
         cmd_parser.add_argument("--sort-key", help="Sort key", default="airDateUtc")
@@ -243,7 +242,7 @@ class CliStatusCommand(CliCommand):
     name = "status"
     description = "Get status of 1 or all currently running commands"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--id", "-i", help="command ID", type=int, default=None)
         return cmd_parser
@@ -258,7 +257,7 @@ class CliGetBlocklistCommand(CliCommand):
     name = "blocklist"
     description = "Get blocklisted items"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--page", help="Page to get", type=int, default=1)
         cmd_parser.add_argument("--sort-key", help="Sort key", default="date")
@@ -278,7 +277,7 @@ class CliDeleteBlocklistCommand(CliCommand):
     name = "delete-blocklist"
     description = "Get list of quality profiles"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--id", "-i", help="item ID", type=int, default=None)
         return cmd_parser
@@ -293,7 +292,7 @@ class CliGetNotificationCommand(CliCommand):
     name = "notification"
     description = "Get notification(s)"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--id", "-i", help="item ID", type=int, default=None)
         return cmd_parser
@@ -308,7 +307,7 @@ class CliDeleteNotificationCommand(CliCommand):
     name = "delete-notification"
     description = "Delete the specified notification or all"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--id", "-i", help="item ID", type=int, required=True)
         return cmd_parser
@@ -323,7 +322,7 @@ class CliPutNotificationCommand(CliCommand):
     name = "put-notification"
     description = "Create the specified notification"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--id", "-i", help="item ID", type=int, required=True)
         group = cmd_parser.add_mutually_exclusive_group(required=True)
@@ -349,7 +348,7 @@ class CliGetTagCommand(CliCommand):
     name = "tag"
     description = "Get tag(s)"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--id", "-i", help="item ID", type=int, default=None)
         return cmd_parser
@@ -364,7 +363,7 @@ class CliGetTagDetailCommand(CliCommand):
     name = "tag-detail"
     description = "Get tag(s) details"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--id", "-i", help="item ID", type=int, default=None)
         return cmd_parser
@@ -379,7 +378,7 @@ class CliDeleteTagCommand(CliCommand):
     name = "delete-tag"
     description = "Delete the specified tag"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--id", "-i", help="item ID", type=int, required=True)
         return cmd_parser
@@ -394,7 +393,7 @@ class CliEditTagCommand(CliCommand):
     name = "edit-tag"
     description = "Edit the specified tag"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--id", "-i", help="item ID", type=int, required=True)
         cmd_parser.add_argument("--label", "-l", help="tag label", type=str, required=True)
@@ -410,7 +409,7 @@ class CliGetTagItemsCommand(CliCommand):
     name = "tag-items"
     description = "List items with specifed tag"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         group = cmd_parser.add_mutually_exclusive_group(required=True)
         group.add_argument("--id", "-i", help="tag id", type=int, default=None)
@@ -447,7 +446,7 @@ class CliCreateTagCommand(CliCommand):
     name = "create-tag"
     description = "Create the specified tag"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("label")
         return cmd_parser
@@ -462,7 +461,7 @@ class CliGetExclusionCommand(CliCommand):
     name = "exclusion"
     description = "Get exclusion(s)"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--id", "-i", help="item ID", type=int, default=None)
         return cmd_parser
@@ -477,7 +476,7 @@ class CliDeleteExclusionCommand(CliCommand):
     name = "delete-exclusion"
     description = "Delete the specified exclusion"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--id", "-i", help="item ID", type=int, required=True)
         return cmd_parser
@@ -506,7 +505,7 @@ class CliGetMovieCommand(CliCommand):
     name = "get"
     description = "Get info on a of movie"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--mid", "-i", help="ID of the movie to get info on", type=int, default=None)
         cmd_parser.add_argument("--json", "-j", action="store_true", help="Print data as json", default=False)
@@ -529,7 +528,7 @@ class CliDeleteMovieCommand(CliCommand):
     name = "delete"
     description = "Delete a movie"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--mid", "-i", help="ID of the movie to delete", type=int, required=True)
         cmd_parser.add_argument(
@@ -550,7 +549,7 @@ class CliGetRefreshMovieCommand(CliCommand):
     name = "refresh"
     description = "Refresh movies"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--mid", "-i", help="Movie ID", type=int, default=None)
         return cmd_parser
@@ -565,7 +564,7 @@ class CliGetRescanMovieCommand(CliCommand):
     name = "rescan"
     description = "Rescan movies"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--mid", "-i", help="Movie ID", type=int, default=None)
         return cmd_parser
@@ -580,7 +579,7 @@ class CliAddMovieCommand(CliCommand):
     name = "add"
     description = "Add a movie from the imdb/tmdb id, or look for keywords"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         search_group = cmd_parser.add_mutually_exclusive_group()
         search_group.required = True
@@ -592,7 +591,8 @@ class CliAddMovieCommand(CliCommand):
         cmd_parser.add_argument("--quality", "-q", help="Quality profile to use", type=int, default=None)
         cmd_parser.add_argument("--path", help="Full path where the serie should be stored", type=str, default=None)
         cmd_parser.add_argument(
-            "--root-folder", '-r',
+            "--root-folder",
+            "-r",
             help="Root folder id or path, or 'auto' to select it interactively. Ignored if --path is set",
             type=str,
             default=None,
@@ -627,7 +627,7 @@ class CliEditMovieCommand(CliCommand):
     name = "edit"
     description = "Push an updated item to the movie library"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         search_group = cmd_parser.add_mutually_exclusive_group()
         search_group.required = True
@@ -650,7 +650,7 @@ class CliCreateRadarrExclusionCommand(CliCommand):
     name = "create-exclusion"
     description = "Create the specified exclusion"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--title", "-t", help="title", required=True)
         cmd_parser.add_argument("--id", "-i", help="tvdb ID", type=int, required=True)
@@ -682,7 +682,7 @@ class CliGetSerieCommand(CliCommand):
     name = "get"
     description = "Get info on a of serie"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--sid", "-i", help="ID of the serie to get info on", type=int, default=None)
         cmd_parser.add_argument("--json", "-j", action="store_true", help="Print data as json", default=False)
@@ -705,7 +705,7 @@ class CliDeleteSerieCommand(CliCommand):
     name = "delete"
     description = "Delete a serie"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--sid", "-i", help="ID of the serie to delete", type=int, required=True)
         cmd_parser.add_argument(
@@ -726,7 +726,7 @@ class CliGetRefreshSerieCommand(CliCommand):
     name = "refresh"
     description = "Refresh series"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--sid", "-i", help="serie ID", type=int, default=None)
         return cmd_parser
@@ -741,7 +741,7 @@ class CliGetRescanSerieCommand(CliCommand):
     name = "rescan"
     description = "Rescan series"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--sid", "-i", help="serie ID", type=int, default=None)
         return cmd_parser
@@ -756,7 +756,7 @@ class CliAddSerieCommand(CliCommand):
     name = "add"
     description = "Add a serie from the tvdb id, or look for keywords"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         search_group = cmd_parser.add_mutually_exclusive_group()
         search_group.required = True
@@ -776,7 +776,8 @@ class CliAddSerieCommand(CliCommand):
         )
         cmd_parser.add_argument("--path", help="Full path where the serie should be stored", type=str, default=None)
         cmd_parser.add_argument(
-            "--root-folder", '-r',
+            "--root-folder",
+            "-r",
             help="Root folder id or path, or 'auto' to select it interactively. Ignored if --path is set",
             type=str,
             default=None,
@@ -822,7 +823,7 @@ class CliEpisodeCommand(CliCommand):
     name = "get-episode"
     description = "Get info on an episode"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--sid", "-i", help="ID of the serie to get info on", type=int, default=None)
         cmd_parser.add_argument("--epid", "-e", help="ID of the episode to get info on", type=int, default=None)
@@ -838,7 +839,7 @@ class CliGetEpisodeFileCommand(CliCommand):
     name = "get-episode-file"
     description = "Get info on an episode file"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--sid", "-i", help="ID of the serie to get info on", type=int, default=None)
         cmd_parser.add_argument("--epid", "-e", help="ID of the episode to get info on", type=int, default=None)
@@ -854,7 +855,7 @@ class CliDeleteEpisodeFileCommand(CliCommand):
     name = "delete-episode-file"
     description = "Get info on a of serie"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--sid", "-i", help="ID of the serie to get info on", type=int, default=None)
         return cmd_parser
@@ -869,7 +870,7 @@ class CliCreateSonarrExclusionCommand(CliCommand):
     name = "create-exclusion"
     description = "Create the specified exclusion"
 
-    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+    def configure_args(self, cmd_subparser: _SubParsersAction[Any]) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--title", "-t", help="title", required=True)
         cmd_parser.add_argument("--id", "-i", help="tvdb ID", type=int, required=True)
