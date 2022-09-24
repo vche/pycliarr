@@ -5,6 +5,15 @@ Changelog
 master
 ======
 
+v1.0.22
+=======
+
+:Date: Sept 24, 2022
+
+Fix
+---
+* Fix missing raw option and support for older root folder requests (without space)
+
 v1.0.21
 =======
 

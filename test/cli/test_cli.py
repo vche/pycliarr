@@ -1566,3 +1566,38 @@ def test_cli_sonarr_root_folders(monkeypatch, mock_exit):
 
     mock_sonarr.assert_called()
     mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_root_folders_json(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "root-folders",
+        "-j",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value = [{'id':1, 'path': '/a/b/c', 'freeSpace': 23000000000000000000000000}])
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_root_folder", mock_sonarr)
+    cli.main()
+
+    mock_sonarr.assert_called()
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_root_folders_no_space(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "root-folders",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock(return_value = [{'id':1, 'path': '/a/b/c'}])
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_root_folder", mock_sonarr)
+    cli.main()
+
+    mock_sonarr.assert_called()
+    mock_exit.assert_called_with(0)

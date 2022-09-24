@@ -101,11 +101,14 @@ def select_item(
         raise Exception("Invalid selection: {}")
 
 
-def print_root_folder(cli: base_media.BaseCliMediaApi) -> None:
+def print_root_folder(cli: base_media.BaseCliMediaApi, raw=bool) -> None:
     res = cli.get_root_folder()
-    print("Id  Free       Path")
-    for root_folder in res:
-        print(f"{root_folder['id']:<3} {size_to_str(root_folder['freeSpace']):<10} {root_folder['path']}")
+    if raw:
+        print(res)
+    else:
+        print("Id  Free       Path")
+        for root_folder in res:
+            print(f"{root_folder['id']:<3} {size_to_str(root_folder.get('freeSpace')):<10} {root_folder['path']}")
 
 
 def select_root_folder(cli: base_media.BaseCliMediaApi) -> int:
@@ -491,9 +494,14 @@ class CliRootFoldersCommand(CliCommand):
     name = "root-folders"
     description = "Get root folder list"
 
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--json", "-j", action="store_true", help="Print data as json", default=False)
+        return cmd_parser
+
     def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
         super().run(cli, args)
-        print_root_folder(cli)
+        print_root_folder(cli, raw=args.json)
 
 
 ##############################################
