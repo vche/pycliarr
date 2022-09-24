@@ -1207,8 +1207,8 @@ def test_cli_radarr_create_exclusion(monkeypatch, mock_exit):
         "radarr",
         "create-exclusion",
         "-t", "a title",
-        "-i", "12345"
-        "-y", "2020"
+        "-i", "12345",
+        "-y", "2020",
     ]
     monkeypatch.setattr(sys, "argv", test_args)
     mock_sonarr = Mock(return_value={"id": 12345})

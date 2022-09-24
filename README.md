@@ -44,7 +44,7 @@ print(serie.title)
 Clients:
 ```sh
 pyvenv/bin/pycliarr --help
-PyCliarr version 0.0.1
+PyCliarr version 1.0.21
 usage: pycliarr [-h] --host HOST --api-key API_KEY [--user USER] [--password PASSWORD] [--debug] {sonarr,radarr} ...
 
 Radarr/Sonarr client
@@ -68,14 +68,17 @@ optional arguments:
 Radarr CLI:
 ```sh
 pyvenv/bin/pycliarr radarr --help
-PyCliarr version 0.0.1
-usage: pycliarr radarr [-h] {get,delete,add,refresh,rescan,profiles,system-status,disk-space,queue,calendar,delqueue,wanted} ...
+PyCliarr version 1.0.21
+usage: pycliarr radarr [-h]
+                       {get,delete,add,edit,refresh,rescan,profiles,system-status,disk-space,queue,calendar,delete-queue,wanted,status,blocklist,delete-blocklist,notification,delete-notification,put-notification,tag,tag-detail,delete-tag,edit-tag,create-tag,tag-items,exclusion,delete-exclusion,create-exclusion,search-missing,root-folders}
+                       ...
 
 positional arguments:
-  {get,delete,add,refresh,rescan,profiles,system-status,disk-space,queue,calendar,delqueue,wanted}
+  {get,delete,add,edit,refresh,rescan,profiles,system-status,disk-space,queue,calendar,delete-queue,wanted,status,blocklist,delete-blocklist,notification,delete-notification,put-notification,tag,tag-detail,delete-tag,edit-tag,create-tag,tag-items,exclusion,delete-exclusion,create-exclusion,search-missing,root-folders}
     get                 Get info on a of movie
     delete              Delete a movie
     add                 Add a movie from the imdb/tmdb id, or look for keywords
+    edit                Push an updated item to the movie library
     refresh             Refresh movies
     rescan              Rescan movies
     profiles            Get list of quality profiles
@@ -83,8 +86,26 @@ positional arguments:
     disk-space          Get disk space
     queue               Get current downloading queue
     calendar            Get events from calendar
-    delqueue            Get list of quality profiles
+    delete-queue        Get list of quality profiles
     wanted              List wanted/missing
+    status              Get status of 1 or all currently running commands
+    blocklist           Get blocklisted items
+    delete-blocklist    Get list of quality profiles
+    notification        Get notification(s)
+    delete-notification
+                        Delete the specified notification or all
+    put-notification    Create the specified notification
+    tag                 Get tag(s)
+    tag-detail          Get tag(s) details
+    delete-tag          Delete the specified tag
+    edit-tag            Edit the specified tag
+    create-tag          Create the specified tag
+    tag-items           List items with specifed tag
+    exclusion           Get exclusion(s)
+    delete-exclusion    Delete the specified exclusion
+    create-exclusion    Create the specified exclusion
+    search-missing      Search missing movies
+    root-folders        Get root folder list
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -93,11 +114,13 @@ optional arguments:
 Sonarr CLI:
 ```sh
 pyvenv/bin/pycliarr sonarr --help
-PyCliarr version 0.0.1
-usage: pycliarr sonarr [-h] {get,delete,add,refresh,rescan,get-episode,get-episode-file,delete-episode-file,profiles,system-status,disk-space,queue,calendar,delqueue,wanted} ...
+PyCliarr version 1.0.21
+usage: pycliarr sonarr [-h]
+                       {get,delete,add,refresh,rescan,get-episode,get-episode-file,delete-episode-file,profiles,system-status,disk-space,queue,calendar,delete-queue,wanted,status,blocklist,delete-blocklist,notification,delete-notification,put-notification,tag,tag-detail,delete-tag,edit-tag,create-tag,tag-items,exclusion,delete-exclusion,create-exclusion,search-missing,root-folders}
+                       ...
 
 positional arguments:
-  {get,delete,add,refresh,rescan,get-episode,get-episode-file,delete-episode-file,profiles,system-status,disk-space,queue,calendar,delqueue,wanted}
+  {get,delete,add,refresh,rescan,get-episode,get-episode-file,delete-episode-file,profiles,system-status,disk-space,queue,calendar,delete-queue,wanted,status,blocklist,delete-blocklist,notification,delete-notification,put-notification,tag,tag-detail,delete-tag,edit-tag,create-tag,tag-items,exclusion,delete-exclusion,create-exclusion,search-missing,root-folders}
     get                 Get info on a of serie
     delete              Delete a serie
     add                 Add a serie from the tvdb id, or look for keywords
@@ -112,8 +135,26 @@ positional arguments:
     disk-space          Get disk space
     queue               Get current downloading queue
     calendar            Get events from calendar
-    delqueue            Get list of quality profiles
+    delete-queue        Get list of quality profiles
     wanted              List wanted/missing
+    status              Get status of 1 or all currently running commands
+    blocklist           Get blocklisted items
+    delete-blocklist    Get list of quality profiles
+    notification        Get notification(s)
+    delete-notification
+                        Delete the specified notification or all
+    put-notification    Create the specified notification
+    tag                 Get tag(s)
+    tag-detail          Get tag(s) details
+    delete-tag          Delete the specified tag
+    edit-tag            Edit the specified tag
+    create-tag          Create the specified tag
+    tag-items           List items with specifed tag
+    exclusion           Get exclusion(s)
+    delete-exclusion    Delete the specified exclusion
+    create-exclusion    Create the specified exclusion
+    search-missing      Search missing episods
+    root-folders        Get root folder list
 
 optional arguments:
   -h, --help            show this help message and exit

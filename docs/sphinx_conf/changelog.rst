@@ -5,6 +5,15 @@ Changelog
 master
 ======
 
+v1.0.21
+=======
+
+:Date: Sept 23, 2022
+
+Fix
+---
+* Fix unit tests for older python versions, mypy issues and add workflows
+
 v1.0.20
 =======
 
