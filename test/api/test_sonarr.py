@@ -13,14 +13,9 @@ TEST_SERIEINFO = {
     "title": "some serie",
     "alternateTitles": [],
     "sortTitle": "",
-    "seasonCount": 0,
-    "totalEpisodeCount": 0,
-    "episodeCount": 0,
-    "episodeFileCount": 0,
-    "sizeOnDisk": 0,
+    "statistics": {},
     "status": "",
     "overview": "",
-    "previousAiring": "",
     "network": "",
     "airTime": "",
     "images": [],
@@ -31,7 +26,6 @@ TEST_SERIEINFO = {
     ],
     "year": 0,
     "path": "",
-    "profileId": 0,
     "seasonFolder": True,
     "monitored": True,
     "useSceneNumbering": False,
@@ -40,7 +34,6 @@ TEST_SERIEINFO = {
     "tvRageId": 0,
     "tvMazeId": 0,
     "firstAired": "",
-    "lastInfoSync": "",
     "seriesType": "",
     "cleanTitle": "",
     "imdbId": "",
@@ -125,9 +118,7 @@ def test_add_serie_withtvdb(mock_add, mock_root, mock_get, cli):
     exp.update({
         "title": "some serie",
         "path": "some/path/some serie",
-        "profileId": 1,
         "qualityProfileId": 1,
-        "languageProfileId": 1,
         "monitored": True,
         "seasonFolder": False,
         "addOptions": {
@@ -136,7 +127,7 @@ def test_add_serie_withtvdb(mock_add, mock_root, mock_get, cli):
             "ignoreEpisodesWithoutFiles": True,
         }
     })
-    cli.add_serie(quality=1, tvdb_id=1234, season_folder=False, language=1)
+    cli.add_serie(quality=1, tvdb_id=1234, season_folder=False)
     mock_add.assert_called_with(json_data=exp)
 
 
@@ -148,9 +139,7 @@ def test_add_serie_withpath(mock_add, mock_root, mock_get, cli):
     exp.update({
         "title": "some serie",
         "path": "some/other_path/some_other_serie",
-        "profileId": 1,
         "qualityProfileId": 1,
-        "languageProfileId": 1,
         "monitored": True,
         "seasonFolder": False,
         "addOptions": {
@@ -159,7 +148,7 @@ def test_add_serie_withpath(mock_add, mock_root, mock_get, cli):
             "ignoreEpisodesWithoutFiles": True,
         }
     })
-    cli.add_serie(quality=1, tvdb_id=1234, season_folder=False, path="some/other_path/some_other_serie", language=1)
+    cli.add_serie(quality=1, tvdb_id=1234, season_folder=False, path="some/other_path/some_other_serie")
     mock_add.assert_called_with(json_data=exp)
 
 
@@ -171,9 +160,7 @@ def test_add_serie_withseasons(mock_add, mock_root, mock_get, cli):
     exp.update({
         "title": "some serie",
         "path": "some/path/some serie",
-        "profileId": 1,
         "qualityProfileId": 1,
-        "languageProfileId": 1,
         "monitored": True,
         "seasons": [
             {"seasonNumber": 1, "monitored": True},
@@ -186,7 +173,7 @@ def test_add_serie_withseasons(mock_add, mock_root, mock_get, cli):
             "ignoreEpisodesWithoutFiles": False,
         }
     })
-    cli.add_serie(quality=1, tvdb_id=1234, monitored_seasons=[1, 2], language=1)
+    cli.add_serie(quality=1, tvdb_id=1234, monitored_seasons=[1, 2])
     mock_add.assert_called_with(json_data=exp)
 
 
@@ -197,9 +184,7 @@ def test_add_serie_withinfo(mock_add, mock_root, cli):
     exp.update({
         "title": "some serie",
         "path": "some/path/some serie",
-        "profileId": 1,
         "qualityProfileId": 1,
-        "languageProfileId": 1,
         "monitored": False,
         "addOptions": {
             "searchForMissingEpisodes": False,
@@ -213,7 +198,7 @@ def test_add_serie_withinfo(mock_add, mock_root, cli):
         {"seasonNumber": 2, "monitored": True},
         {"seasonNumber": 3, "monitored": True}
     ]
-    cli.add_serie(quality=1, serie_info=info, monitored=False, search=False, language=1)
+    cli.add_serie(quality=1, serie_info=info, monitored=False, search=False)
     mock_add.assert_called_with(json_data=exp)
 
 

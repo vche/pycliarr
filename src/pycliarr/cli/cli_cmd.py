@@ -1,11 +1,58 @@
 import datetime
 import json
-from argparse import ArgumentParser, Namespace, _SubParsersAction
+from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, Namespace, _SubParsersAction
+from pathlib import Path
 from pprint import pformat
-from typing import Any, List, Optional, Union, cast, no_type_check
+from typing import Any, Dict, List, Optional, Union, cast, no_type_check
 
 from pycliarr.api import base_api, base_media, exceptions, radarr, sonarr
 from pycliarr.cli.utils import size_to_str
+
+
+class ArgDefaults:
+    CONFIG_DEFAULT = "/tmp/pycliarr_cfg.json"
+
+    def __init__(self, config_filepath: str = CONFIG_DEFAULT):
+        self.config_filepath = Path(config_filepath)
+        self._op_defaults = self.load_defaults()
+
+    def _build_key(self, obj: Any, arg: Any, default: Any) -> str:
+        return f"{obj.__class__.__name__}.{arg}"
+
+    def load_defaults(self) -> Dict[str, Any]:
+        op_defaults = {}
+        try:
+            with open(self.config_filepath, "r") as config_file:
+                op_defaults = json.load(config_file)
+                print(f"tarace {op_defaults}")
+        except Exception as e:
+            print(f"Unable to load config {self.config_filepath}, ignoring presets: {e}")
+        return op_defaults
+
+    def clear_defaults(self) -> None:
+        self.config_filepath.unlink(missing_ok=True)
+
+    def save_defaults(self):
+        try:
+            with open(self.config_filepath, "w") as config_file:
+                json.dump(self._op_defaults, config_file)
+        except Exception as e:
+            print(f"Unable to save config {self.config_filepath}: {e}")
+
+    def to_string(self):
+        return json.dumps(self._op_defaults, sort_keys=True, indent=4)
+
+    def get_default(self, obj: Any, arg: Any, default: Any, type: Any = None) -> Any:
+        key = self._build_key(obj, arg, default)
+        raw_value = self._op_defaults.setdefault(key, default)
+        return type(raw_value) if type and raw_value is not None else raw_value
+
+    def set_default(self, obj: Any, arg: Any, default: Any) -> None:
+        key = self._build_key(obj, arg, default)
+        self.set_default_for_key(key, default)
+
+    def set_default_for_key(self, key: str, default: Any) -> None:
+        self._op_defaults[key] = str(default)
 
 
 class CliCommand:
@@ -17,8 +64,18 @@ class CliCommand:
     def __init__(self) -> None:
         pass
 
+    def set_arg_defaults(self, config_default: ArgDefaults):
+        self.arg_defaults = config_default
+
+    def add_arg_with_default(self, parser, arg, default, *args, **kwargs):
+        type = bool if isinstance(default, bool) else kwargs.get("type")
+        default_to_use = self.arg_defaults.get_default(self, arg, default, type=type)
+        parser.add_argument(arg, *args, default=default_to_use, **kwargs)
+
     def configure_args(self, cmdlist_parser: _SubParsersAction) -> ArgumentParser:
-        cmd_parser = cmdlist_parser.add_parser(self.name, help=self.description)
+        cmd_parser = cmdlist_parser.add_parser(
+            self.name, help=self.description, formatter_class=ArgumentDefaultsHelpFormatter
+        )
         cmd_parser.set_defaults(cmd_name=self.name)
         return cast(ArgumentParser, cmd_parser)
 
@@ -32,18 +89,32 @@ class CliApiCommand:
     Allows instantiating the relevant communication client, and execute a subcommmand from its name.
     """
 
-    def __init__(self, name: str, cli_class: Any, commands: List[CliCommand]) -> None:
+    def __init__(self, name: str, commands: List[CliCommand]) -> None:
         self.name = name
-        self.cli_class = cli_class
         self.cmd_list = {cmd.name: cmd for cmd in commands}
+
+    def add_commands_args(self, cmd_subparser: _SubParsersAction, config_default: ArgDefaults) -> None:
+        for cmd in self.cmd_list:
+            self.cmd_list[cmd].set_arg_defaults(config_default)
+            self.cmd_list[cmd].configure_args(cmd_subparser)
+
+    def run_command(self, cmd_name: str, args: Namespace) -> None:
+        self.cmd_list[cmd_name].run(None, args)
+
+
+class CliApiArrCommand(CliApiCommand):
+    """Definition of an API client.
+
+    Allows instantiating the relevant communication client, and execute a subcommmand from its name.
+    """
+
+    def __init__(self, name: str, cli_class: Any, commands: List[CliCommand]) -> None:
+        super().__init__(name, commands)
+        self.cli_class = cli_class
 
     def _new_client(self, host: str, api_key: str, username: Optional[str], password: Optional[str]) -> Any:
         cli = self.cli_class(host, api_key, username=username, password=password)
         return cli
-
-    def add_commands_args(self, cmd_subparser: _SubParsersAction) -> None:
-        for cmd in self.cmd_list:
-            self.cmd_list[cmd].configure_args(cmd_subparser)
 
     def run_command(self, cmd_name: str, args: Namespace) -> None:
         cli = self._new_client(args.host, args.api_key, username=args.user, password=args.password)
@@ -73,17 +144,6 @@ def select_profile(cli: base_media.BaseCliMediaApi) -> int:
         raise Exception("Invalid profile selection: {profile_id}")
 
 
-def select_language_profile(cli: base_media.BaseCliMediaApi) -> int:
-    res = cli.get_language_profiles()
-    for profile in res:
-        print(f"[{profile['id']}]: {profile['name']}")
-    profile_id = input(f"Profile id to use (1-{len(res)}):")
-    if profile_id.isdigit():
-        return int(profile_id)
-    else:
-        raise Exception("Invalid profile selection: {profile_id}")
-
-
 def select_item(
     terms: str, choices: List[Union[radarr.RadarrMovieItem, sonarr.SonarrSerieItem]]
 ) -> Union[radarr.RadarrMovieItem, sonarr.SonarrSerieItem]:
@@ -93,7 +153,7 @@ def select_item(
         # Only one result is returned
         return choices  # type: ignore
     for item in choices:
-        print(f"[{choices.index(item)+1}]: {item.title} ({item.year})")
+        print(f"[{choices.index(item) + 1}]: {item.title} ({item.year})")
     item_id = input(f"Select the item to add (1-{len(choices)}):")
     if item_id.isdigit() and int(item_id) <= len(choices):
         return choices[int(item_id) - 1]
@@ -177,11 +237,13 @@ class CliGetQueueCommand(CliCommand):
 
     def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
-        cmd_parser.add_argument("--page", help="Page to get", type=int, default=1)
-        cmd_parser.add_argument("--sort-key", help="Sort key", default="progress")
-        cmd_parser.add_argument("--page-size", help="Page size", type=int, default=20)
-        cmd_parser.add_argument("--sort-dir", help="Sort direction", default="ascending")
-        cmd_parser.add_argument("--exclude-unknown", help="Exclude unknown items", action="store_true", default=False)
+        self.add_arg_with_default(cmd_parser, "--page", 1, help="Page to get", type=int)
+        self.add_arg_with_default(cmd_parser, "--sort-key", "progress", help="Sort key")
+        self.add_arg_with_default(cmd_parser, "--page-size", 20, help="Page size", type=int)
+        self.add_arg_with_default(cmd_parser, "--sort-dir", "ascending", help="Sort direction")
+        self.add_arg_with_default(
+            cmd_parser, "--exclude-unknown", False, help="Exclude unknown items", action="store_true"
+        )
         return cmd_parser
 
     def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
@@ -196,8 +258,8 @@ class CliGetCalendarCommand(CliCommand):
 
     def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
-        cmd_parser.add_argument("--start", help="Start date, format like 2018-06-29", default=None)
-        cmd_parser.add_argument("--end", help="End date, format like 2018-06-29", default=None)
+        self.add_arg_with_default(cmd_parser, "--start", None, help="Start date, format like 2018-06-29")
+        self.add_arg_with_default(cmd_parser, "--end", None, help="End date, format like 2018-06-29")
         return cmd_parser
 
     def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
@@ -229,10 +291,10 @@ class CliWantedCommand(CliCommand):
 
     def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
-        cmd_parser.add_argument("--page", help="Page to get", type=int, default=1)
-        cmd_parser.add_argument("--sort-key", help="Sort key", default="airDateUtc")
-        cmd_parser.add_argument("--page-size", help="Page size", type=int, default=10)
-        cmd_parser.add_argument("--sort-dir", help="Sort direction", default="asc")
+        self.add_arg_with_default(cmd_parser, "--page", 1, help="Page to get", type=int)
+        self.add_arg_with_default(cmd_parser, "--sort-key", "airDateUtc", help="Sort key")
+        self.add_arg_with_default(cmd_parser, "--page-size", 10, help="Page size", type=int)
+        self.add_arg_with_default(cmd_parser, "--sort-dir", "asc", help="Sort direction")
         return cmd_parser
 
     def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
@@ -262,10 +324,10 @@ class CliGetBlocklistCommand(CliCommand):
 
     def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
-        cmd_parser.add_argument("--page", help="Page to get", type=int, default=1)
-        cmd_parser.add_argument("--sort-key", help="Sort key", default="date")
-        cmd_parser.add_argument("--page-size", help="Page size", type=int, default=20)
-        cmd_parser.add_argument("--sort-dir", help="Sort direction", default="descending")
+        self.add_arg_with_default(cmd_parser, "--page", 1, help="Page to get", type=int)
+        self.add_arg_with_default(cmd_parser, "--sort-key", "date", help="Sort key")
+        self.add_arg_with_default(cmd_parser, "--page-size", 20, help="Page size", type=int)
+        self.add_arg_with_default(cmd_parser, "--sort-dir", "descending", help="Sort direction")
         return cmd_parser
 
     def run(self, cli: base_media.BaseCliMediaApi, args: Namespace) -> None:
@@ -539,12 +601,13 @@ class CliDeleteMovieCommand(CliCommand):
     def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--mid", "-i", help="ID of the movie to delete", type=int, required=True)
-        cmd_parser.add_argument(
-            "--delfiles", "-f", help="Also delete files on disk", default=False, action="store_true"
+        self.add_arg_with_default(
+            cmd_parser, "--delfiles", False, "-f", help="Also delete files on disk", action="store_true"
         )
-        cmd_parser.add_argument(
-            "--exclude", "-e", help="Ass exclusion from import lists", default=False, action="store_true"
+        self.add_arg_with_default(
+            cmd_parser, "--exclude", False, "-e", help="Add exclusion from import list", action="store_true"
         )
+
         return cmd_parser
 
     def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
@@ -596,14 +659,15 @@ class CliAddMovieCommand(CliCommand):
         search_group.add_argument(
             "--terms", "-t", help="Keyword to search for the movie to add", type=str, default=None
         )
-        cmd_parser.add_argument("--quality", "-q", help="Quality profile to use", type=int, default=None)
+        self.add_arg_with_default(cmd_parser, "--quality", None, "-q", help="Quality profile to use", type=int)
         cmd_parser.add_argument("--path", help="Full path where the serie should be stored", type=str, default=None)
-        cmd_parser.add_argument(
+        self.add_arg_with_default(
+            cmd_parser,
             "--root-folder",
+            None,
             "-r",
             help="Root folder id or path, or 'auto' to select it interactively. Ignored if --path is set",
             type=str,
-            default=None,
         )
         return cmd_parser
 
@@ -716,12 +780,8 @@ class CliDeleteSerieCommand(CliCommand):
     def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
         cmd_parser = super().configure_args(cmd_subparser)
         cmd_parser.add_argument("--sid", "-i", help="ID of the serie to delete", type=int, required=True)
-        cmd_parser.add_argument(
-            "--delfiles", "-f", help="Also delete files on disk", default=False, action="store_true"
-        )
-        cmd_parser.add_argument(
-            "--exclude", "-e", help="Ass exclusion from import lists", default=False, action="store_true"
-        )
+        self.add_arg_with_default(cmd_parser, "--delfiles", False, "-f", help="Also delete files on disk")
+        self.add_arg_with_default(cmd_parser, "--exclude", False, "-e", help="Add exclusion from import list")
         return cmd_parser
 
     def run(self, cli: sonarr.SonarrCli, args: Namespace) -> None:
@@ -772,23 +832,26 @@ class CliAddSerieCommand(CliCommand):
         search_group.add_argument(
             "--terms", "-t", help="Keyword to search for the serie to add", type=str, default=None
         )
-        cmd_parser.add_argument("--quality", "-q", help="Quality profile to use", type=int, default=None)
-        cmd_parser.add_argument("--language", "-l", help="Language profile to use", type=int, default=None)
-        cmd_parser.add_argument("--seasons", "-s", help="Comma separated list of seasons nums", type=str, default=None)
-        cmd_parser.add_argument(
+        self.add_arg_with_default(cmd_parser, "--quality", None, "-q", help="Quality profile to use", type=int)
+        self.add_arg_with_default(
+            cmd_parser, "--seasons", None, "-s", help="Comma separated list of seasons nums", type=str
+        )
+        self.add_arg_with_default(
+            cmd_parser,
             "--season-folders",
+            False,
             "-f",
             help="Whether to create season folders, default is false",
-            default=False,
             action="store_true",
         )
         cmd_parser.add_argument("--path", help="Full path where the serie should be stored", type=str, default=None)
-        cmd_parser.add_argument(
+        self.add_arg_with_default(
+            cmd_parser,
             "--root-folder",
+            None,
             "-r",
             help="Root folder id or path, or 'auto' to select it interactively. Ignored if --path is set",
             type=str,
-            default=None,
         )
         return cmd_parser
 
@@ -803,8 +866,6 @@ class CliAddSerieCommand(CliCommand):
         # If no quality profile specified, list them qnd prompt for choice
         if not args.quality:
             args.quality = select_profile(cli)
-        if not args.language:
-            args.language = select_language_profile(cli)
         root_id = root_folder_id_from_arg(cli, args.root_folder)
 
         # Get the optional season list
@@ -822,7 +883,6 @@ class CliAddSerieCommand(CliCommand):
             season_folder=args.season_folders,
             path=args.path,
             root_id=root_id,
-            language=args.language,
         )
         print(f"Result:\n{res}")
 
@@ -900,11 +960,50 @@ class CliSearchMissingEpisodes(CliCommand):
         print(f"Result: {json.dumps(res)}\n")
 
 
+##############################################
+########## config specific commands ##########
+##############################################
+class CliConfigShowCommand(CliCommand):
+    name = "show"
+    description = "Display current config"
+
+    def run(self, cli: Any, args: Namespace) -> None:
+        super().run(cli, args)
+        print(f"Stored config:\n{self.arg_defaults.to_string()}\n")
+
+
+class CliConfigResetCommand(CliCommand):
+    name = "clear"
+    description = "Display current config"
+
+    def run(self, cli: Any, args: Namespace) -> None:
+        super().run(cli, args)
+        self.arg_defaults.clear_defaults()
+        print("Removed stored config")
+
+
+class CliConfigSetCommand(CliCommand):
+    name = "set"
+    description = "Set a default value for the specified (Use 'show' to display available keys)"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--name", "-n", help="setting name", required=True)
+        cmd_parser.add_argument("--value", "-v", help="setting value", required=True)
+        return cmd_parser
+
+    def run(self, cli: sonarr.SonarrCli, args: Namespace) -> None:
+        super().run(cli, args)
+        self.arg_defaults.set_default_for_key(args.name, args.value)
+        self.arg_defaults.save_defaults()
+        print(f"Config key {args.name} set to '{args.value} and stored in {self.arg_defaults.config_filepath}'\n")
+
+
 #####################################################
 ########## Clients and commands definition ##########
 #####################################################
 CLI_LIST: List[CliApiCommand] = [
-    CliApiCommand(
+    CliApiArrCommand(
         "sonarr",
         sonarr.SonarrCli,
         [
@@ -942,7 +1041,7 @@ CLI_LIST: List[CliApiCommand] = [
             CliRootFoldersCommand(),
         ],
     ),
-    CliApiCommand(
+    CliApiArrCommand(
         "radarr",
         radarr.RadarrCli,
         [
@@ -976,6 +1075,14 @@ CLI_LIST: List[CliApiCommand] = [
             CliCreateRadarrExclusionCommand(),
             CliSearchMissingMovies(),
             CliRootFoldersCommand(),
+        ],
+    ),
+    CliApiCommand(
+        "config",
+        [
+            CliConfigResetCommand(),
+            CliConfigSetCommand(),
+            CliConfigShowCommand(),
         ],
     ),
 ]

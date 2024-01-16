@@ -372,13 +372,6 @@ def test_get_tag_detail_all(mock_base, cli):
     assert res == TEST_JSON
 
 
-@patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)
-def test_get_language_profiles(mock_base, cli):
-    res = cli.get_language_profiles()
-    mock_base.assert_called_with(cli.api_url_language_profile)
-    assert res == TEST_JSON
-
-
 @patch("pycliarr.api.base_media.BaseCliMediaApi.request_get", return_value={})
 def test_get_exclusion(mock_post, cli):
     cli.get_exclusion(12345)

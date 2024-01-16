@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union, cast
 
-from pycliarr.api.base_api import BaseCliApiItem, json_data
+from pycliarr.api.base_api import BaseCliApiItem, json_data, json_list
 from pycliarr.api.base_media import BaseCliMediaApi
 from pycliarr.api.exceptions import RadarrCliError
 
@@ -80,9 +80,14 @@ class RadarrCli(BaseCliMediaApi):
     api_url_item = f"{BaseCliMediaApi.api_url_base}/movie"
     api_url_itemlookup = f"{BaseCliMediaApi.api_url_base}/movie/lookup"
     api_url_exclusions = f"{BaseCliMediaApi.api_url_base}/exclusions"
+    api_url_language_profile = f"{BaseCliMediaApi.api_url_base}/languageProfile"
 
     # Keep using v1 for commands not available in v3
     api_url_wanted_missing = "/api/wanted/missing"
+
+    def get_language_profiles(self) -> json_list:
+        """Return the quality profiles"""
+        return cast(json_list, self.request_get(self.api_url_language_profile))
 
     def get_movie(self, movie_id: Optional[int] = None) -> Union[RadarrMovieItem, List[RadarrMovieItem]]:
         """Get specified movie, or all if no id provided from server collection.

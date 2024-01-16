@@ -297,3 +297,10 @@ def test_get_queue_with_args(mock_get, cli):
     }
     mock_get.assert_called_with(cli.api_url_queue, url_params=data)
     assert res == TEST_JSON
+
+
+@patch("pycliarr.api.radarr.BaseCliMediaApi.request_get", return_value=TEST_JSON)
+def test_get_language_profiles(mock_base, cli):
+    res = cli.get_language_profiles()
+    mock_base.assert_called_with(cli.api_url_language_profile)
+    assert res == TEST_JSON

@@ -15,21 +15,15 @@ class SonarrSerieItem(BaseCliApiItem):
             "title": "",
             "alternateTitles": [],
             "sortTitle": "",
-            "seasonCount": 0,
-            "totalEpisodeCount": 0,
-            "episodeCount": 0,
-            "episodeFileCount": 0,
-            "sizeOnDisk": 0,
+            "statistics": {},
             "status": "",
             "overview": "",
-            "previousAiring": "",
             "network": "",
             "airTime": "",
             "images": [],
             "seasons": [],
             "year": 0,
             "path": "",
-            "profileId": 0,
             "seasonFolder": True,
             "monitored": True,
             "useSceneNumbering": False,
@@ -38,7 +32,6 @@ class SonarrSerieItem(BaseCliApiItem):
             "tvRageId": 0,
             "tvMazeId": 0,
             "firstAired": "",
-            "lastInfoSync": "",
             "seriesType": "",
             "cleanTitle": "",
             "imdbId": "",
@@ -49,7 +42,6 @@ class SonarrSerieItem(BaseCliApiItem):
             "added": "",
             "ratings": {},
             "qualityProfileId": 0,
-            "languageProfileId": 0,
             "id": 0,
         }
 
@@ -145,7 +137,6 @@ class SonarrCli(BaseCliMediaApi):
         season_folder: bool = True,
         path: Optional[str] = None,
         root_id: int = 0,
-        language: int = 1,
     ) -> json_data:
         """addMovie adds a new serie to collection.
 
@@ -162,7 +153,6 @@ class SonarrCli(BaseCliMediaApi):
             season_folder (bool): If True (default), create a folder for each season.
             path (Optional[str]): Specify the path awhere the movie should be stored. Default is root/<serie name>.
             root_id (Optional[int]): Specify the root folder to use. Ignored if a path is specified. Default is root[0].
-            language (int): Specify the language to use. Default is the first enabled (1)
 
         Returns:
             json response
@@ -181,9 +171,7 @@ class SonarrCli(BaseCliMediaApi):
 
         # Prepare serie info for adding
         serie_info.path = path or str(self.build_serie_path(serie_info, root_folder_id=root_id))
-        serie_info.profileId = quality
         serie_info.qualityProfileId = quality
-        serie_info.languageProfileId = language
         serie_info.monitored = monitored
         serie_info.seasonFolder = season_folder
 

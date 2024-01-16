@@ -7,12 +7,12 @@ from typing import Dict, List
 import pycliarr
 from pycliarr.api import exceptions
 from pycliarr.cli import utils
-from pycliarr.cli.cli_cmd import CLI_LIST, CliApiCommand
+from pycliarr.cli.cli_cmd import CLI_LIST, ArgDefaults, CliApiCommand
 
 log = logging.getLogger(__name__)
 
 
-def _parse_args(cli_mapping: Dict[str, CliApiCommand]) -> Namespace:
+def _parse_args(cli_mapping: Dict[str, CliApiCommand], config_default: ArgDefaults) -> Namespace:
     """
     cliarr host api-key sonarr list/get/delete/add
     cliarr host api-key radarr list/get/delete/add
@@ -33,7 +33,7 @@ def _parse_args(cli_mapping: Dict[str, CliApiCommand]) -> Namespace:
         client_parser.set_defaults(cli_name=cli)
         cmd_subparser = client_parser.add_subparsers(dest=f"{cli} command")
         cmd_subparser.required = True
-        cli_mapping[cli].add_commands_args(cmd_subparser)
+        cli_mapping[cli].add_commands_args(cmd_subparser, config_default)
 
     args = parser.parse_args()
     args.log_level = logging.DEBUG if args.debug else logging.INFO
@@ -52,11 +52,13 @@ def _build_mapping(cli_list: List[CliApiCommand]) -> Dict[str, CliApiCommand]:
 
 
 def main() -> None:
+    config_default = ArgDefaults()
+
     """Main entry point."""
     print(f"PyCliarr version {pycliarr.__version__}", file=sys.stderr)
 
     cli_mapping = _build_mapping(CLI_LIST)
-    args = _parse_args(cli_mapping)
+    args = _parse_args(cli_mapping, config_default)
     utils.setup_logging(level=args.log_level)
 
     try:

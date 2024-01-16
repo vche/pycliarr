@@ -2,10 +2,11 @@ import pytest
 import sys
 
 from pycliarr.cli import cli
-from pycliarr.cli.cli_cmd import select_profile, select_language_profile
+from pycliarr.cli.cli_cmd import ArgDefaults, select_profile
 from pycliarr.api import radarr, sonarr
 from pycliarr.api.exceptions import CliArrError
-from unittest.mock import Mock, patch, call
+from unittest.mock import Mock, patch, call, mock_open
+from pathlib import Path
 
 
 TEST_HOST = "http://example.com"
@@ -919,7 +920,6 @@ def test_cli_radarr_add_one_result(mock_input, monkeypatch, mock_exit):
         ]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
-    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_language_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
@@ -1067,7 +1067,6 @@ def test_cli_radarr_add_manual_badmovie(mock_input, monkeypatch, mock_exit):
         ]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
-    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_language_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
@@ -1097,7 +1096,6 @@ def test_cli_radarr_add_manual_badprofile(mock_input, monkeypatch, mock_exit):
         'items': [{'quality': {'name': 'item1'}, 'allowed': True}]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
-    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_language_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
@@ -1126,7 +1124,6 @@ def test_cli_radarr_add_manual_nomovie(mock_input, monkeypatch, mock_exit):
         'items': [{'quality': {'name': 'item1'}, 'allowed': True}]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_quality_profiles", mock_profiles)
-    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_language_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.lookup_movie", mock_lookup)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.add_movie", mock_sonarr)
     cli.main()
@@ -1353,7 +1350,6 @@ def test_cli_sonarr_add_tvdb(monkeypatch, mock_exit):
         season_folder=True,
         path=None,
         root_id=0,
-        language=1,
     )
     mock_exit.assert_called_with(0)
 
@@ -1384,7 +1380,6 @@ def test_cli_sonarr_add_tvdb_with_seasons(monkeypatch, mock_exit):
         season_folder=False,
         path="some/path",
         root_id=0,
-        language=1
     )
     mock_exit.assert_called_with(0)
 
@@ -1433,7 +1428,6 @@ def test_cli_sonarr_add_manual(mock_input, monkeypatch, mock_exit):
         'items': [{'quality': {'name': 'item1'}, 'allowed': True}]
     }]
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_quality_profiles", mock_profiles)
-    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_language_profiles", mock_profiles)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.lookup_serie", mock_lookup)
     monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.add_serie", mock_sonarr)
     cli.main()
@@ -1446,21 +1440,8 @@ def test_cli_sonarr_add_manual(mock_input, monkeypatch, mock_exit):
         season_folder=False,
         path=None,
         root_id=0,
-        language=1,
     )
     mock_exit.assert_called_with(0)
-
-
-@patch('builtins.input', return_value="1c")
-def test_select_language_nok(mock_input):
-    mock_cli = Mock()
-    mock_cli.get_language_profiles.return_value = [{
-        'name': 'name',
-        'id': '1',
-        'items': [{'quality': {'name': 'item1'}, 'allowed': True}]
-    }]
-    with pytest.raises(Exception):
-        select_language_profile(mock_cli)
 
 
 def test_cli_sonarr_getepisodefile(monkeypatch, mock_exit):
@@ -1601,3 +1582,111 @@ def test_cli_sonarr_root_folders_no_space(monkeypatch, mock_exit):
 
     mock_sonarr.assert_called()
     mock_exit.assert_called_with(0)
+
+
+@patch('pycliarr.cli.cli.ArgDefaults')
+def test_cli_config_show(mock_defaultargs, monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", "",
+        "-k", "",
+        "config",
+        "show",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    cli.main()
+
+    mock_defaultargs().to_string.assert_called()
+
+
+@patch('pycliarr.cli.cli.ArgDefaults')
+def test_cli_config_clear(mock_defaultargs, monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", "",
+        "-k", "",
+        "config",
+        "clear",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    cli.main()
+
+    mock_defaultargs().clear_defaults.assert_called()
+
+
+@patch('pycliarr.cli.cli.ArgDefaults')
+def test_cli_config_set(mock_defaultargs, monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", "",
+        "-k", "",
+        "config",
+        "set",
+        "--name", "somename",
+        "--value", "somevalue",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    cli.main()
+
+    mock_defaultargs().set_default_for_key.assert_called_with("somename", "somevalue")
+    mock_defaultargs().save_defaults.assert_called()
+
+
+def test_arg_defaults():
+    with patch('builtins.open', mock_open(read_data='{"ArgDefaults.other_key": "other_value"}')) as patch_open:
+        argdef = ArgDefaults()
+        print(argdef._op_defaults)
+        patch_open.assert_called_with(Path('/tmp/pycliarr_cfg.json'), 'r')
+
+        # Existing value
+        val = argdef.get_default(argdef, "other_key", "some_value")
+        assert val == "other_value"
+
+        # New key
+        val = argdef.get_default(argdef, "some_key", "some_value")
+        assert val == "some_value"
+
+        # Store new key
+        argdef.set_default(argdef, "some_key", "1")
+
+        # Check it's used
+        val = argdef.get_default(argdef, "some_key", "some_value", type=int)
+        assert val == 1
+
+        # Save
+        argdef.save_defaults()
+        patch_open.assert_called_with(Path('/tmp/pycliarr_cfg.json'), 'w')
+
+        # Print
+        print(argdef.to_string())
+
+        patch_open().write.side_effect = Exception
+        argdef.save_defaults()
+        patch_open.assert_called_with(Path('/tmp/pycliarr_cfg.json'), 'w')
+
+        # Clear
+        argdef.config_filepath = Path("/tmp/pipo")
+        argdef.clear_defaults()
+
+
+def test_arg_defaults_custom_file():
+    with patch('builtins.open', mock_open(read_data='{"ArgDefaults.other_key": "other_value"}')) as patch_open:
+        argdef = ArgDefaults("/test/file")
+        patch_open.assert_called_with(Path("/test/file"), 'r')
+
+
+def test_arg_defaults_no_file():
+    with patch('builtins.open', side_effect=FileNotFoundError) as patch_open:
+        argdef = ArgDefaults("/test/file")
+
+        # New key
+        val = argdef.get_default(argdef, "some_key", "some_value")
+        assert val == "some_value"
+
+        # Store new key
+        argdef.set_default(argdef, "some_key", "1")
+
+        # Check it's used
+        val = argdef.get_default(argdef, "some_key", "some_value", type=int)
+        assert val == 1
+

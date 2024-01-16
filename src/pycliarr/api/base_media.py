@@ -26,7 +26,6 @@ class BaseCliMediaApi(BaseCliApi):
     api_url_queue = f"{api_url_base}/queue"
     api_url_history = f"{api_url_base}/history/"
     api_url_profile = f"{api_url_base}/qualityProfile"
-    api_url_language_profile = f"{api_url_base}/languageProfile"
     api_url_rootfolder = f"{api_url_base}/rootfolder"
     api_url_log = f"{api_url_base}/log"
     api_url_systembackup = f"{api_url_base}/system/backup"
@@ -177,10 +176,6 @@ class BaseCliMediaApi(BaseCliApi):
     def get_quality_profiles(self) -> json_list:
         """Return the quality profiles"""
         return cast(json_list, self.request_get(self.api_url_profile))
-
-    def get_language_profiles(self) -> json_list:
-        """Return the quality profiles"""
-        return cast(json_list, self.request_get(self.api_url_language_profile))
 
     def _get_queue(
         self,

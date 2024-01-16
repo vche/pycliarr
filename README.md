@@ -44,7 +44,7 @@ print(serie.title)
 Clients:
 ```sh
 pyvenv/bin/pycliarr --help
-PyCliarr version 1.0.21
+PyCliarr version 1.0.22
 usage: pycliarr [-h] --host HOST --api-key API_KEY [--user USER] [--password PASSWORD] [--debug] {sonarr,radarr} ...
 
 Radarr/Sonarr client
@@ -53,6 +53,7 @@ positional arguments:
   {sonarr,radarr}
     sonarr              use sonarr client
     radarr              use radarr client
+    config              use config client
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -114,7 +115,7 @@ optional arguments:
 Sonarr CLI:
 ```sh
 pyvenv/bin/pycliarr sonarr --help
-PyCliarr version 1.0.21
+PyCliarr version 1.0.22
 usage: pycliarr sonarr [-h]
                        {get,delete,add,refresh,rescan,get-episode,get-episode-file,delete-episode-file,profiles,system-status,disk-space,queue,calendar,delete-queue,wanted,status,blocklist,delete-blocklist,notification,delete-notification,put-notification,tag,tag-detail,delete-tag,edit-tag,create-tag,tag-items,exclusion,delete-exclusion,create-exclusion,search-missing,root-folders}
                        ...
@@ -159,6 +160,53 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
 ```
+
+Config CLI:
+
+Allows storing default argument values for all commands. Note that while -t and -k arguments are mandatory, they are not used. so any value works.
+The config values will be stored in `"/tmp/pycliarr_cfg.json"` and can be freely edited (all default will be reset) or edited manually.
+
+To display all the possible arguments that can be set:
+```sh
+pycliarr -t "" -k "" config show
+```
+
+To change for instance the default value of the queue command page size:
+```sh
+pycliarr -t "" -k "" config config set -n "CliGetQueueCommand.--page-size" -v "3"
+```
+
+Before running the command above, running the following would use a default page size of 20. After running the command, the same command would use a default page size of 3:
+```sh
+pycliarr -t <url> -k <api key> sonarr queue
+```
+
+But specifying the argument works normally, only the defaults (when parameter is not specified) are affected:
+```sh
+pycliarr -t <url> -k <api key> sonarr queue --page-size 5
+```
+
+To clear all defaults and reset them to their orignal value:
+```sh
+pycliarr -t "" -k "" config clear
+```
+
+Help:
+```sh
+pyvenv/bin/pycliarr config --help
+PyCliarr version 1.0.22
+usage: pycliarr config [-h] {clear,set,show} ...
+
+positional arguments:
+  {clear,set,show}
+    clear           Display current config
+    set             Set a default value for the specified (Use 'show' to display available keys)
+    show            Display current config
+
+options:
+  -h, --help        show this help message and exit
+
+
 ## Installation
 From pip:
 ```sh
@@ -175,9 +223,34 @@ pip install -e .
 
 ### Installing sources projects
 
-Get the project and create the virtual env:
+Get the project:
 ```sh
 git clone https://github.com/vche/pycliarr.git
+cd pycliarr
+```
+
+#### Using [pixi](https://pixi.sh/)
+
+```sh
+# Install dependencies and pycliarr
+pixi build
+
+# Run the binary
+pixi run pycliarr
+
+# Or start a term
+pixi shell
+
+# Run tests
+pixi run tests
+
+#generate doc
+pixi run doc
+```
+
+#### Using venv and pip
+Create the virtual env:
+```sh
 virtualenv pyvenv
 . pyvenv/bin/activate
 pip install -e .
