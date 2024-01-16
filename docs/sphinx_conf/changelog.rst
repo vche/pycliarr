@@ -5,6 +5,19 @@ Changelog
 master
 ======
 
+v1.0.23
+=======
+
+:Date: Jan 16, 2024
+
+Fix
+---
+* Fix deprecated language id in sonarr 4.0 (Issue #33 <https://github.com/vche/pycliarr/issues/33>)
+
+New
+---
+* Add config mode to customize CLI default parameters (Issue #33 <https://github.com/vche/pycliarr/issues/33>)
+
 v1.0.22
 =======
 
