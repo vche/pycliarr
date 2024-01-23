@@ -5,6 +5,15 @@ Changelog
 master
 ======
 
+v1.0.24
+=======
+
+:Date: Jan 23, 2024
+
+Fix
+---
+* Removed debug trace and automate release
+
 v1.0.23
 =======
 
@@ -16,7 +25,7 @@ Fix
 
 New
 ---
-* Add config mode to customize CLI default parameters (Issue #33 <https://github.com/vche/pycliarr/issues/33>)
+* Add config mode to customize CLI default parameters (Issue #32 <https://github.com/vche/pycliarr/issues/32>)
 
 v1.0.22
 =======

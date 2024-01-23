@@ -24,7 +24,6 @@ class ArgDefaults:
         try:
             with open(self.config_filepath, "r") as config_file:
                 op_defaults = json.load(config_file)
-                print(f"tarace {op_defaults}")
         except Exception as e:
             print(f"Unable to load config {self.config_filepath}, ignoring presets: {e}")
         return op_defaults
