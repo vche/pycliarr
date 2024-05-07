@@ -1,0 +1,18 @@
+diff --git a/src/pycliarr/api/sonarr.py b/src/pycliarr/api/sonarr.py
+index 0a6d5f0..6ea2cf1 100755
+--- a/src/pycliarr/api/sonarr.py
++++ b/src/pycliarr/api/sonarr.py
+@@ -335,11 +335,9 @@ class SonarrCli(BaseCliMediaApi):
+         """
+         return self._get_queue(
+             page, sort_key, page_size, sort_dir, options={"includeUnknownSeriesItems": include_unknown}
++        )
+ 
+-
+-    def rename_files(
+-        self, file_ids: List[int], serie_id: int
+-    ) -> Dict[str, Any] | List[Dict[str, Any]]:
++    def rename_files(self, file_ids: List[int], serie_id: int) -> json_data:
+         """Rename the list of files provided.
+ 
+         Args:

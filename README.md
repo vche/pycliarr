@@ -233,7 +233,7 @@ cd pycliarr
 
 ```sh
 # Install dependencies and pycliarr
-pixi build
+pixi run build
 
 # Run the binary
 pixi run pycliarr
@@ -242,7 +242,7 @@ pixi run pycliarr
 pixi shell
 
 # Run tests
-pixi run tests
+pixi run test
 
 #generate doc
 pixi run doc
