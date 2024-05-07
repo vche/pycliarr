@@ -35,7 +35,9 @@ class BaseCliMediaApi(BaseCliApi):
     api_url_tag = f"{api_url_base}/tag"
     api_url_exclusions = f"{api_url_base}/importlistexclusion"
 
-    def __init__(self, *args: Any, default_root_folder_id: int = 0, **kwargs: Any) -> None:
+    def __init__(
+        self, *args: Any, default_root_folder_id: int = 0, **kwargs: Any
+    ) -> None:
         super().__init__(*args, **kwargs)
         self._default_root_folder_id = default_root_folder_id
 
@@ -47,7 +49,9 @@ class BaseCliMediaApi(BaseCliApi):
     def default_root_folder_id(self, value: int) -> None:
         self._default_root_folder_id = value
 
-    def get_calendar(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> json_data:
+    def get_calendar(
+        self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None
+    ) -> json_data:
         """Retrieve info about when items were/will be downloaded.
 
         If start and end are not provided, retrieves movies airing today and tomorrow.
@@ -84,16 +88,6 @@ class BaseCliMediaApi(BaseCliApi):
             json response
         """
         return self._sendCommand({"name": "RssSync"})
-
-    def rename_files(self, file_ids: List[int]) -> json_data:
-        """Rename the list of files provided.
-
-        Args:
-            file_ids (List[int]): List of ids of files to rename
-        Returns:
-            json response
-        """
-        return self._sendCommand({"name": "RenameFiles", "files": file_ids})
 
     def get_disk_space(self) -> json_data:
         """Retrieve info about the disk space on the server.
@@ -144,7 +138,9 @@ class BaseCliMediaApi(BaseCliApi):
         """
         return self.request_post(self.api_url_item, json_data=json_data)
 
-    def delete_item(self, item_id: int, delete_files: bool = True, options: Dict[str, Any] = {}) -> json_data:
+    def delete_item(
+        self, item_id: int, delete_files: bool = True, options: Dict[str, Any] = {}
+    ) -> json_data:
         """Delete the item with the given ID
 
         Args:
@@ -159,7 +155,9 @@ class BaseCliMediaApi(BaseCliApi):
         url_path = f"{self.api_url_item}/{item_id}"
         return self.request_delete(url_path, data)
 
-    def edit_item(self, json_data: json_data, url_params: Optional[Dict[str, Any]] = None) -> json_data:
+    def edit_item(
+        self, json_data: json_data, url_params: Optional[Dict[str, Any]] = None
+    ) -> json_data:
         """Edit an item from the collection
 
         Args:
@@ -167,7 +165,9 @@ class BaseCliMediaApi(BaseCliApi):
         Returns:
             json response
         """
-        return self.request_put(self.api_url_item, json_data=json_data, url_params=url_params)
+        return self.request_put(
+            self.api_url_item, json_data=json_data, url_params=url_params
+        )
 
     def get_system_status(self) -> json_data:
         """Return the System Status as json"""
@@ -255,7 +255,13 @@ class BaseCliMediaApi(BaseCliApi):
         data.update(options)
         return self.request_get(self.api_url_history, url_params=data)
 
-    def get_logs(self, page: int = 1, sort_key: str = "time", page_size: int = 10, sort_dir: str = "asc") -> json_data:
+    def get_logs(
+        self,
+        page: int = 1,
+        sort_key: str = "time",
+        page_size: int = 10,
+        sort_dir: str = "asc",
+    ) -> json_data:
         """Get logs
 
         Args:
@@ -279,7 +285,11 @@ class BaseCliMediaApi(BaseCliApi):
         return self.request_get(self.api_url_systembackup)
 
     def get_wanted(
-        self, page: int = 1, sort_key: str = "airDateUtc", page_size: int = 10, sort_dir: str = "asc"
+        self,
+        page: int = 1,
+        sort_key: str = "airDateUtc",
+        page_size: int = 10,
+        sort_dir: str = "asc",
     ) -> json_data:
         """Get Wanted / Missing episodes
 
@@ -312,7 +322,9 @@ class BaseCliMediaApi(BaseCliApi):
         """
         root_paths = self.get_root_folder()
         selected_root_folder_id = root_folder_id or self.default_root_folder_id
-        print(f"{selected_root_folder_id} // {root_folder_id} // {self.default_root_folder_id}")
+        print(
+            f"{selected_root_folder_id} // {root_folder_id} // {self.default_root_folder_id}"
+        )
         root_path = root_paths[0] if not selected_root_folder_id else None
         for path in root_paths:
             if path["id"] == int(selected_root_folder_id):
@@ -323,7 +335,11 @@ class BaseCliMediaApi(BaseCliApi):
         return Path(root_path["path"]) / self.to_path(title)
 
     def get_blocklist(
-        self, page: int = 1, sort_key: str = "date", page_size: int = 20, sort_dir: str = "descending"
+        self,
+        page: int = 1,
+        sort_key: str = "date",
+        page_size: int = 20,
+        sort_dir: str = "descending",
     ) -> json_data:
         """Get blocklisted releases
 
@@ -350,7 +366,9 @@ class BaseCliMediaApi(BaseCliApi):
             json response
         """
         if item_id:
-            return self.request_delete(self.api_url_blocklist, url_params={"id": item_id})
+            return self.request_delete(
+                self.api_url_blocklist, url_params={"id": item_id}
+            )
         else:
             return self.request_delete(f"{self.api_url_blocklist}/bulk")
 
@@ -362,7 +380,9 @@ class BaseCliMediaApi(BaseCliApi):
         Returns:
             json response
         """
-        return self.request_get(f"{self.api_url_notification}/{item_id if item_id else ''}")
+        return self.request_get(
+            f"{self.api_url_notification}/{item_id if item_id else ''}"
+        )
 
     def delete_notification(self, item_id: int) -> json_data:
         """Remove the specified item from the blocklist, or all items if none specified
@@ -384,7 +404,9 @@ class BaseCliMediaApi(BaseCliApi):
         Returns:
             json response
         """
-        return self.request_put(f"{self.api_url_notification}/{item_id}", json_data=notification_data)
+        return self.request_put(
+            f"{self.api_url_notification}/{item_id}", json_data=notification_data
+        )
 
     def get_tag(self, item_id: Optional[int] = None) -> json_data:
         """Get specified tag or all if none specified
@@ -404,7 +426,9 @@ class BaseCliMediaApi(BaseCliApi):
         Returns:
             json response
         """
-        return self.request_get(f"{self.api_url_tag}/detail/{item_id if item_id else ''}")
+        return self.request_get(
+            f"{self.api_url_tag}/detail/{item_id if item_id else ''}"
+        )
 
     def delete_tag(self, item_id: int) -> json_data:
         """Remove the specified tag
@@ -425,7 +449,9 @@ class BaseCliMediaApi(BaseCliApi):
         Returns:
             json response
         """
-        return self.request_put(f"{self.api_url_tag}/{item_id}", json_data={"id": item_id, "label": value})
+        return self.request_put(
+            f"{self.api_url_tag}/{item_id}", json_data={"id": item_id, "label": value}
+        )
 
     def create_tag(self, value: str) -> json_data:
         """Create the specified tag
@@ -446,7 +472,9 @@ class BaseCliMediaApi(BaseCliApi):
         Returns:
             json response
         """
-        return self.request_get(f"{self.api_url_exclusions}/{item_id if item_id else ''}")
+        return self.request_get(
+            f"{self.api_url_exclusions}/{item_id if item_id else ''}"
+        )
 
     def delete_exclusion(self, item_id: int) -> json_data:
         """Remove the specified exclusions
