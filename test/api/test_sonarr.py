@@ -365,3 +365,9 @@ def test_get_queue_with_args(mock_get, cli):
     }
     mock_get.assert_called_with(cli.api_url_queue, url_params=data)
     assert res == TEST_JSON
+
+@patch("pycliarr.api.base_media.BaseCliApi.request_post", return_value=TEST_JSON)
+def test_renamefiles(mock_base, cli):
+    res = cli.rename_files([1, 2, 3], 1)
+    mock_base.assert_called_with(cli.api_url_command, json_data={"name": "RenameFiles", "files": [1, 2, 3], "seriesId": 1})
+    assert res == TEST_JSON

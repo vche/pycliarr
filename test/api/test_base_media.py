@@ -54,13 +54,6 @@ def test_syncrss(mock_base, cli):
     assert res == TEST_JSON
 
 
-@patch("pycliarr.api.base_media.BaseCliApi.request_post", return_value=TEST_JSON)
-def test_renamefiles(mock_base, cli):
-    res = cli.rename_files([1, 2, 3])
-    mock_base.assert_called_with(cli.api_url_command, json_data={"name": "RenameFiles", "files": [1, 2, 3]})
-    assert res == TEST_JSON
-
-
 @patch("pycliarr.api.base_media.BaseCliApi.request_get", return_value=TEST_JSON)
 def test_diskspace(mock_base, cli):
     res = cli.get_disk_space()

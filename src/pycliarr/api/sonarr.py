@@ -59,7 +59,6 @@ class SonarrCli(BaseCliMediaApi):
         * get_calendar
         * get_command
         * get_quality_profiles
-        * rename_files
         * get_disk_space
         * get_system_status
         * get_queue
@@ -336,4 +335,21 @@ class SonarrCli(BaseCliMediaApi):
         """
         return self._get_queue(
             page, sort_key, page_size, sort_dir, options={"includeUnknownSeriesItems": include_unknown}
+        )
+
+    def rename_files(self, file_ids: List[int], serie_id: int) -> json_data:
+        """Rename the list of files provided.
+
+        Args:
+            file_ids (List[int]): List of ids of files to rename
+            serie_id int: The id of the series to rename
+        Returns:
+            json response
+        """
+        return self._sendCommand(
+            {
+                "name": "RenameFiles",
+                "files": file_ids,
+                "seriesId": serie_id,
+            }
         )

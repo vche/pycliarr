@@ -85,16 +85,6 @@ class BaseCliMediaApi(BaseCliApi):
         """
         return self._sendCommand({"name": "RssSync"})
 
-    def rename_files(self, file_ids: List[int]) -> json_data:
-        """Rename the list of files provided.
-
-        Args:
-            file_ids (List[int]): List of ids of files to rename
-        Returns:
-            json response
-        """
-        return self._sendCommand({"name": "RenameFiles", "files": file_ids})
-
     def get_disk_space(self) -> json_data:
         """Retrieve info about the disk space on the server.
 
