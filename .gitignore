@@ -10,3 +10,8 @@ build
 # pixi environments
 .pixi
 .env
+
+# IntelliJ
+.idea
+
+.vscode

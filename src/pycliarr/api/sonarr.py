@@ -335,11 +335,9 @@ class SonarrCli(BaseCliMediaApi):
         """
         return self._get_queue(
             page, sort_key, page_size, sort_dir, options={"includeUnknownSeriesItems": include_unknown}
+        )
 
-
-    def rename_files(
-        self, file_ids: List[int], serie_id: int
-    ) -> Dict[str, Any] | List[Dict[str, Any]]:
+    def rename_files(self, file_ids: List[int], serie_id: int) -> json_data:
         """Rename the list of files provided.
 
         Args:
