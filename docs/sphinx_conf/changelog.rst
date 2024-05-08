@@ -5,6 +5,15 @@ Changelog
 master
 ======
 
+v1.0.26
+=======
+
+:Date: May 9, 2024
+
+Fix
+---
+* Fix (issue #34 <https://github.com/vche/pycliarr/issues/34>) where renaming in sonarr requires serie id (thanks to @hollanbm)
+
 v1.0.24
 =======
 
