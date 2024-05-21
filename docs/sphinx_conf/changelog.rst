@@ -5,6 +5,19 @@ Changelog
 master
 ======
 
+v1.0.27
+=======
+
+:Date: May 21, 2024
+
+New
+---
+* Add new command for `get rename` (fix #36)
+
+Fix
+---
+* Send config errors to stderr to help json parsing
+
 v1.0.26
 =======
 

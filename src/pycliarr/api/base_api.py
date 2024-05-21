@@ -87,8 +87,10 @@ class BaseCliApi:
                 response=res.content.decode(),
             )
         try:
-            body: Dict[str, Any] = res.json()
-            return body
+            if res.content.decode():
+                body: Dict[str, Any] = res.json()
+                return body
+            return {}
         except Exception as e:
             raise CliDecodeError(f"Error parsing response {res.content.decode()} from {request_url}: {e}")
 

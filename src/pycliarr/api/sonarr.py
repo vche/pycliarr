@@ -353,3 +353,13 @@ class SonarrCli(BaseCliMediaApi):
                 "seriesId": serie_id,
             }
         )
+
+    def get_rename(self, serie_id: int) -> json_data:
+        """Get a list of episodes files that can be renamed
+
+        Args:
+            serie_id (int):  id of the serie of which to get the renamable episodes
+        Returns:
+            json response
+        """
+        return self.request_get(self.api_url_rename, url_params={"seriesId": serie_id})

@@ -311,3 +311,9 @@ def test_renamefiles(mock_base, cli):
     res = cli.rename_files([1, 2, 3])
     mock_base.assert_called_with(cli.api_url_command, json_data={"name": "RenameFiles", "files": [1, 2, 3]})
     assert res == TEST_JSON
+
+
+@patch("pycliarr.api.radarr.BaseCliMediaApi.request_get")
+def test_get_rename_movie(mock_base, cli):
+    res = cli.get_rename(1234)
+    mock_base.assert_called_with(cli.api_url_rename, url_params={"movieId": 1234})

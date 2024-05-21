@@ -34,6 +34,7 @@ class BaseCliMediaApi(BaseCliApi):
     api_url_notification = f"{api_url_base}/notification"
     api_url_tag = f"{api_url_base}/tag"
     api_url_exclusions = f"{api_url_base}/importlistexclusion"
+    api_url_rename = f"{api_url_base}/rename"
 
     def __init__(self, *args: Any, default_root_folder_id: int = 0, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)

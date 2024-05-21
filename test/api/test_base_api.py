@@ -18,6 +18,7 @@ def mock_response(code, data_dict):
     resp = Mock()
     resp.status_code = code
     resp.json.side_effect = data_dict
+    resp.content.decode.return_value = str(data_dict)
     return resp
 
 
@@ -43,6 +44,18 @@ def test_request_error(patch_session):
 
     with pytest.raises(CliArrError):
         cli.request_get(TEST_PATH)
+
+    assert patch_session().headers == {"X-Api-Key": TEST_APIKEY}
+    patch_session().request.assert_called_with("GET", f"{TEST_HOST}{TEST_PATH}", params=None, json=None)
+
+
+@patch("pycliarr.api.base_api.requests.Session")
+def test_request_empty_response(patch_session):
+    cli = BaseCliApi(TEST_HOST, TEST_APIKEY, username=TEST_USER, password=TEST_PASS)
+    patch_session().request.return_value = mock_response(200, [""])
+    patch_session().request.return_value.content.decode.return_value = ""
+
+    assert cli.request_get(TEST_PATH) == {}
 
     assert patch_session().headers == {"X-Api-Key": TEST_APIKEY}
     patch_session().request.assert_called_with("GET", f"{TEST_HOST}{TEST_PATH}", params=None, json=None)

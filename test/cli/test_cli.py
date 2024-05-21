@@ -1214,6 +1214,24 @@ def test_cli_radarr_create_exclusion(monkeypatch, mock_exit):
     mock_exit.assert_called_with(0)
 
 
+def test_cli_radarr_getrename(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "radarr",
+        "get-rename",
+        "-i", "1234",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.radarr.RadarrCli.get_rename", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(1234)
+    mock_exit.assert_called_with(0)
+
+
 ##############################################
 ########## sonarr specific commands ##########
 ##############################################
@@ -1581,6 +1599,24 @@ def test_cli_sonarr_root_folders_no_space(monkeypatch, mock_exit):
     cli.main()
 
     mock_sonarr.assert_called()
+    mock_exit.assert_called_with(0)
+
+
+def test_cli_sonarr_getrename(monkeypatch, mock_exit):
+    test_args = [
+        "pycliarr",
+        "-t", TEST_HOST,
+        "-k", TEST_APIKEY,
+        "sonarr",
+        "get-rename",
+        "-i", "1234",
+    ]
+    monkeypatch.setattr(sys, "argv", test_args)
+    mock_sonarr = Mock()
+    mock_sonarr.return_value = TEST_JSON
+    monkeypatch.setattr("pycliarr.cli.cli_cmd.sonarr.SonarrCli.get_rename", mock_sonarr)
+    cli.main()
+    mock_sonarr.assert_called_with(1234)
     mock_exit.assert_called_with(0)
 
 

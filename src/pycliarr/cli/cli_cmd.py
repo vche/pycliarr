@@ -1,5 +1,6 @@
 import datetime
 import json
+import sys
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, Namespace, _SubParsersAction
 from pathlib import Path
 from pprint import pformat
@@ -24,8 +25,9 @@ class ArgDefaults:
         try:
             with open(self.config_filepath, "r") as config_file:
                 op_defaults = json.load(config_file)
-        except Exception as e:
-            print(f"Unable to load config {self.config_filepath}, ignoring presets: {e}")
+        except Exception:
+            pass
+            # print(f"Unable to load config {self.config_filepath}, ignoring presets: {e}", file=sys.stderr)
         return op_defaults
 
     def clear_defaults(self) -> None:
@@ -36,7 +38,7 @@ class ArgDefaults:
             with open(self.config_filepath, "w") as config_file:
                 json.dump(self._op_defaults, config_file)
         except Exception as e:
-            print(f"Unable to save config {self.config_filepath}: {e}")
+            print(f"Unable to save config {self.config_filepath}: {e}", file=sys.stderr)
 
     def to_string(self):
         return json.dumps(self._op_defaults, sort_keys=True, indent=4)
@@ -744,6 +746,21 @@ class CliSearchMissingMovies(CliCommand):
         print(f"{json.dumps(res)}")
 
 
+class CliRenameMovie(CliCommand):
+    name = "get-rename"
+    description = "Get renaming information if the movie can be renamed"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--mid", "-i", help="ID of the movie to get renaming info on", type=int, required=True)
+        return cmd_parser
+
+    def run(self, cli: radarr.RadarrCli, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.get_rename(args.mid)
+        print(json.dumps(res))
+
+
 ##############################################
 ########## sonarr specific commands ##########
 ##############################################
@@ -959,6 +976,21 @@ class CliSearchMissingEpisodes(CliCommand):
         print(f"Result: {json.dumps(res)}\n")
 
 
+class CliRenameEpisodes(CliCommand):
+    name = "get-rename"
+    description = "Get a list of episodes of a serie that can be renamed"
+
+    def configure_args(self, cmd_subparser: _SubParsersAction) -> ArgumentParser:
+        cmd_parser = super().configure_args(cmd_subparser)
+        cmd_parser.add_argument("--sid", "-i", help="ID of the serie to list renamable files", type=int, required=True)
+        return cmd_parser
+
+    def run(self, cli: sonarr.SonarrCli, args: Namespace) -> None:
+        super().run(cli, args)
+        res = cli.get_rename(args.sid)
+        print(json.dumps(res))
+
+
 ##############################################
 ########## config specific commands ##########
 ##############################################
@@ -1038,6 +1070,7 @@ CLI_LIST: List[CliApiCommand] = [
             CliCreateSonarrExclusionCommand(),
             CliSearchMissingEpisodes(),
             CliRootFoldersCommand(),
+            CliRenameEpisodes(),
         ],
     ),
     CliApiArrCommand(
@@ -1074,6 +1107,7 @@ CLI_LIST: List[CliApiCommand] = [
             CliCreateRadarrExclusionCommand(),
             CliSearchMissingMovies(),
             CliRootFoldersCommand(),
+            CliRenameMovie(),
         ],
     ),
     CliApiCommand(

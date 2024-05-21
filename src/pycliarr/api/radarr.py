@@ -297,3 +297,13 @@ class RadarrCli(BaseCliMediaApi):
             json response
         """
         return self._sendCommand({"name": "RenameFiles", "files": file_ids})
+
+    def get_rename(self, movie_id: int) -> json_data:
+        """Get the possible renaming for the specified movie
+
+        Args:
+            movie_id (int):  id of the movie to check
+        Returns:
+            json response
+        """
+        return self.request_get(self.api_url_rename, url_params={"movieId": movie_id})

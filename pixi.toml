@@ -8,8 +8,8 @@ platforms = ["osx-64"]
 
 [tasks]
 build = { cmd = "pip install -e .", cwd = "./" }
-radarr = { cmd = ["pycliarr", "-t", "$RADARR_URL", "-k", "$RADARR_KEY", "radarr"] }
-sonarr = { cmd = ["pycliarr", "-t", "$SONARR_URL", "-k", "$SONARR_KEY", "sonarr"] }
+radarr = { cmd = ["pycliarr", "-d", "-t", "$RADARR_URL", "-k", "$RADARR_KEY", "radarr"] }
+sonarr = { cmd = ["pycliarr", "-d", "-t", "$SONARR_URL", "-k", "$SONARR_KEY", "sonarr"] }
 config = { cmd = ["pycliarr", "-t", "", "-k", "", "config"] }
 doc = { cmd = ["setup.py", "doc"], cwd = "./" }
 test = { cmd = "tox", cwd = "./" }
