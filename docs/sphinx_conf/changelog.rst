@@ -17,6 +17,7 @@ New
 Fix
 ---
 * Send config errors to stderr to help json parsing
+* Don't try to parse empty responses
 
 v1.0.26
 =======
